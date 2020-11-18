@@ -1,0 +1,383 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f1f1f1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: bold;
+}
+
+.header.header--homepage {
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.header.header--homepage .header__navigation {
+  font-weight: 500;
+}
+
+.header.header--homepage .header__navigation .nav-link {
+  color: whitesmoke;
+}
+
+.header .header__cta-text {
+  margin-top: 8rem;
+  color: whitesmoke;
+}
+
+.header .header__cta-text .site-name {
+  color: #3955d1;
+}
+
+.header .header__cta-text p {
+  font-size: 1.1rem;
+}
+
+.header .header__cta-text .btn.btn--cta {
+  padding: 1rem 2rem;
+  background-color: #3955d1;
+  margin-bottom: 9rem;
+  color: #cad1f3;
+  font-weight: 600;
+}
+
+main {
+  color: #4e4e4e;
+}
+
+.c-link {
+  color: inherit;
+}
+
+.c-link:hover {
+  text-decoration: none;
+}
+
+.c-link.c-link--primary-color {
+  color: #3955d1;
+}
+
+.c-about-us {
+  padding: 7rem 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.c-about-us .c-about-us__title::after {
+  content: '';
+  display: block;
+  width: 20%;
+  border-bottom: 0.3rem solid #3955d1;
+  margin-top: .3rem;
+}
+
+.c-about-us .c-about-us__content {
+  background-color: rgba(57, 85, 209, 0.96);
+  color: #cad1f3;
+  padding: 4rem 3rem;
+}
+
+.c-intro-video {
+  background-color: #f6f5f5;
+  padding: 7rem 0;
+}
+
+.c-what-we-do {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  padding-top: 7rem;
+  padding-bottom: 6rem;
+  color: #fdf1f2;
+}
+
+.c-features {
+  margin-top: 7rem;
+}
+
+.c-benefit {
+  padding: 1.5rem;
+  background-color: #f6f5f5;
+  height: 24rem;
+  border-radius: 5px;
+}
+
+@media screen and (min-width: 576px) {
+  .c-benefit {
+    height: 25rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .c-benefit {
+    height: 21rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .c-benefit {
+    margin-bottom: 1rem;
+  }
+}
+
+.c-benefit .c-benefit__title {
+  font-size: 1.2rem;
+  color: #4d3d3e;
+  margin-bottom: 1rem;
+}
+
+.c-benefit .c-benefit__info {
+  font-size: .9rem;
+  color: #5e5052;
+}
+
+.c-benefit .c-benefit__icon {
+  color: #3955d1;
+}
+
+.c-benefit .c-benefit__invest-btn {
+  background-color: #3955d1;
+  color: #f5eaeb;
+}
+
+.c-benefit.c-benefit--main {
+  background-color: #e9e9e9;
+}
+
+.c-benefit.c-benefit--main .c-benefit__title {
+  font-size: 1.8rem;
+}
+
+.c-benefit.c-benefit--main .c-benefit__info {
+  font-size: 1rem;
+  color: #646464;
+}
+
+.c-why-us {
+  margin-top: 7rem;
+  padding: 5rem 0rem;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.c-why-us .c-why-us__text {
+  background: linear-gradient(128.47deg, #ef2354 14.1%, rgba(239, 35, 133, 0.9) 76.95%);
+  color: #faecef;
+}
+
+@media screen and (max-width: 576px) {
+  .c-why-us .c-why-us__text h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .c-why-us .c-why-us__text p {
+    font-size: .9rem;
+  }
+}
+
+.c-crypto-chat {
+  margin-top: 7rem;
+}
+
+.c-footer {
+  background-image: url(../images/blog8.jpg);
+  margin-top: 7rem;
+  padding: 7rem 0;
+  color: #f0f0f0;
+}
+
+.c-footer.c-footer--no-margin {
+  margin-top: 0rem;
+}
+
+.c-footer .c-footer-menu .c-footer-menu__heading {
+  margin-bottom: 1.3rem;
+}
+
+.c-footer .c-footer-menu .c-foooter-menu__item {
+  margin-top: .4rem;
+}
+
+.c-footer .c-footer-menu .c-foooter-menu__item .c-footer-menu__link {
+  color: #f0f0f0;
+}
+
+.c-footer .c-footer__rights-text {
+  margin-top: 4rem;
+}
+
+.c-footer .c-footer__social-icons {
+  margin-top: 4rem;
+}
+
+.c-footer .c-footer__social-icons .c-footer__icon-link {
+  display: inline-block;
+  color: #f0f0f0;
+  margin-right: .7rem;
+  font-size: 1.2rem;
+}
+
+.c-login {
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-top: 0;
+}
+
+.c-login .c-login__form {
+  padding: 5rem 2rem;
+}
+
+@media screen and (min-width: 768px) {
+  .c-login .c-login__form {
+    padding: 10rem 5rem;
+  }
+}
+
+.c-login .c-login__form .c-login__the-form {
+  background-color: #fdfffc;
+}
+
+.input__icon {
+  color: #b1b1b4;
+  position: relative;
+  top: -1.8rem;
+  left: .7rem;
+}
+
+.form-input {
+  padding-left: 2rem;
+}
+
+.c-pricing {
+  margin-top: 7rem;
+  margin-bottom: unset;
+}
+
+.c-plan {
+  -webkit-transition: outline .3s ease;
+  transition: outline .3s ease;
+  outline: none;
+}
+
+.c-plan .c-plan__heading {
+  text-align: center;
+  background: linear-gradient(128.47deg, #EF2354 14.1%, rgba(239, 35, 133, 0.9) 76.95%);
+  color: #faecef;
+  padding: 1.2rem;
+}
+
+.c-plan .c-plan__heading .c-plan__title {
+  margin-bottom: .7rem;
+}
+
+.c-plan .c-plan__heading .c-plan__title h4 {
+  font-size: 1.2rem;
+}
+
+.c-plan .c-plan__heading .c-plan__info .c-plan__interest {
+  font-size: 3rem;
+}
+
+.c-plan .c-plan__heading .c-plan__info .c-plan__interest .c-plan__interest--percentage {
+  font-size: 1.3rem;
+}
+
+.c-plan .c-plan-body {
+  margin-top: 3rem;
+}
+
+.c-plan .c-plan-body .c-plan-body__details li {
+  text-align: center;
+  margin-bottom: 1.3rem;
+  border-bottom: 1px solid rgba(173, 166, 166, 0.3);
+  color: #818181;
+}
+
+.c-plan .c-plan-footer {
+  margin-top: 3rem;
+}
+
+.c-plan .c-plan-footer .invest-btn {
+  text-align: center;
+}
+
+.c-plan .c-plan-footer .invest-btn .btn--invest {
+  background-color: #3955d1;
+  color: #dfe3f7;
+  width: 10rem;
+  max-width: 100%;
+}
+
+.c-plan:hover {
+  cursor: pointer;
+  outline: 1px solid #8c9ce4;
+}
+
+.c-faq {
+  margin-top: 7rem;
+}
+
+.c-about-company-growth {
+  margin-top: 7rem;
+}
+
+.c-terms-of-use {
+  margin-top: 7rem;
+}
+
+.c-privacy-policy {
+  margin-top: 7rem;
+}
+
+#google_translate_element {
+  position: relative;
+}
+
+.goog-logo-link {
+  display: none;
+}
+
+.goog-logo-link #text {
+  display: none;
+}
+
+.goog-te-gadget {
+  font-size: 0px !important;
+}
+
+.goog-te-gadget div {
+  display: inline;
+}
+
+.goog-te-gadget div select {
+  width: 131px;
+  height: 35px;
+  border: 1px solid #3955d1 !important;
+  color: #000;
+  padding: 2px;
+  outline: none;
+  border: none;
+}
+
+.goog-te-gadget div select option {
+  border: 1px solid #3955d1;
+}
+
+.goog-te-gadget div select option:hover {
+  cursor: pointer;
+}
+
+.goog-te-gadget div select:hover {
+  border: 1px solid #3955d1 !important;
+  cursor: pointer;
+}
+/*# sourceMappingURL=main.css.map */

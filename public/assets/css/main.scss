@@ -1,0 +1,398 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+$primary-color: #3955d1;
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: rgb(241, 241, 241);
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: bold;
+}
+
+.header {
+    &.header--homepage {
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        .header__navigation {
+            font-weight: 500;
+
+            .nav-link {
+                color: rgb(245, 245, 245);
+            }
+        }
+    }
+
+    .header__cta-text {
+        margin-top: 8rem;
+        color: rgb(245, 245, 245);
+
+        .site-name {
+            color: $primary-color;
+        }
+
+        p {
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            &.btn--cta {
+                padding: 1rem 2rem;
+                background-color: $primary-color;
+                margin-bottom: 9rem;
+                color: lighten($color: $primary-color, $amount: 35);
+                font-weight: 600;
+            }
+
+        }
+    }
+}
+
+main {
+    color: rgb(78, 78, 78);
+}
+
+.c-link {
+    color: inherit;
+
+    &:hover {
+        text-decoration: none;
+    }
+
+    &.c-link--primary-color {
+        color: $primary-color;
+    }
+}
+
+.c-about-us {
+    padding: 7rem 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    .c-about-us__title {
+        &::after {
+            content: '';
+            display: block;
+            width: 20%;
+            border-bottom: .3rem solid $primary-color;
+            margin-top: .3rem;
+        }
+    }
+
+    .c-about-us__content {
+        background-color: rgba($primary-color, .96);
+        color: lighten($color: $primary-color, $amount: 35);
+        padding: 4rem 3rem;
+
+    }
+}
+
+
+
+.c-intro-video {
+    background-color: rgb(246, 245, 245);
+    padding: 7rem 0;
+}
+
+.c-what-we-do {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    padding-top: 7rem;
+    padding-bottom: 6rem;
+    color: rgb(253, 241, 242);
+}
+
+.c-features {
+    margin-top: 7rem;
+}
+
+.c-benefit {
+    padding: 1.5rem;
+    background-color: rgb(246, 245, 245);
+    height: 24rem;
+    @media screen and (min-width: 576px) {
+        height: 25rem;
+    }
+    @media screen and (min-width: 768px) {
+        height: 21rem;
+    }
+    border-radius: 5px;
+
+    @media screen and (max-width: 768px) {
+        margin-bottom: 1rem;
+    }
+
+    .c-benefit__title {
+        font-size: 1.2rem;
+        color: rgb(77, 61, 62);
+        margin-bottom: 1rem;
+    }
+
+    .c-benefit__info {
+        font-size: .9rem;
+        color: hsl(351, 8%, 34%);
+    }
+
+    .c-benefit__icon {
+        color: $primary-color;
+    }
+
+    .c-benefit__invest-btn {
+        background-color: $primary-color;
+        color: rgb(245, 234, 235);
+    }
+
+    &.c-benefit--main {
+        background-color: rgb(233, 233, 233);
+
+        .c-benefit__title {
+            font-size: 1.8rem;
+        }
+
+        .c-benefit__info {
+            font-size: 1rem;
+            color: rgb(100, 100, 100);
+        }
+    }
+}
+
+.c-why-us {
+    margin-top: 7rem;
+    padding: 5rem 0rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    .c-why-us__text {
+        background: linear-gradient(128.47deg, #ef2354 14.1%, rgba(239, 35, 133, 0.9) 76.95%);
+        color: rgb(250, 236, 239);
+
+        h2 {
+            @media screen and (max-width: 576px) {
+                font-size: 1.4rem;
+            }
+        }
+
+        p {
+            @media screen and (max-width: 576px) {
+                font-size: .9rem;
+            }
+        }
+
+    }
+}
+
+.c-crypto-chat {
+    margin-top: 7rem;
+}
+
+.c-footer {
+
+    background-image: url(../images/blog8.jpg);
+    margin-top: 7rem;
+    padding: 7rem 0;
+    color: rgb(240, 240, 240);
+
+    &.c-footer--no-margin {
+        margin-top: 0rem;
+    }
+
+    .c-footer-menu {
+        .c-footer-menu__heading {
+            margin-bottom: 1.3rem;
+        }
+
+        .c-foooter-menu__item {
+            margin-top: .4rem;
+
+            .c-footer-menu__link {
+                color: rgb(240, 240, 240);
+
+            }
+        }
+    }
+
+    .c-footer__rights-text {
+        margin-top: 4rem;
+    }
+
+    .c-footer__social-icons {
+        margin-top: 4rem;
+
+        .c-footer__icon-link {
+            display: inline-block;
+            color: rgb(240, 240, 240);
+            margin-right: .7rem;
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.c-login {
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-top: 0;
+
+    .c-login__form {
+        // background-color: $primary-color;
+        padding: 5rem 2rem;
+
+        @media screen and (min-width: 768px) {
+            padding: 10rem 5rem;
+        }
+
+        .c-login__the-form {
+            background-color: #fdfffc;
+        }
+    }
+}
+
+.input__icon {
+    color: #b1b1b4;
+    position: relative;
+    top: -1.8rem;
+    left: .7rem;
+}
+
+.form-input {
+    padding-left: 2rem;
+}
+
+.c-pricing {
+    margin-top: 7rem;
+    margin-bottom: unset;
+}
+
+.c-plan {
+    transition: outline .3s ease;
+    outline: none;
+
+    .c-plan__heading {
+        text-align: center;
+        background: linear-gradient(128.47deg, #EF2354 14.1%, rgba(239, 35, 133, 0.9) 76.95%);
+        color: rgb(250, 236, 239);
+        padding: 1.2rem;
+        
+
+        .c-plan__title {
+            margin-bottom: .7rem;
+
+            h4 {
+                font-size: 1.2rem;
+
+            }
+        }
+
+        .c-plan__info {
+            .c-plan__interest {
+                font-size: 3rem;
+
+                .c-plan__interest--percentage {
+                    font-size: 1.3rem;
+                }
+                
+            }
+        }
+    }
+
+    .c-plan-body {
+        margin-top: 3rem;
+
+        .c-plan-body__details {
+            li {
+                text-align: center;
+                margin-bottom: 1.3rem;
+                border-bottom: 1px solid rgba(173, 166, 166, .3);
+                color: rgb(129, 129, 129);
+            }
+        }
+    }
+
+    .c-plan-footer {
+        margin-top: 3rem;
+
+        .invest-btn {
+            text-align: center;
+
+            .btn--invest {
+                background-color: $primary-color;
+                color: lighten($color: $primary-color, $amount: 40);
+                width: 10rem;
+                max-width: 100%;
+            }
+        }
+    }
+
+    &:hover {
+        cursor: pointer;
+        outline: 1px solid lighten($color: $primary-color, $amount: 20);
+    }
+}
+
+.c-faq {
+    margin-top: 7rem;
+}
+
+.c-about-company-growth {
+    margin-top: 7rem;
+}
+
+.c-terms-of-use {
+    margin-top: 7rem;
+}
+
+.c-privacy-policy {
+    margin-top: 7rem;
+}
+
+#google_translate_element {
+    position: relative;
+}
+
+.goog-logo-link {
+    display: none;
+}
+
+.goog-logo-link #text {
+    display: none;
+}
+
+.goog-te-gadget {
+    font-size: 0px !important;
+}
+
+.goog-te-gadget div {
+    display: inline;
+}
+
+.goog-te-gadget div select {
+    width: 131px;
+    height: 35px;
+    border: 1px solid #3955d1 !important;
+    color: #000;
+    padding: 2px;
+    outline: none;
+    border: none;
+}
+
+.goog-te-gadget div select option {
+    border: 1px solid #3955d1;
+}
+
+.goog-te-gadget div select option:hover {
+    cursor: pointer;
+}
+
+.goog-te-gadget div select:hover {
+    border: 1px solid #3955d1 !important;
+    cursor: pointer;
+}

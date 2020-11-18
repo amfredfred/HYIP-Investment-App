@@ -1,0 +1,127 @@
+// h1,h2,h3,h4,h5,h6{
+//     font-weight: bold;
+// }
+// header{
+//     nav{
+//         font-weight: bold;
+//         background-color: #13293d;
+//         li{
+//             a{
+//                 font-size: 1.1rem;
+//             }
+//         }
+
+//     }
+// }
+// main{
+//     margin: 7rem 0;
+// }
+// .menu{
+//     .desktop-menu, .mobile-menu{
+//         li{
+//             a{
+//                 color: #247ba0;
+//             }
+//         }
+//     }
+// }
+
+$primary-color: blue;
+$link-color: lighten($primary-color, 10);
+$dark-bg-color: #353535;
+$dark-bg-color--light: #4b4b4d;
+$light-bg-color:hsl(220, 4%, 97%);
+$light-bg-color--lighter:#fdfffc;
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #a5acb6;
+    border-radius: 10px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    // background-color: hsl(220, 4%, 97%);
+    
+
+    &[theme=dark]{
+        background-color: $dark-bg-color !important;
+    }
+    &[theme=light]{
+        background-color: $light-bg-color !important;
+    }
+}
+
+.dashboard-content {
+    display: flex;
+}
+
+.main-dashboard-content {
+
+    display: block;
+    flex-grow: 1;
+    padding: 2rem 2rem;
+
+    .page-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+}
+
+.change-theme {
+  position: fixed;
+  padding: .4rem .6rem;
+  font-size: 1rem;
+  border-radius: 50%;
+  background-color: #3b413c;
+  right: 10px;
+  top: 10px;
+  color: #f9f9f9;
+  a{
+    color: inherit;
+  }
+}
+
+/*
+.white-bg {
+    background-color: $light-bg-color--lighter;
+}
+
+.text-color {
+    color: hsl(130, 6%, 40%);
+}
+.table-menu-btn {
+    cursor: pointer;
+  }
+  .table-actions {
+    position: relative;
+    .action-list {
+      position: absolute;
+      top: 0;
+      left: -25px;
+    }
+  }
+
+  .dark-bg--darker{
+      background-color: $dark-bg-color !important;
+  }
+  .dark-bg--lighter{
+    background-color:  $dark-bg-color--light!important;
+}
+.light-text{
+    color: lighten($color: $dark-bg-color, $amount: 50)!important;
+}
+.lighter-text{
+    color: lighten($color: $dark-bg-color, $amount: 60)!important;
+}
+*/
