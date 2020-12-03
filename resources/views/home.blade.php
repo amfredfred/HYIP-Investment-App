@@ -1,5 +1,5 @@
 @section('title')
-
+<title>Brvest</title>
 @endsection
 @extends('layouts.home')
 @section('content')
