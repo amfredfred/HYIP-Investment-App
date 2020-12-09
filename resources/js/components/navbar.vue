@@ -53,7 +53,14 @@ export default {
   methods: {
     fetchRoutes() {
       this.$router.options.routes.forEach((route) => {
-        this.routes.push({ name: route.name, icon: route.prop.icon });
+        if (route.children && route.children[0].path === "") {
+          const defaultChildRoute = route.children[0];
+          return this.routes.push({
+            name: defaultChildRoute.name,
+            icon: route.prop.icon,
+          });
+        }
+        return this.routes.push({ name: route.name, icon: route.prop.icon });
       });
     },
   },

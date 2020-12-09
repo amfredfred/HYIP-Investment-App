@@ -4,6 +4,9 @@ import withdraw from "./pages/user/withdraw.vue";
 import referral from "./pages/user/referral.vue";
 import setting from "./pages/user/settings.vue";
 
+import choosePlan from "./pages/user/invest/selectPlan.vue";
+import payInvest from "./pages/user/invest/pay.vue";
+
 const user_routes = [
     {
         path: "/",
@@ -14,9 +17,19 @@ const user_routes = [
     {
         path: "/invest",
         component: invest,
-        name: "Invest",
         prop: { icon: "fa-diamond" },
-        children: []
+        children: [
+            {
+                name: "Invest",
+                path: "",
+                component: choosePlan
+            },
+            {
+                path: "pay/:planId",
+                component: payInvest,
+                name: "payInvest"
+            }
+        ]
     },
     {
         path: "/withdraw",
