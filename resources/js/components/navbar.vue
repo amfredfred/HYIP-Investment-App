@@ -16,7 +16,7 @@
         </div>
         <ul>
           <li v-for="(route, index) in routes" class="mb-10 text-lg" :key="index">
-            <router-link class="text-green-50" :to="{name:route.name}">
+            <router-link :to="{name:route.name}">
               <i class="mr-3 fa" :class="route.icon"></i>
               {{route.name}}
             </router-link>
@@ -66,8 +66,10 @@ export default {
 
 <style lang="scss" scoped>
 a {
+  @apply text-green-100 #{!important};
   &:hover {
-    color: inherit;
+    @apply text-green-100;
+    text-decoration: none;
   }
 }
 </style>

@@ -26,7 +26,7 @@
         "vue-template-compiler": "2.6.12",
         "postcss": "7.0.35",
         "autoprefixer": "9.8.6",
-        "vuetify-loader": "1.4.3"
+        "vuetify-loader": "1.5.0"
     },
     "dependencies": {
         "animate.css": "4.1.1",
