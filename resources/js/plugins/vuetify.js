@@ -4,6 +4,8 @@ import "vuetify/dist/vuetify.min.css";
 
 Vue.use(Vuetify, { components: { VApp, VMain } });
 
-const opts = {};
+const opts = {
+    theme: { disable: true }
+};
 
 export default new Vuetify(opts);

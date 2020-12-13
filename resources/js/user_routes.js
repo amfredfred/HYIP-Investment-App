@@ -6,6 +6,7 @@ import setting from "./pages/user/settings.vue";
 
 import choosePlan from "./pages/user/invest/selectPlan.vue";
 import payInvest from "./pages/user/invest/pay.vue";
+import successfulInvest from "./pages/user/invest/success.vue";
 
 const user_routes = [
     {
@@ -28,6 +29,12 @@ const user_routes = [
                 path: "pay/:planId",
                 component: payInvest,
                 name: "payInvest"
+            },
+
+            {
+                path: "success",
+                component: successfulInvest,
+                name: "successfulInvest"
             }
         ]
     },

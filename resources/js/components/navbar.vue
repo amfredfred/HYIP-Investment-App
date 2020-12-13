@@ -1,7 +1,7 @@
 <template>
   <div class="navigation">
     <div
-      class="fixed top-0 z-10 w-full h-full bg-gray-700 md:block md:w-72 md:relative header-bar bg-opacity-5"
+      class="fixed top-0 z-10 w-full h-full bg-gray-700 md:block md:w-72 md:relative header-bar bg-opacity-50"
       :class="{hidden: hideNavbarMobile}"
       @click="hideNavbarMobile = true"
     >
@@ -26,11 +26,11 @@
     </div>
 
     <div
-      class="fixed max-w-full bottom-5 right-1 md:hidden floating-hambuger"
+      class="fixed z-10 max-w-full bottom-5 right-1 md:hidden floating-hambuger"
       :class="{hidden: hideNavbarMobile == false}"
     >
       <button
-        class="z-10 p-4 bg-green-600 rounded-full fa fa-bars text-green-50"
+        class="p-4 bg-green-600 rounded-full fa fa-bars text-green-50"
         @click="hideNavbarMobile = false"
       ></button>
     </div>

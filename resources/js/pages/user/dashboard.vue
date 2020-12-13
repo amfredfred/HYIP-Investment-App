@@ -29,14 +29,57 @@
     </section>
 
     <section class="mt-12">
-      <!-- Active investments -->
-      <h4>Active Investments</h4>
-      <v-data-table
-        :headers="tableHeaders"
-        :items="transactions"
-        :items-per-page="5"
-        class="elevation-1"
-      ></v-data-table>
+      <div>
+        <v-row justify="space-between" class="flex-column-reverse flex-md-row">
+          <v-col cols="12" md="9">
+            <h4 class="mb-5">Recent Transactions</h4>
+            <v-data-table
+              :headers="tableHeaders"
+              :items="transactions"
+              :items-per-page="5"
+              class="elevation-1"
+            ></v-data-table>
+          </v-col>
+          <v-col cols="12" md="3">
+            <div class="account-summary">
+            <h4 class="mb-5">Account Summary</h4>
+              <div
+                class="p-3 mb-4 green darken-2 green--text text--lighten-5 active-investment rounded-2xl"
+              >
+                <div class="flex">
+                  <v-icon class="mr-6" size="40">fa fa-rocket</v-icon>
+                  <div>
+                    <h6>Active Investments</h6>
+                    <span class="block text-2xl font-bold">$300.00</span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="p-3 mb-4 blue darken-2 blue--text text--lighten-5 total-investment rounded-2xl"
+              >
+                <div class="flex">
+                  <v-icon class="mr-6" size="40">fa fa-trophy</v-icon>
+                  <div>
+                    <h6>Total Investments</h6>
+                    <span class="block text-2xl font-bold">$300.00</span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="p-3 mb-4 orange darken-2 orange--text text--lighten-5 total-investment rounded-2xl"
+              >
+                <div class="flex">
+                  <v-icon class="mr-6" size="40">fa fa-money</v-icon>
+                  <div>
+                    <h6>Current Balance</h6>
+                    <span class="block text-2xl font-bold">$300.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </div>
     </section>
   </div>
 </template>
