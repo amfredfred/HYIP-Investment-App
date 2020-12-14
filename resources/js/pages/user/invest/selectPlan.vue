@@ -1,17 +1,35 @@
 <template>
   <div class="selectPlan">
-    <h1>choose plan</h1>
+    <h1 class="font-bold text-gray-600">choose plan</h1>
     <section class="mt-8">
       <v-row>
-        <v-col cols="12" md="3" sm="6" v-for="(plan, index) in plans" :key="index">
-          <v-card elevation="1" class="p-2 text-green-800 rounded-md bg-green-50">
-            <v-card-title>{{plan.name}}</v-card-title>
-            <v-card-subtitle>{{plan.price}}</v-card-subtitle>
-            <v-card-actions>
-              <v-btn
-                :to="{name:'payInvest', params: {planId: index}}"
-                class="px-4 text-green-100 bg-green-700 rounded-lg"
-              >Invest</v-btn>
+        <v-col cols="12" md="4" sm="6" v-for="(plan, index) in plans" :key="index">
+          <v-card elevation="1" class="text-gray-800 rounded-md bg-gray-50">
+            <v-card-title class="text-lg font-bold text-green-500">{{plan.name}}</v-card-title>
+            <div class="card-body">
+              <div class="plan-features">
+                <div class="flex justify-between pb-3 mb-12 border-pink-500 feature">
+                  <span class="text-base text-gray-600">Min</span>
+                  <span class="text-lg font-bold text-gray-700">$100</span>
+                </div>
+
+                <div class="flex justify-between pb-3 mb-12 border-pink-500 feature">
+                  <span class="text-base text-gray-600">Max</span>
+                  <span class="text-lg font-bold text-gray-700">$100</span>
+                </div>
+
+                <div class="flex justify-between pb-3 mb-12 border-pink-500 feature">
+                  <span class="text-base text-gray-600">Interest</span>
+                  <span class="text-lg font-bold text-gray-700">5%</span>
+                </div>
+              </div>
+            </div>
+
+            <v-card-actions class="p-10 mx-0 bg-gray-100">
+              <v-btn :to="{name:'payInvest', params: {planId: index}}" text color="amber darken-4">
+                Invest
+                <v-icon class="ml-4">fa fa-long-arrow-right</v-icon>
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -33,3 +51,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.plan-features {
+  .feature {
+    border-bottom: 2px solid;
+  }
+}
+</style>
