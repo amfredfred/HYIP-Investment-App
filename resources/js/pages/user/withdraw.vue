@@ -22,11 +22,29 @@
             single-line
             outlined
           ></v-select>
-          <v-btn color="blue darken-3 large blue--text text--lighten-5">
+          <v-btn color="blue darken-3 large blue--text text--lighten-5" @click="dialogShown = true">
             Request Withdrawal
             <v-icon class="ml-2 text-lg">fa fa-credit-card</v-icon>
           </v-btn>
         </v-form>
+
+        <v-dialog v-model="dialogShown" width="500">
+          <v-card>
+            <v-card-title class="text-gray-600 headline grey lighten-2">Request Made</v-card-title>
+
+            <v-card-text class="mt-3">
+              Your withdraw request has been made and is being
+              processed
+            </v-card-text>
+
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-2" dark text @click="dialogShown = false">Okay</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </div>
     </section>
 
@@ -47,6 +65,7 @@ export default {
   name: "withdraw",
   data() {
     return {
+      dialogShown: false,
       form: {
         amount: "",
         balance: "",

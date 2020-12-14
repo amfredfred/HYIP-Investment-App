@@ -37,12 +37,13 @@
               :headers="tableHeaders"
               :items="transactions"
               :items-per-page="5"
-              class="elevation-1"
+              item-class="text-xl"
+              class="text-lg elevation-1 rounded-md"
             ></v-data-table>
           </v-col>
           <v-col cols="12" md="3">
             <div class="account-summary">
-            <h4 class="mb-5">Account Summary</h4>
+              <h4 class="mb-5">Account Summary</h4>
               <div
                 class="p-3 mb-4 green darken-2 green--text text--lighten-5 active-investment rounded-2xl"
               >
