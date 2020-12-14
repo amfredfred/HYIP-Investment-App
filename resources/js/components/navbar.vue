@@ -21,6 +21,12 @@
               {{route.name}}
             </router-link>
           </li>
+          <li class="mb-10 text-lg">
+            <a href>
+              <i class="mr-3 fa fa-power-off"></i>
+              Logout
+            </a>
+          </li>
         </ul>
       </div>
     </div>
