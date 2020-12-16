@@ -1,6 +1,8 @@
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 
+import store from "./store";
+
 import navbar from "./components/navbar.vue";
 
 window._ = require("lodash");
@@ -13,6 +15,7 @@ Vue.component("nav-bar", navbar);
 const app = new Vue({
     router,
     vuetify,
+    store,
     el: "#app"
 });
 

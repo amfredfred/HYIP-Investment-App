@@ -6,13 +6,5 @@
 <script>
 export default {
   name: "invest",
-  data() {
-    return {
-      plans: [
-        { name: "Amazing Plan", price: "$100.00" },
-        { name: "Unamazing plan", price: "$300" },
-      ],
-    };
-  },
 };
 </script>

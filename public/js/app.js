@@ -99,6 +99,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_userInformation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/userInformation */ "./resources/js/mixins/userInformation.js");
+/* harmony import */ var _mixins_utilitiesMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/utilitiesMixin */ "./resources/js/mixins/utilitiesMixin.js");
 //
 //
 //
@@ -185,31 +187,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "dashboard",
   data: function data() {
     return {
       tableHeaders: [{
         text: "Date",
-        value: "date"
+        value: "created_at"
       }, {
-        text: "Withdrawal Method",
-        value: "method"
+        text: "Transaction Type",
+        value: "type"
       }, {
         text: "Amount",
         value: "amount"
-      }, {
-        text: "Status",
-        value: "status"
-      }],
-      transactions: [{
-        date: "20-22-10",
-        method: "Bitcoin",
-        amount: "$200,00",
-        status: "Pending"
       }]
     };
-  }
+  },
+  methods: {},
+  mounted: function mounted() {
+    this.getUserInformation();
+  },
+  mixins: [_mixins_userInformation__WEBPACK_IMPORTED_MODULE_0__["default"], _mixins_utilitiesMixin__WEBPACK_IMPORTED_MODULE_1__["default"]]
 });
 
 /***/ }),
@@ -229,18 +239,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "invest",
-  data: function data() {
-    return {
-      plans: [{
-        name: "Amazing Plan",
-        price: "$100.00"
-      }, {
-        name: "Unamazing plan",
-        price: "$300"
-      }]
-    };
-  }
+  name: "invest"
 });
 
 /***/ }),
@@ -376,14 +375,25 @@ __webpack_require__.r(__webpack_exports__);
   name: "SelectPlan",
   data: function data() {
     return {
-      plans: [{
-        name: "Amazing Plan",
-        price: "$100.00"
-      }, {
-        name: "Unamazing plan",
-        price: "$300"
-      }]
+      plans: []
     };
+  },
+  methods: {
+    get_plans: function get_plans() {
+      var _this = this;
+
+      var REQUEST_URL = "/deposit/";
+      axios.get(REQUEST_URL).then(function (response) {
+        _this.plans = response.data.plan;
+        _this.investments = response.data.plan;
+        _this.balance = response.data.total_balance;
+        _this.coins = response.data.coins;
+        _this.recent_deposits = response.data.investment;
+        _this.loading_transactions = false;
+      })["catch"](function (error) {
+        console.log("error");
+      });
+    }
   }
 });
 
@@ -537,8 +547,74 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "setting"
+  name: "setting",
+  data: function data() {
+    return {
+      valid: false,
+      firstname: "",
+      lastname: "",
+      password: "",
+      confirmPassword: "",
+      btcAddress: "",
+      ethAddress: "",
+      ltcAddress: "",
+      bchAddress: "",
+      dashAddress: ""
+    };
+  }
 });
 
 /***/ }),
@@ -711,6 +787,308 @@ exports.push([module.i, ".plan-features .feature[data-v-64a12e84] {\n  border-bo
 
 // exports
 
+
+/***/ }),
+
+/***/ "./node_modules/moment/locale sync recursive ^\\.\\/.*$":
+/*!**************************************************!*\
+  !*** ./node_modules/moment/locale sync ^\.\/.*$ ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./af": "./node_modules/moment/locale/af.js",
+	"./af.js": "./node_modules/moment/locale/af.js",
+	"./ar": "./node_modules/moment/locale/ar.js",
+	"./ar-dz": "./node_modules/moment/locale/ar-dz.js",
+	"./ar-dz.js": "./node_modules/moment/locale/ar-dz.js",
+	"./ar-kw": "./node_modules/moment/locale/ar-kw.js",
+	"./ar-kw.js": "./node_modules/moment/locale/ar-kw.js",
+	"./ar-ly": "./node_modules/moment/locale/ar-ly.js",
+	"./ar-ly.js": "./node_modules/moment/locale/ar-ly.js",
+	"./ar-ma": "./node_modules/moment/locale/ar-ma.js",
+	"./ar-ma.js": "./node_modules/moment/locale/ar-ma.js",
+	"./ar-sa": "./node_modules/moment/locale/ar-sa.js",
+	"./ar-sa.js": "./node_modules/moment/locale/ar-sa.js",
+	"./ar-tn": "./node_modules/moment/locale/ar-tn.js",
+	"./ar-tn.js": "./node_modules/moment/locale/ar-tn.js",
+	"./ar.js": "./node_modules/moment/locale/ar.js",
+	"./az": "./node_modules/moment/locale/az.js",
+	"./az.js": "./node_modules/moment/locale/az.js",
+	"./be": "./node_modules/moment/locale/be.js",
+	"./be.js": "./node_modules/moment/locale/be.js",
+	"./bg": "./node_modules/moment/locale/bg.js",
+	"./bg.js": "./node_modules/moment/locale/bg.js",
+	"./bm": "./node_modules/moment/locale/bm.js",
+	"./bm.js": "./node_modules/moment/locale/bm.js",
+	"./bn": "./node_modules/moment/locale/bn.js",
+	"./bn-bd": "./node_modules/moment/locale/bn-bd.js",
+	"./bn-bd.js": "./node_modules/moment/locale/bn-bd.js",
+	"./bn.js": "./node_modules/moment/locale/bn.js",
+	"./bo": "./node_modules/moment/locale/bo.js",
+	"./bo.js": "./node_modules/moment/locale/bo.js",
+	"./br": "./node_modules/moment/locale/br.js",
+	"./br.js": "./node_modules/moment/locale/br.js",
+	"./bs": "./node_modules/moment/locale/bs.js",
+	"./bs.js": "./node_modules/moment/locale/bs.js",
+	"./ca": "./node_modules/moment/locale/ca.js",
+	"./ca.js": "./node_modules/moment/locale/ca.js",
+	"./cs": "./node_modules/moment/locale/cs.js",
+	"./cs.js": "./node_modules/moment/locale/cs.js",
+	"./cv": "./node_modules/moment/locale/cv.js",
+	"./cv.js": "./node_modules/moment/locale/cv.js",
+	"./cy": "./node_modules/moment/locale/cy.js",
+	"./cy.js": "./node_modules/moment/locale/cy.js",
+	"./da": "./node_modules/moment/locale/da.js",
+	"./da.js": "./node_modules/moment/locale/da.js",
+	"./de": "./node_modules/moment/locale/de.js",
+	"./de-at": "./node_modules/moment/locale/de-at.js",
+	"./de-at.js": "./node_modules/moment/locale/de-at.js",
+	"./de-ch": "./node_modules/moment/locale/de-ch.js",
+	"./de-ch.js": "./node_modules/moment/locale/de-ch.js",
+	"./de.js": "./node_modules/moment/locale/de.js",
+	"./dv": "./node_modules/moment/locale/dv.js",
+	"./dv.js": "./node_modules/moment/locale/dv.js",
+	"./el": "./node_modules/moment/locale/el.js",
+	"./el.js": "./node_modules/moment/locale/el.js",
+	"./en-au": "./node_modules/moment/locale/en-au.js",
+	"./en-au.js": "./node_modules/moment/locale/en-au.js",
+	"./en-ca": "./node_modules/moment/locale/en-ca.js",
+	"./en-ca.js": "./node_modules/moment/locale/en-ca.js",
+	"./en-gb": "./node_modules/moment/locale/en-gb.js",
+	"./en-gb.js": "./node_modules/moment/locale/en-gb.js",
+	"./en-ie": "./node_modules/moment/locale/en-ie.js",
+	"./en-ie.js": "./node_modules/moment/locale/en-ie.js",
+	"./en-il": "./node_modules/moment/locale/en-il.js",
+	"./en-il.js": "./node_modules/moment/locale/en-il.js",
+	"./en-in": "./node_modules/moment/locale/en-in.js",
+	"./en-in.js": "./node_modules/moment/locale/en-in.js",
+	"./en-nz": "./node_modules/moment/locale/en-nz.js",
+	"./en-nz.js": "./node_modules/moment/locale/en-nz.js",
+	"./en-sg": "./node_modules/moment/locale/en-sg.js",
+	"./en-sg.js": "./node_modules/moment/locale/en-sg.js",
+	"./eo": "./node_modules/moment/locale/eo.js",
+	"./eo.js": "./node_modules/moment/locale/eo.js",
+	"./es": "./node_modules/moment/locale/es.js",
+	"./es-do": "./node_modules/moment/locale/es-do.js",
+	"./es-do.js": "./node_modules/moment/locale/es-do.js",
+	"./es-mx": "./node_modules/moment/locale/es-mx.js",
+	"./es-mx.js": "./node_modules/moment/locale/es-mx.js",
+	"./es-us": "./node_modules/moment/locale/es-us.js",
+	"./es-us.js": "./node_modules/moment/locale/es-us.js",
+	"./es.js": "./node_modules/moment/locale/es.js",
+	"./et": "./node_modules/moment/locale/et.js",
+	"./et.js": "./node_modules/moment/locale/et.js",
+	"./eu": "./node_modules/moment/locale/eu.js",
+	"./eu.js": "./node_modules/moment/locale/eu.js",
+	"./fa": "./node_modules/moment/locale/fa.js",
+	"./fa.js": "./node_modules/moment/locale/fa.js",
+	"./fi": "./node_modules/moment/locale/fi.js",
+	"./fi.js": "./node_modules/moment/locale/fi.js",
+	"./fil": "./node_modules/moment/locale/fil.js",
+	"./fil.js": "./node_modules/moment/locale/fil.js",
+	"./fo": "./node_modules/moment/locale/fo.js",
+	"./fo.js": "./node_modules/moment/locale/fo.js",
+	"./fr": "./node_modules/moment/locale/fr.js",
+	"./fr-ca": "./node_modules/moment/locale/fr-ca.js",
+	"./fr-ca.js": "./node_modules/moment/locale/fr-ca.js",
+	"./fr-ch": "./node_modules/moment/locale/fr-ch.js",
+	"./fr-ch.js": "./node_modules/moment/locale/fr-ch.js",
+	"./fr.js": "./node_modules/moment/locale/fr.js",
+	"./fy": "./node_modules/moment/locale/fy.js",
+	"./fy.js": "./node_modules/moment/locale/fy.js",
+	"./ga": "./node_modules/moment/locale/ga.js",
+	"./ga.js": "./node_modules/moment/locale/ga.js",
+	"./gd": "./node_modules/moment/locale/gd.js",
+	"./gd.js": "./node_modules/moment/locale/gd.js",
+	"./gl": "./node_modules/moment/locale/gl.js",
+	"./gl.js": "./node_modules/moment/locale/gl.js",
+	"./gom-deva": "./node_modules/moment/locale/gom-deva.js",
+	"./gom-deva.js": "./node_modules/moment/locale/gom-deva.js",
+	"./gom-latn": "./node_modules/moment/locale/gom-latn.js",
+	"./gom-latn.js": "./node_modules/moment/locale/gom-latn.js",
+	"./gu": "./node_modules/moment/locale/gu.js",
+	"./gu.js": "./node_modules/moment/locale/gu.js",
+	"./he": "./node_modules/moment/locale/he.js",
+	"./he.js": "./node_modules/moment/locale/he.js",
+	"./hi": "./node_modules/moment/locale/hi.js",
+	"./hi.js": "./node_modules/moment/locale/hi.js",
+	"./hr": "./node_modules/moment/locale/hr.js",
+	"./hr.js": "./node_modules/moment/locale/hr.js",
+	"./hu": "./node_modules/moment/locale/hu.js",
+	"./hu.js": "./node_modules/moment/locale/hu.js",
+	"./hy-am": "./node_modules/moment/locale/hy-am.js",
+	"./hy-am.js": "./node_modules/moment/locale/hy-am.js",
+	"./id": "./node_modules/moment/locale/id.js",
+	"./id.js": "./node_modules/moment/locale/id.js",
+	"./is": "./node_modules/moment/locale/is.js",
+	"./is.js": "./node_modules/moment/locale/is.js",
+	"./it": "./node_modules/moment/locale/it.js",
+	"./it-ch": "./node_modules/moment/locale/it-ch.js",
+	"./it-ch.js": "./node_modules/moment/locale/it-ch.js",
+	"./it.js": "./node_modules/moment/locale/it.js",
+	"./ja": "./node_modules/moment/locale/ja.js",
+	"./ja.js": "./node_modules/moment/locale/ja.js",
+	"./jv": "./node_modules/moment/locale/jv.js",
+	"./jv.js": "./node_modules/moment/locale/jv.js",
+	"./ka": "./node_modules/moment/locale/ka.js",
+	"./ka.js": "./node_modules/moment/locale/ka.js",
+	"./kk": "./node_modules/moment/locale/kk.js",
+	"./kk.js": "./node_modules/moment/locale/kk.js",
+	"./km": "./node_modules/moment/locale/km.js",
+	"./km.js": "./node_modules/moment/locale/km.js",
+	"./kn": "./node_modules/moment/locale/kn.js",
+	"./kn.js": "./node_modules/moment/locale/kn.js",
+	"./ko": "./node_modules/moment/locale/ko.js",
+	"./ko.js": "./node_modules/moment/locale/ko.js",
+	"./ku": "./node_modules/moment/locale/ku.js",
+	"./ku.js": "./node_modules/moment/locale/ku.js",
+	"./ky": "./node_modules/moment/locale/ky.js",
+	"./ky.js": "./node_modules/moment/locale/ky.js",
+	"./lb": "./node_modules/moment/locale/lb.js",
+	"./lb.js": "./node_modules/moment/locale/lb.js",
+	"./lo": "./node_modules/moment/locale/lo.js",
+	"./lo.js": "./node_modules/moment/locale/lo.js",
+	"./lt": "./node_modules/moment/locale/lt.js",
+	"./lt.js": "./node_modules/moment/locale/lt.js",
+	"./lv": "./node_modules/moment/locale/lv.js",
+	"./lv.js": "./node_modules/moment/locale/lv.js",
+	"./me": "./node_modules/moment/locale/me.js",
+	"./me.js": "./node_modules/moment/locale/me.js",
+	"./mi": "./node_modules/moment/locale/mi.js",
+	"./mi.js": "./node_modules/moment/locale/mi.js",
+	"./mk": "./node_modules/moment/locale/mk.js",
+	"./mk.js": "./node_modules/moment/locale/mk.js",
+	"./ml": "./node_modules/moment/locale/ml.js",
+	"./ml.js": "./node_modules/moment/locale/ml.js",
+	"./mn": "./node_modules/moment/locale/mn.js",
+	"./mn.js": "./node_modules/moment/locale/mn.js",
+	"./mr": "./node_modules/moment/locale/mr.js",
+	"./mr.js": "./node_modules/moment/locale/mr.js",
+	"./ms": "./node_modules/moment/locale/ms.js",
+	"./ms-my": "./node_modules/moment/locale/ms-my.js",
+	"./ms-my.js": "./node_modules/moment/locale/ms-my.js",
+	"./ms.js": "./node_modules/moment/locale/ms.js",
+	"./mt": "./node_modules/moment/locale/mt.js",
+	"./mt.js": "./node_modules/moment/locale/mt.js",
+	"./my": "./node_modules/moment/locale/my.js",
+	"./my.js": "./node_modules/moment/locale/my.js",
+	"./nb": "./node_modules/moment/locale/nb.js",
+	"./nb.js": "./node_modules/moment/locale/nb.js",
+	"./ne": "./node_modules/moment/locale/ne.js",
+	"./ne.js": "./node_modules/moment/locale/ne.js",
+	"./nl": "./node_modules/moment/locale/nl.js",
+	"./nl-be": "./node_modules/moment/locale/nl-be.js",
+	"./nl-be.js": "./node_modules/moment/locale/nl-be.js",
+	"./nl.js": "./node_modules/moment/locale/nl.js",
+	"./nn": "./node_modules/moment/locale/nn.js",
+	"./nn.js": "./node_modules/moment/locale/nn.js",
+	"./oc-lnc": "./node_modules/moment/locale/oc-lnc.js",
+	"./oc-lnc.js": "./node_modules/moment/locale/oc-lnc.js",
+	"./pa-in": "./node_modules/moment/locale/pa-in.js",
+	"./pa-in.js": "./node_modules/moment/locale/pa-in.js",
+	"./pl": "./node_modules/moment/locale/pl.js",
+	"./pl.js": "./node_modules/moment/locale/pl.js",
+	"./pt": "./node_modules/moment/locale/pt.js",
+	"./pt-br": "./node_modules/moment/locale/pt-br.js",
+	"./pt-br.js": "./node_modules/moment/locale/pt-br.js",
+	"./pt.js": "./node_modules/moment/locale/pt.js",
+	"./ro": "./node_modules/moment/locale/ro.js",
+	"./ro.js": "./node_modules/moment/locale/ro.js",
+	"./ru": "./node_modules/moment/locale/ru.js",
+	"./ru.js": "./node_modules/moment/locale/ru.js",
+	"./sd": "./node_modules/moment/locale/sd.js",
+	"./sd.js": "./node_modules/moment/locale/sd.js",
+	"./se": "./node_modules/moment/locale/se.js",
+	"./se.js": "./node_modules/moment/locale/se.js",
+	"./si": "./node_modules/moment/locale/si.js",
+	"./si.js": "./node_modules/moment/locale/si.js",
+	"./sk": "./node_modules/moment/locale/sk.js",
+	"./sk.js": "./node_modules/moment/locale/sk.js",
+	"./sl": "./node_modules/moment/locale/sl.js",
+	"./sl.js": "./node_modules/moment/locale/sl.js",
+	"./sq": "./node_modules/moment/locale/sq.js",
+	"./sq.js": "./node_modules/moment/locale/sq.js",
+	"./sr": "./node_modules/moment/locale/sr.js",
+	"./sr-cyrl": "./node_modules/moment/locale/sr-cyrl.js",
+	"./sr-cyrl.js": "./node_modules/moment/locale/sr-cyrl.js",
+	"./sr.js": "./node_modules/moment/locale/sr.js",
+	"./ss": "./node_modules/moment/locale/ss.js",
+	"./ss.js": "./node_modules/moment/locale/ss.js",
+	"./sv": "./node_modules/moment/locale/sv.js",
+	"./sv.js": "./node_modules/moment/locale/sv.js",
+	"./sw": "./node_modules/moment/locale/sw.js",
+	"./sw.js": "./node_modules/moment/locale/sw.js",
+	"./ta": "./node_modules/moment/locale/ta.js",
+	"./ta.js": "./node_modules/moment/locale/ta.js",
+	"./te": "./node_modules/moment/locale/te.js",
+	"./te.js": "./node_modules/moment/locale/te.js",
+	"./tet": "./node_modules/moment/locale/tet.js",
+	"./tet.js": "./node_modules/moment/locale/tet.js",
+	"./tg": "./node_modules/moment/locale/tg.js",
+	"./tg.js": "./node_modules/moment/locale/tg.js",
+	"./th": "./node_modules/moment/locale/th.js",
+	"./th.js": "./node_modules/moment/locale/th.js",
+	"./tk": "./node_modules/moment/locale/tk.js",
+	"./tk.js": "./node_modules/moment/locale/tk.js",
+	"./tl-ph": "./node_modules/moment/locale/tl-ph.js",
+	"./tl-ph.js": "./node_modules/moment/locale/tl-ph.js",
+	"./tlh": "./node_modules/moment/locale/tlh.js",
+	"./tlh.js": "./node_modules/moment/locale/tlh.js",
+	"./tr": "./node_modules/moment/locale/tr.js",
+	"./tr.js": "./node_modules/moment/locale/tr.js",
+	"./tzl": "./node_modules/moment/locale/tzl.js",
+	"./tzl.js": "./node_modules/moment/locale/tzl.js",
+	"./tzm": "./node_modules/moment/locale/tzm.js",
+	"./tzm-latn": "./node_modules/moment/locale/tzm-latn.js",
+	"./tzm-latn.js": "./node_modules/moment/locale/tzm-latn.js",
+	"./tzm.js": "./node_modules/moment/locale/tzm.js",
+	"./ug-cn": "./node_modules/moment/locale/ug-cn.js",
+	"./ug-cn.js": "./node_modules/moment/locale/ug-cn.js",
+	"./uk": "./node_modules/moment/locale/uk.js",
+	"./uk.js": "./node_modules/moment/locale/uk.js",
+	"./ur": "./node_modules/moment/locale/ur.js",
+	"./ur.js": "./node_modules/moment/locale/ur.js",
+	"./uz": "./node_modules/moment/locale/uz.js",
+	"./uz-latn": "./node_modules/moment/locale/uz-latn.js",
+	"./uz-latn.js": "./node_modules/moment/locale/uz-latn.js",
+	"./uz.js": "./node_modules/moment/locale/uz.js",
+	"./vi": "./node_modules/moment/locale/vi.js",
+	"./vi.js": "./node_modules/moment/locale/vi.js",
+	"./x-pseudo": "./node_modules/moment/locale/x-pseudo.js",
+	"./x-pseudo.js": "./node_modules/moment/locale/x-pseudo.js",
+	"./yo": "./node_modules/moment/locale/yo.js",
+	"./yo.js": "./node_modules/moment/locale/yo.js",
+	"./zh-cn": "./node_modules/moment/locale/zh-cn.js",
+	"./zh-cn.js": "./node_modules/moment/locale/zh-cn.js",
+	"./zh-hk": "./node_modules/moment/locale/zh-hk.js",
+	"./zh-hk.js": "./node_modules/moment/locale/zh-hk.js",
+	"./zh-mo": "./node_modules/moment/locale/zh-mo.js",
+	"./zh-mo.js": "./node_modules/moment/locale/zh-mo.js",
+	"./zh-tw": "./node_modules/moment/locale/zh-tw.js",
+	"./zh-tw.js": "./node_modules/moment/locale/zh-tw.js"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
 
 /***/ }),
 
@@ -953,150 +1331,282 @@ var render = function() {
   return _c("div", { staticClass: "dashboard" }, [
     _vm._m(0),
     _vm._v(" "),
-    _vm._m(1),
+    _vm.loading
+      ? _c(
+          "div",
+          { staticClass: "skeleton-loader" },
+          [_c("v-skeleton-loader", { attrs: { type: "card, table" } })],
+          1
+        )
+      : _vm._e(),
     _vm._v(" "),
-    _c("section", { staticClass: "mt-12" }, [
-      _c(
-        "div",
-        [
-          _c(
-            "v-row",
-            {
-              staticClass: "flex-column-reverse flex-md-row",
-              attrs: { justify: "space-between" }
-            },
-            [
-              _c(
-                "v-col",
-                { attrs: { cols: "12", md: "9" } },
-                [
-                  _c("h4", { staticClass: "mb-5" }, [
-                    _vm._v("Recent Transactions")
-                  ]),
-                  _vm._v(" "),
-                  _c("v-data-table", {
-                    staticClass: "text-lg elevation-1 rounded-md",
-                    attrs: {
-                      headers: _vm.tableHeaders,
-                      items: _vm.transactions,
-                      "items-per-page": 5,
-                      "item-class": "text-xl"
-                    }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("v-col", { attrs: { cols: "12", md: "3" } }, [
-                _c("div", { staticClass: "account-summary" }, [
-                  _c("h4", { staticClass: "mb-5" }, [
-                    _vm._v("Account Summary")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "p-3 mb-4 green darken-2 green--text text--lighten-5 active-investment rounded-2xl"
-                    },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "flex" },
-                        [
-                          _c(
-                            "v-icon",
-                            { staticClass: "mr-6", attrs: { size: "40" } },
-                            [_vm._v("fa fa-rocket")]
-                          ),
-                          _vm._v(" "),
-                          _c("div", [
-                            _c("h6", [_vm._v("Active Investments")]),
-                            _vm._v(" "),
+    !_vm.loading
+      ? _c("div", { staticClass: "page" }, [
+          _c("section", { staticClass: "mt-16 invoices-dashboard" }, [
+            _c("h4", [_vm._v("Invoices")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "flex flex-wrap mt-4 md:flex-nowrap md:space-x-4 space-x-0 md:space-x-10"
+              },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "w-full px-20 py-3 mb-4 text-center text-gray-800 bg-green-100 sm:w-auto rounded-xl shadow-sm total-balance"
+                  },
+                  [
+                    _c("h3", { staticClass: "text-xl font-bold" }, [
+                      _vm._v("$" + _vm._s(_vm.userInformation.total_balance))
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", [_vm._v("Total Balance")])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "w-full px-20 py-3 mb-4 text-center text-gray-800 bg-green-100 sm:w-auto total-investments rounded-xl shadow-sm"
+                  },
+                  [
+                    _c("h3", { staticClass: "text-xl font-bold" }, [
+                      _vm._v("$" + _vm._s(_vm.userInformation.total_deposit))
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", [_vm._v("Total Investments")])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "w-full px-20 py-3 mb-4 text-center text-gray-800 bg-green-100 sm:w-auto total-withdrawal rounded-xl shadow-sm"
+                  },
+                  [
+                    _c("h3", { staticClass: "text-xl font-bold" }, [
+                      _vm._v("$" + _vm._s(_vm.userInformation.total_withdraw))
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", [_vm._v("Total Withdrawals")])
+                  ]
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("section", { staticClass: "mt-12" }, [
+            _c(
+              "div",
+              [
+                _c(
+                  "v-row",
+                  {
+                    staticClass: "flex-column-reverse flex-md-row",
+                    attrs: { justify: "space-between" }
+                  },
+                  [
+                    _c(
+                      "v-col",
+                      { attrs: { cols: "12", md: "9" } },
+                      [
+                        _c("h4", { staticClass: "mb-5" }, [
+                          _vm._v("Recent Transactions")
+                        ]),
+                        _vm._v(" "),
+                        _c("v-data-table", {
+                          staticClass: "text-lg elevation-1 rounded-md",
+                          attrs: {
+                            headers: _vm.tableHeaders,
+                            items: _vm.userInformation.transaction,
+                            "items-per-page": 10,
+                            "item-class": "text-xl"
+                          },
+                          scopedSlots: _vm._u(
+                            [
+                              {
+                                key: "item.created_at",
+                                fn: function(ref) {
+                                  var item = ref.item
+                                  return [
+                                    _c("td", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm._f("formatDate")(item.created_at)
+                                        )
+                                      )
+                                    ])
+                                  ]
+                                }
+                              },
+                              {
+                                key: "item.amount",
+                                fn: function(ref) {
+                                  var item = ref.item
+                                  return [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("formatCurrency")(item.amount)
+                                      )
+                                    )
+                                  ]
+                                }
+                              }
+                            ],
+                            null,
+                            false,
+                            623183069
+                          )
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("v-col", { attrs: { cols: "12", md: "3" } }, [
+                      _c("div", { staticClass: "account-summary" }, [
+                        _c("h4", { staticClass: "mb-5" }, [
+                          _vm._v("Account Summary")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "p-3 mb-4 green darken-2 green--text text--lighten-5 active-investment rounded-2xl"
+                          },
+                          [
                             _c(
-                              "span",
-                              { staticClass: "block text-2xl font-bold" },
-                              [_vm._v("$300.00")]
+                              "div",
+                              { staticClass: "flex" },
+                              [
+                                _c(
+                                  "v-icon",
+                                  {
+                                    staticClass: "mr-6",
+                                    attrs: { size: "40" }
+                                  },
+                                  [_vm._v("fa fa-rocket")]
+                                ),
+                                _vm._v(" "),
+                                _c("div", [
+                                  _c("h6", [_vm._v("Active Investments")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "span",
+                                    { staticClass: "block text-2xl font-bold" },
+                                    [
+                                      _vm._v(
+                                        "$" +
+                                          _vm._s(
+                                            _vm.userInformation.total_deposit
+                                          )
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ],
+                              1
                             )
-                          ])
-                        ],
-                        1
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "p-3 mb-4 blue darken-2 blue--text text--lighten-5 total-investment rounded-2xl"
-                    },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "flex" },
-                        [
-                          _c(
-                            "v-icon",
-                            { staticClass: "mr-6", attrs: { size: "40" } },
-                            [_vm._v("fa fa-trophy")]
-                          ),
-                          _vm._v(" "),
-                          _c("div", [
-                            _c("h6", [_vm._v("Total Investments")]),
-                            _vm._v(" "),
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "p-3 mb-4 blue darken-2 blue--text text--lighten-5 total-investment rounded-2xl"
+                          },
+                          [
                             _c(
-                              "span",
-                              { staticClass: "block text-2xl font-bold" },
-                              [_vm._v("$300.00")]
+                              "div",
+                              { staticClass: "flex" },
+                              [
+                                _c(
+                                  "v-icon",
+                                  {
+                                    staticClass: "mr-6",
+                                    attrs: { size: "40" }
+                                  },
+                                  [_vm._v("fa fa-money")]
+                                ),
+                                _vm._v(" "),
+                                _c("div", [
+                                  _c("h6", [_vm._v("Earned")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "span",
+                                    { staticClass: "block text-2xl font-bold" },
+                                    [
+                                      _vm._v(
+                                        "$" + _vm._s(_vm.userInformation.earned)
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ],
+                              1
                             )
-                          ])
-                        ],
-                        1
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "p-3 mb-4 orange darken-2 orange--text text--lighten-5 total-investment rounded-2xl"
-                    },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "flex" },
-                        [
-                          _c(
-                            "v-icon",
-                            { staticClass: "mr-6", attrs: { size: "40" } },
-                            [_vm._v("fa fa-money")]
-                          ),
-                          _vm._v(" "),
-                          _c("div", [
-                            _c("h6", [_vm._v("Current Balance")]),
-                            _vm._v(" "),
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "p-3 mb-4 orange darken-2 orange--text text--lighten-5 total-investment rounded-2xl"
+                          },
+                          [
                             _c(
-                              "span",
-                              { staticClass: "block text-2xl font-bold" },
-                              [_vm._v("$300.00")]
+                              "div",
+                              { staticClass: "flex" },
+                              [
+                                _c(
+                                  "v-icon",
+                                  {
+                                    staticClass: "mr-6",
+                                    attrs: { size: "40" }
+                                  },
+                                  [_vm._v("fa fa-trophy")]
+                                ),
+                                _vm._v(" "),
+                                _c("div", [
+                                  _c("h6", [
+                                    _vm._v("No. of Active Investments")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "span",
+                                    { staticClass: "block text-2xl font-bold" },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.userInformation.active_investment
+                                        )
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ],
+                              1
                             )
-                          ])
-                        ],
-                        1
-                      )
-                    ]
-                  )
-                ])
-              ])
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ])
+                          ]
+                        )
+                      ])
+                    ])
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ])
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -1106,68 +1616,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", [
       _c("h3", { staticClass: "font-bold" }, [_vm._v("Overview")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "mt-16 invoices-dashboard" }, [
-      _c("h4", [_vm._v("Invoices")]),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass:
-            "flex flex-wrap mt-4 md:flex-nowrap md:space-x-4 space-x-0 md:space-x-10"
-        },
-        [
-          _c(
-            "div",
-            {
-              staticClass:
-                "w-full px-20 py-3 mb-4 text-center text-gray-800 bg-green-100 sm:w-auto rounded-xl shadow-sm total-balance"
-            },
-            [
-              _c("h3", { staticClass: "text-xl font-bold" }, [
-                _vm._v("$14,000")
-              ]),
-              _vm._v(" "),
-              _c("h6", [_vm._v("Total Balance")])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass:
-                "w-full px-20 py-3 mb-4 text-center text-gray-800 bg-green-100 sm:w-auto total-investments rounded-xl shadow-sm"
-            },
-            [
-              _c("h3", { staticClass: "text-xl font-bold" }, [
-                _vm._v("$14,000")
-              ]),
-              _vm._v(" "),
-              _c("h6", [_vm._v("Total Investments")])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass:
-                "w-full px-20 py-3 mb-4 text-center text-gray-800 bg-green-100 sm:w-auto total-withdrawal rounded-xl shadow-sm"
-            },
-            [
-              _c("h3", { staticClass: "text-xl font-bold" }, [
-                _vm._v("$14,000")
-              ]),
-              _vm._v(" "),
-              _c("h6", [_vm._v("Total Withdrawals")])
-            ]
-          )
-        ]
-      )
     ])
   }
 ]
@@ -1824,7 +2272,248 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", [
+    _c("h3", { staticClass: "text-gray-600" }, [_vm._v("Edit Profile")]),
+    _vm._v(" "),
+    _c("section", { staticClass: "mt-8 edit-profile" }, [
+      _c(
+        "div",
+        { staticClass: "rounded-lg shadow-sm bg-gray-50" },
+        [
+          _c(
+            "v-form",
+            {
+              model: {
+                value: _vm.valid,
+                callback: function($$v) {
+                  _vm.valid = $$v
+                },
+                expression: "valid"
+              }
+            },
+            [
+              _c(
+                "v-container",
+                [
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "6", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "First name" },
+                            model: {
+                              value: _vm.firstname,
+                              callback: function($$v) {
+                                _vm.firstname = $$v
+                              },
+                              expression: "firstname"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "6", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Last name" },
+                            model: {
+                              value: _vm.lastname,
+                              callback: function($$v) {
+                                _vm.lastname = $$v
+                              },
+                              expression: "lastname"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "6", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "E-mail" },
+                            model: {
+                              value: _vm.email,
+                              callback: function($$v) {
+                                _vm.email = $$v
+                              },
+                              expression: "email"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "6", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { type: "password", label: "Password" },
+                            model: {
+                              value: _vm.password,
+                              callback: function($$v) {
+                                _vm.password = $$v
+                              },
+                              expression: "password"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "6", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              type: "password",
+                              label: "Confirm Password"
+                            },
+                            model: {
+                              value: _vm.confirmPassword,
+                              callback: function($$v) {
+                                _vm.confirmPassword = $$v
+                              },
+                              expression: "confirmPassword"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    { staticClass: "mt-12" },
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "6", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Bitcoin Address" },
+                            model: {
+                              value: _vm.btcAddress,
+                              callback: function($$v) {
+                                _vm.btcAddress = $$v
+                              },
+                              expression: "btcAddress"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "6", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Etherum Address" },
+                            model: {
+                              value: _vm.ethAddress,
+                              callback: function($$v) {
+                                _vm.ethAddress = $$v
+                              },
+                              expression: "ethAddress"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "6", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Litecoin Address" },
+                            model: {
+                              value: _vm.ltcAddress,
+                              callback: function($$v) {
+                                _vm.ltcAddress = $$v
+                              },
+                              expression: "ltcAddress"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "6", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Bitcoin Cash" },
+                            model: {
+                              value: _vm.bchAddress,
+                              callback: function($$v) {
+                                _vm.bchAddress = $$v
+                              },
+                              expression: "bchAddress"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", sm: "6", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "Dash Address" },
+                            model: {
+                              value: _vm.dashAddress,
+                              callback: function($$v) {
+                                _vm.dashAddress = $$v
+                              },
+                              expression: "dashAddress"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-5" },
+                    [
+                      _c(
+                        "v-btn",
+                        { attrs: { dark: "", color: "green darken-2" } },
+                        [_vm._v("Update Profile")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -2028,17 +2717,20 @@ render._withStripped = true
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _plugins_vuetify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./plugins/vuetify */ "./resources/js/plugins/vuetify.js");
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
-/* harmony import */ var _components_navbar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/navbar.vue */ "./resources/js/components/navbar.vue");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var _components_navbar_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/navbar.vue */ "./resources/js/components/navbar.vue");
+
 
 
 
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-Vue.component("nav-bar", _components_navbar_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
+Vue.component("nav-bar", _components_navbar_vue__WEBPACK_IMPORTED_MODULE_3__["default"]);
 var app = new Vue({
   router: _router__WEBPACK_IMPORTED_MODULE_1__["default"],
   vuetify: _plugins_vuetify__WEBPACK_IMPORTED_MODULE_0__["default"],
+  store: _store__WEBPACK_IMPORTED_MODULE_2__["default"],
   el: "#app"
 });
 /* harmony default export */ __webpack_exports__["default"] = (app);
@@ -2132,6 +2824,81 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/mixins/userInformation.js":
+/*!************************************************!*\
+  !*** ./resources/js/mixins/userInformation.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      loading: true
+    };
+  },
+  methods: _objectSpread({
+    getUserInformation: function getUserInformation() {
+      var _this = this;
+
+      var REQUEST_URL = "/user_dashboard/";
+      axios.get(REQUEST_URL).then(function (response) {
+        _this.updateUserInformation(response.data);
+
+        _this.loading = false;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])("user", ["updateUserInformation"])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("user", ["userInformation"])),
+  mounted: function mounted() {
+    this.getUserInformation();
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/mixins/utilitiesMixin.js":
+/*!***********************************************!*\
+  !*** ./resources/js/mixins/utilitiesMixin.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  methods: {},
+  filters: {
+    formatDate: function formatDate(date) {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format("MMMM Do YYYY, h:mm A");
+    },
+    formatCurrency: function formatCurrency(amount) {
+      var formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      });
+      return formatter.format(parseFloat(amount));
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/pages/user/dashboard.vue":
 /*!***********************************************!*\
   !*** ./resources/js/pages/user/dashboard.vue ***!
@@ -2149,6 +2916,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/index.js");
 /* harmony import */ var vuetify_lib_components_VDataTable__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuetify/lib/components/VDataTable */ "./node_modules/vuetify/lib/components/VDataTable/index.js");
 /* harmony import */ var vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib/components/VIcon */ "./node_modules/vuetify/lib/components/VIcon/index.js");
+/* harmony import */ var vuetify_lib_components_VSkeletonLoader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify/lib/components/VSkeletonLoader */ "./node_modules/vuetify/lib/components/VSkeletonLoader/index.js");
 
 
 
@@ -2173,7 +2941,8 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 
 
-_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VCol: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_4__["VCol"],VDataTable: vuetify_lib_components_VDataTable__WEBPACK_IMPORTED_MODULE_5__["VDataTable"],VIcon: vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_6__["VIcon"],VRow: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_4__["VRow"]})
+
+_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VCol: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_4__["VCol"],VDataTable: vuetify_lib_components_VDataTable__WEBPACK_IMPORTED_MODULE_5__["VDataTable"],VIcon: vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_6__["VIcon"],VRow: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_4__["VRow"],VSkeletonLoader: vuetify_lib_components_VSkeletonLoader__WEBPACK_IMPORTED_MODULE_7__["VSkeletonLoader"]})
 
 
 /* hot reload */
@@ -2680,6 +3449,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _settings_vue_vue_type_template_id_7d6963ce___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings.vue?vue&type=template&id=7d6963ce& */ "./resources/js/pages/user/settings.vue?vue&type=template&id=7d6963ce&");
 /* harmony import */ var _settings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./settings.vue?vue&type=script&lang=js& */ "./resources/js/pages/user/settings.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vuetify-loader/lib/runtime/installComponents.js */ "./node_modules/vuetify-loader/lib/runtime/installComponents.js");
+/* harmony import */ var _node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuetify/lib/components/VBtn */ "./node_modules/vuetify/lib/components/VBtn/index.js");
+/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/index.js");
+/* harmony import */ var vuetify_lib_components_VForm__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib/components/VForm */ "./node_modules/vuetify/lib/components/VForm/index.js");
+/* harmony import */ var vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify/lib/components/VTextField */ "./node_modules/vuetify/lib/components/VTextField/index.js");
 
 
 
@@ -2697,6 +3472,17 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   null
   
 )
+
+/* vuetify-loader */
+
+
+
+
+
+
+
+_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VBtn: vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_4__["VBtn"],VCol: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__["VCol"],VContainer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__["VContainer"],VForm: vuetify_lib_components_VForm__WEBPACK_IMPORTED_MODULE_6__["VForm"],VRow: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__["VRow"],VTextField: vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_7__["VTextField"]})
+
 
 /* hot reload */
 if (false) { var api; }
@@ -2897,6 +3683,67 @@ var routes = _user_routes__WEBPACK_IMPORTED_MODULE_2__["default"]; // if (window
   // base: process.env.BASE_URL,
   routes: routes
 }));
+
+/***/ }),
+
+/***/ "./resources/js/store/index.js":
+/*!*************************************!*\
+  !*** ./resources/js/store/index.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _modules_user__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/user */ "./resources/js/store/modules/user.js");
+
+
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+/* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+  modules: {
+    user: _modules_user__WEBPACK_IMPORTED_MODULE_2__["default"]
+  }
+}));
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/user.js":
+/*!********************************************!*\
+  !*** ./resources/js/store/modules/user.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var state = function state() {
+  return {
+    userInformation: null
+  };
+};
+
+var getters = {
+  userInformation: function userInformation(state) {
+    return state.userInformation;
+  }
+};
+var actions = {};
+var mutations = {
+  updateUserInformation: function updateUserInformation(state, payload) {
+    state.userInformation = payload;
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
 
 /***/ }),
 

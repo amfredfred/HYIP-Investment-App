@@ -43,11 +43,26 @@ export default {
   name: "SelectPlan",
   data() {
     return {
-      plans: [
-        { name: "Amazing Plan", price: "$100.00" },
-        { name: "Unamazing plan", price: "$300" },
-      ],
+      plans: [],
     };
+  },
+  methods: {
+    get_plans() {
+      const REQUEST_URL = "/deposit/";
+      axios
+        .get(REQUEST_URL)
+        .then((response) => {
+          this.plans = response.data.plan;
+          this.investments = response.data.plan;
+          this.balance = response.data.total_balance;
+          this.coins = response.data.coins;
+          this.recent_deposits = response.data.investment;
+          this.loading_transactions = false;
+        })
+        .catch((error) => {
+          console.log("error");
+        });
+    },
   },
 };
 </script>
