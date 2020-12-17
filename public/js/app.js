@@ -331,6 +331,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _mixins_utilitiesMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../mixins/utilitiesMixin */ "./resources/js/mixins/utilitiesMixin.js");
+/* harmony import */ var _mixins_userInformation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../mixins/userInformation */ "./resources/js/mixins/userInformation.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -371,30 +380,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "SelectPlan",
   data: function data() {
-    return {
-      plans: []
-    };
+    return {};
   },
-  methods: {
-    get_plans: function get_plans() {
-      var _this = this;
-
-      var REQUEST_URL = "/deposit/";
-      axios.get(REQUEST_URL).then(function (response) {
-        _this.plans = response.data.plan;
-        _this.investments = response.data.plan;
-        _this.balance = response.data.total_balance;
-        _this.coins = response.data.coins;
-        _this.recent_deposits = response.data.investment;
-        _this.loading_transactions = false;
-      })["catch"](function (error) {
-        console.log("error");
-      });
-    }
-  }
+  methods: {},
+  mixins: [_mixins_utilitiesMixin__WEBPACK_IMPORTED_MODULE_1__["default"], _mixins_userInformation__WEBPACK_IMPORTED_MODULE_2__["default"]],
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("user", ["plans"])),
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -1899,7 +1896,11 @@ var render = function() {
                               {
                                 staticClass: "text-lg font-bold text-gray-700"
                               },
-                              [_vm._v("$100")]
+                              [
+                                _vm._v(
+                                  _vm._s(_vm._f("formatCurrency")(plan.min))
+                                )
+                              ]
                             )
                           ]
                         ),
@@ -1922,7 +1923,11 @@ var render = function() {
                               {
                                 staticClass: "text-lg font-bold text-gray-700"
                               },
-                              [_vm._v("$100")]
+                              [
+                                _vm._v(
+                                  _vm._s(_vm._f("formatCurrency")(plan.max))
+                                )
+                              ]
                             )
                           ]
                         ),
@@ -1945,7 +1950,7 @@ var render = function() {
                               {
                                 staticClass: "text-lg font-bold text-gray-700"
                               },
-                              [_vm._v("5%")]
+                              [_vm._v(_vm._s(plan.percentage) + "%")]
                             )
                           ]
                         )
@@ -2844,10 +2849,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      loading: true
+      loading: true,
+      details: null
     };
   },
   methods: _objectSpread({
+    mountDashboard: function mountDashboard() {
+      this.getUserInformation();
+      this.getPlans();
+    },
     getUserInformation: function getUserInformation() {
       var _this = this;
 
@@ -2859,11 +2869,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    getPlans: function getPlans() {
+      var _this2 = this;
+
+      var REQUEST_URL = "/deposit/";
+      axios.get(REQUEST_URL).then(function (response) {
+        _this2.details = response.data;
+        _this2.plans = response.data.plan;
+        _this2.investments = response.data.plan;
+        _this2.balance = response.data.total_balance;
+        _this2.coins = response.data.coins;
+        _this2.recent_deposits = response.data.investment;
+
+        _this2.updateFullDashboardInformation(response.data);
+      })["catch"](function (error) {
+        console.log("error");
+      });
     }
-  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])("user", ["updateUserInformation"])),
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])("user", ["updateUserInformation", "updateFullDashboardInformation"])),
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])("user", ["userInformation"])),
   mounted: function mounted() {
-    this.getUserInformation();
+    this.mountDashboard();
   }
 });
 
@@ -3722,19 +3749,31 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 __webpack_require__.r(__webpack_exports__);
 var state = function state() {
   return {
-    userInformation: null
+    userInformation: null,
+    plans: [],
+    userCoin: []
   };
 };
 
 var getters = {
   userInformation: function userInformation(state) {
     return state.userInformation;
+  },
+  plans: function plans(state) {
+    return state.plans;
+  },
+  userCoin: function userCoin(state) {
+    return state.userCoin;
   }
 };
 var actions = {};
 var mutations = {
   updateUserInformation: function updateUserInformation(state, payload) {
     state.userInformation = payload;
+  },
+  updateFullDashboardInformation: function updateFullDashboardInformation(state, payload) {
+    state.plans = payload.plan;
+    state.userCoin = payload.coins;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({

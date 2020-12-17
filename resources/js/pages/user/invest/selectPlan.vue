@@ -10,17 +10,17 @@
               <div class="plan-features">
                 <div class="flex justify-between pb-3 mb-12 border-pink-500 feature">
                   <span class="text-base text-gray-600">Min</span>
-                  <span class="text-lg font-bold text-gray-700">$100</span>
+                  <span class="text-lg font-bold text-gray-700">{{plan.min | formatCurrency}}</span>
                 </div>
 
                 <div class="flex justify-between pb-3 mb-12 border-pink-500 feature">
                   <span class="text-base text-gray-600">Max</span>
-                  <span class="text-lg font-bold text-gray-700">$100</span>
+                  <span class="text-lg font-bold text-gray-700">{{plan.max | formatCurrency}}</span>
                 </div>
 
                 <div class="flex justify-between pb-3 mb-12 border-pink-500 feature">
                   <span class="text-base text-gray-600">Interest</span>
-                  <span class="text-lg font-bold text-gray-700">5%</span>
+                  <span class="text-lg font-bold text-gray-700">{{plan.percentage}}%</span>
                 </div>
               </div>
             </div>
@@ -39,31 +39,26 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
+import utilitiesMixin from "../../../mixins/utilitiesMixin";
+import userInformationMixin from "../../../mixins/userInformation";
+
 export default {
   name: "SelectPlan",
   data() {
-    return {
-      plans: [],
-    };
+    return {};
   },
-  methods: {
-    get_plans() {
-      const REQUEST_URL = "/deposit/";
-      axios
-        .get(REQUEST_URL)
-        .then((response) => {
-          this.plans = response.data.plan;
-          this.investments = response.data.plan;
-          this.balance = response.data.total_balance;
-          this.coins = response.data.coins;
-          this.recent_deposits = response.data.investment;
-          this.loading_transactions = false;
-        })
-        .catch((error) => {
-          console.log("error");
-        });
-    },
+
+  methods: {},
+
+  mixins: [utilitiesMixin, userInformationMixin],
+
+  computed: {
+    ...mapGetters("user", ["plans"]),
   },
+
+  mounted() {},
 };
 </script>
 
