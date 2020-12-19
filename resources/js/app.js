@@ -5,6 +5,7 @@ import store from "./store";
 
 import navbar from "./components/navbar.vue";
 
+window.$ = window.jQuery = require("jquery");
 window._ = require("lodash");
 window.axios = require("axios");
 

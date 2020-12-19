@@ -15,7 +15,7 @@
                     fa-link
                   </v-icon>
                   <div class="total-earned">
-                    <h2 class="text-xl font-bold">htts://website.com/r/djdk343</h2>
+                    <h2 class="text-xl font-bold">{{refLink || "No link"}}</h2>
                     <h6>Referral Link</h6>
                   </div>
                 </div>
@@ -26,7 +26,7 @@
                 <div class="flex space-x-5">
                   <v-icon class="text-5xl text--lighten-4 purple--text">fa fa-podcast</v-icon>
                   <div class="total-earned">
-                    <h2 class="font-bold">$100.00</h2>
+                    <h2 class="font-bold">${{referalEarns}}</h2>
                     <h6>Total Earned</h6>
                   </div>
                 </div>
@@ -40,7 +40,7 @@
                     fa-users
                   </v-icon>
                   <div class="total-earned">
-                    <h2 class="font-bold">5</h2>
+                    <h2 class="font-bold">{{totalReferal}}</h2>
                     <h6>Referrals</h6>
                   </div>
                 </div>
@@ -66,6 +66,11 @@ export default {
   name: "Referral",
   data() {
     return {
+      totalReferal: 0,
+      referrals: [],
+      referalEarns: [],
+      refLink: "",
+
       tableHeaders: [
         {
           text: "Date",
@@ -81,15 +86,26 @@ export default {
           value: "status",
         },
       ],
-
-      referrals: [
-        {
-          date: "20-22-10",
-          name: "Felipe Luiz",
-          status: "Pending",
-        },
-      ],
     };
+  },
+  methods: {
+    user_referal() {
+      const REQUEST_URL = "/referals/";
+      axios
+        .get(REQUEST_URL)
+        .then((response) => {
+          this.referalEarns = response.data.commission;
+          this.totalReferal = response.data.refs_count;
+          this.referrals = response.data.referal;
+          this.refLink = response.data.ref_link;
+        })
+        .catch((error) => {
+          console.log("error");
+        });
+    },
+  },
+  mounted() {
+    this.user_referal();
   },
 };
 </script>

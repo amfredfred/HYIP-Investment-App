@@ -10,24 +10,24 @@
               <div class="plan-features">
                 <div class="flex justify-between pb-3 mb-12 border-pink-500 feature">
                   <span class="text-base text-gray-600">Min</span>
-                  <span class="text-lg font-bold text-gray-700">$100</span>
+                  <span class="text-lg font-bold text-gray-700">${{plan.min}}</span>
                 </div>
 
                 <div class="flex justify-between pb-3 mb-12 border-pink-500 feature">
                   <span class="text-base text-gray-600">Max</span>
-                  <span class="text-lg font-bold text-gray-700">$100</span>
+                  <span class="text-lg font-bold text-gray-700">${{plan.max}}</span>
                 </div>
 
                 <div class="flex justify-between pb-3 mb-12 border-pink-500 feature">
                   <span class="text-base text-gray-600">Interest</span>
-                  <span class="text-lg font-bold text-gray-700">5%</span>
+                  <span class="text-lg font-bold text-gray-700">{{plan.percentage}}%</span>
                 </div>
               </div>
             </div>
 
             <div class="p-10 mx-0 deep-purple darken-2 deep-purple--text text--lighten-5">
               <h5 class="font-bold">Current Balance</h5>
-              <span class="block text-3xl font-bold">$0.0</span>
+              <span class="block text-3xl font-bold">${{balance}}</span>
             </div>
           </v-card>
         </v-col>
@@ -35,9 +35,9 @@
           <v-form>
             <v-text-field outlined type="number" label="Amount"></v-text-field>
             <v-select
-              :items="withdrawalMethod"
+              :items="coins"
               item-text="name"
-              item-value="abbr"
+              item-value="id"
               label="Payment Method"
               single-line
               outlined
@@ -51,6 +51,8 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "pay",
   data() {
@@ -61,6 +63,18 @@ export default {
       ],
     };
   },
+  methods: {},
+  computed: {
+    ...mapState("user", {
+      plan(state) {
+        return state.plans[this.$route.params.planId];
+      },
+
+      coins: "userCoin",
+      balance: (state) => state.userInformation.total_balance,
+    }),
+  },
+  mounted() {},
 };
 </script>
 <style lang="scss" scoped>

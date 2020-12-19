@@ -253,6 +253,13 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -305,6 +312,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "pay",
   data: function data() {
@@ -317,7 +325,18 @@ __webpack_require__.r(__webpack_exports__);
         abbr: "eth"
       }]
     };
-  }
+  },
+  methods: {},
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])("user", {
+    plan: function plan(state) {
+      return state.plans[this.$route.params.planId];
+    },
+    coins: "userCoin",
+    balance: function balance(state) {
+      return state.userInformation.total_balance;
+    }
+  })),
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -511,6 +530,10 @@ __webpack_require__.r(__webpack_exports__);
   name: "Referral",
   data: function data() {
     return {
+      totalReferal: 0,
+      referrals: [],
+      referalEarns: [],
+      refLink: "",
       tableHeaders: [{
         text: "Date",
         value: "date"
@@ -520,13 +543,26 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: "Status",
         value: "status"
-      }],
-      referrals: [{
-        date: "20-22-10",
-        name: "Felipe Luiz",
-        status: "Pending"
       }]
     };
+  },
+  methods: {
+    user_referal: function user_referal() {
+      var _this = this;
+
+      var REQUEST_URL = "/referals/";
+      axios.get(REQUEST_URL).then(function (response) {
+        _this.referalEarns = response.data.commission;
+        _this.totalReferal = response.data.refs_count;
+        _this.referrals = response.data.referal;
+        _this.refLink = response.data.ref_link;
+      })["catch"](function (error) {
+        console.log("error");
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.user_referal();
   }
 });
 
@@ -596,21 +632,151 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "setting",
   data: function data() {
     return {
-      valid: false,
-      firstname: "",
-      lastname: "",
-      password: "",
-      confirmPassword: "",
-      btcAddress: "",
-      ethAddress: "",
-      ltcAddress: "",
-      bchAddress: "",
-      dashAddress: ""
+      form: {
+        valid: false,
+        firstname: "",
+        lastname: "",
+        password: "",
+        confirmPassword: "",
+        btcAddress: "",
+        ethAddress: "",
+        ltcAddress: "",
+        bchAddress: "",
+        dashAddress: ""
+      },
+      userDetail: [],
+      country: [],
+      paymentMethod: [],
+      selectedCountry: "",
+      enable2factor: "no",
+      updating_profile: false
     };
+  },
+  methods: {
+    user_setting: function user_setting() {
+      var _this = this;
+
+      var REQUEST_URL = "/edit_account/";
+      axios.get(REQUEST_URL).then(function (response) {
+        _this.userDetail = response.data.user;
+        _this.country = response.data.country;
+        _this.paymentMethod = response.data.payment_method;
+        _this.selectedCountry = _this.userDetail.country;
+
+        _this.setFormValues();
+
+        if (parseInt(_this.userDetail.google2fa_secret_status) === 1) {
+          _this.enable2factor = "yes";
+        }
+      })["catch"](function (error) {
+        console.log("error");
+      });
+    },
+    setFormValues: function setFormValues() {
+      this.form.firstname = this.userDetail.first_name;
+      this.form.lastname = this.userDetail.last_name;
+      this.form.email = this.userDetail.email;
+    },
+    collect_form_data: function collect_form_data() {
+      this.updating_profile = true;
+      var formdata = new FormData();
+      this.paymentMethod.forEach(function (pmethod) {
+        formdata.append(pmethod.coin.slug, pmethod.address);
+      });
+      var completeForm = this.appendFormData(formdata);
+      this.update_profile(completeForm);
+    },
+    appendFormData: function appendFormData(formdata) {
+      var _this2 = this;
+
+      Object.keys(this.form).forEach(function (key) {
+        return formdata.append(key, _this2.form[key]);
+      });
+      return formdata;
+    },
+    update_profile: function update_profile(formdata) {
+      var _this3 = this;
+
+      var REQUEST_URL = "edit_account";
+      axios({
+        url: REQUEST_URL,
+        method: "POST",
+        data: formdata,
+        headers: {
+          "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        }
+      }).then(function (response) {
+        if (parseInt(response.data.status) === 401) {
+          return _this3.display_profile_error(response.data.message);
+        }
+
+        _this3.message_type = "success";
+        _this3.updating_profile = false;
+        _this3.message = "Profile Updated";
+      });
+    },
+    display_profile_error: function display_profile_error(error_message) {
+      var _this4 = this;
+
+      Object.keys(error_message).forEach(function (error) {
+        var message = error_message[error];
+        _this4.message_type = "danger";
+        _this4.updating_profile = false;
+        message.forEach(function (mes) {
+          _this4.message = mes;
+        });
+      });
+    },
+    toggle2factorAuth: function toggle2factorAuth(state) {
+      if (state === "yes") {
+        return this.enable2factorAuth();
+      } else if (state === "no") {
+        this.disable2factorAuth();
+      } else {
+        return;
+      }
+    },
+    enable2factorAuth: function enable2factorAuth() {
+      var _this5 = this;
+
+      if (this.enable2factor === "no") {
+        return;
+      }
+
+      var REQUEST_URL = "/2fa/enable";
+      axios.get(REQUEST_URL).then(function (response) {
+        var data = response.data;
+
+        if (data.check_status === "1") {
+          _this5.$router.push({
+            name: "2factorsuccess",
+            query: {
+              secret: data.secret,
+              qr_code: data.image
+            }
+          });
+        }
+      });
+    },
+    disable2factorAuth: function disable2factorAuth() {
+      if (this.enable2factor === "yes") {
+        return;
+      }
+
+      var REQUEST_URL = "/2fa/disable";
+      axios.get(REQUEST_URL);
+    }
+  },
+  mounted: function mounted() {
+    this.user_setting();
   }
 });
 
@@ -687,6 +853,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "withdraw",
   data: function data() {
@@ -694,8 +873,8 @@ __webpack_require__.r(__webpack_exports__);
       dialogShown: false,
       form: {
         amount: "",
-        balance: "",
-        method: ""
+        withdrawAccount: "",
+        withdrawalMethod: ""
       },
       withdrawalMethod: [{
         name: "Bitcoin",
@@ -704,7 +883,16 @@ __webpack_require__.r(__webpack_exports__);
         name: "Etherum",
         abbr: "eth"
       }],
-      withdrawAccount: ["Main", "Referral", "Bonus"],
+      withdrawAccount: [{
+        name: "Main",
+        number: 1
+      }, {
+        name: "Referral",
+        number: 2
+      }, {
+        name: "Bonus",
+        number: 3
+      }],
       tableHeaders: [{
         text: "Date",
         value: "date"
@@ -718,13 +906,62 @@ __webpack_require__.r(__webpack_exports__);
         text: "Status",
         value: "status"
       }],
-      transactions: [{
-        date: "20-22-10",
-        method: "Bitcoin",
-        amount: "$200,00",
-        status: "Pending"
-      }]
+      transactions: [],
+      balance_details: {},
+      requesting: false
     };
+  },
+  methods: {
+    getBalanceDetails: function getBalanceDetails() {
+      var _this = this;
+
+      var REQUEST_URL = "/withdraw";
+      axios.get(REQUEST_URL).then(function (response) {
+        _this.balance_details = response.data;
+        _this.withdrawalMethod = response.data.usercoin;
+        _this.selected_coin = _this.user_wallets[0];
+        _this.transactions = response.data.withdraws; // this.set_withdraw_amount();
+
+        _this.requesting = false;
+      })["catch"](function (error) {
+        console.log("error");
+      });
+    },
+    initiate_withdrawal: function initiate_withdrawal() {
+      var _this2 = this;
+
+      this.requesting = true;
+      var formdata = new FormData();
+      formdata.append("coin", this.form.withdrawalMethod);
+      formdata.append("withdraw_from", this.form.withdrawAccount);
+      formdata.append("amount", this.form.amount);
+      var REQUEST_URL = "withdraw";
+      axios({
+        url: REQUEST_URL,
+        method: "POST",
+        data: formdata,
+        headers: {
+          "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        }
+      }).then(function (response) {
+        _this2.handle_withdraw_response(response.data);
+      });
+    },
+    handle_withdraw_response: function handle_withdraw_response(response_data) {
+      if (response_data.status === "error") {
+        this.error_message = response_data.message;
+        this.loading_data = false;
+        this.error_making_withdraw = true;
+        return;
+      }
+
+      this.withdraw_data = response_data;
+      this.loading_data = false;
+      this.confirm_withdraw = true;
+    }
+  },
+  mounted: function mounted() {
+    this.getBalanceDetails();
   }
 });
 
@@ -1706,7 +1943,7 @@ var render = function() {
                                 {
                                   staticClass: "text-lg font-bold text-gray-700"
                                 },
-                                [_vm._v("$100")]
+                                [_vm._v("$" + _vm._s(_vm.plan.min))]
                               )
                             ]
                           ),
@@ -1729,7 +1966,7 @@ var render = function() {
                                 {
                                   staticClass: "text-lg font-bold text-gray-700"
                                 },
-                                [_vm._v("$100")]
+                                [_vm._v("$" + _vm._s(_vm.plan.max))]
                               )
                             ]
                           ),
@@ -1752,7 +1989,7 @@ var render = function() {
                                 {
                                   staticClass: "text-lg font-bold text-gray-700"
                                 },
-                                [_vm._v("5%")]
+                                [_vm._v(_vm._s(_vm.plan.percentage) + "%")]
                               )
                             ]
                           )
@@ -1773,7 +2010,7 @@ var render = function() {
                           _c(
                             "span",
                             { staticClass: "block text-3xl font-bold" },
-                            [_vm._v("$0.0")]
+                            [_vm._v("$" + _vm._s(_vm.balance))]
                           )
                         ]
                       )
@@ -1797,9 +2034,9 @@ var render = function() {
                       _vm._v(" "),
                       _c("v-select", {
                         attrs: {
-                          items: _vm.withdrawalMethod,
+                          items: _vm.coins,
                           "item-text": "name",
-                          "item-value": "abbr",
+                          "item-value": "id",
                           label: "Payment Method",
                           "single-line": "",
                           outlined: ""
@@ -2149,7 +2386,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("div", { staticClass: "total-earned" }, [
                             _c("h2", { staticClass: "text-xl font-bold" }, [
-                              _vm._v("htts://website.com/r/djdk343")
+                              _vm._v(_vm._s(_vm.refLink || "No link"))
                             ]),
                             _vm._v(" "),
                             _c("h6", [_vm._v("Referral Link")])
@@ -2182,7 +2419,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("div", { staticClass: "total-earned" }, [
                             _c("h2", { staticClass: "font-bold" }, [
-                              _vm._v("$100.00")
+                              _vm._v("$" + _vm._s(_vm.referalEarns))
                             ]),
                             _vm._v(" "),
                             _c("h6", [_vm._v("Total Earned")])
@@ -2218,7 +2455,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("div", { staticClass: "total-earned" }, [
                             _c("h2", { staticClass: "font-bold" }, [
-                              _vm._v("5")
+                              _vm._v(_vm._s(_vm.totalReferal))
                             ]),
                             _vm._v(" "),
                             _c("h6", [_vm._v("Referrals")])
@@ -2288,12 +2525,12 @@ var render = function() {
           _c(
             "v-form",
             {
-              model: {
-                value: _vm.valid,
-                callback: function($$v) {
-                  _vm.valid = $$v
-                },
-                expression: "valid"
+              ref: "form",
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.collect_form_data()
+                }
               }
             },
             [
@@ -2310,11 +2547,11 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: { label: "First name" },
                             model: {
-                              value: _vm.firstname,
+                              value: _vm.form.firstname,
                               callback: function($$v) {
-                                _vm.firstname = $$v
+                                _vm.$set(_vm.form, "firstname", $$v)
                               },
-                              expression: "firstname"
+                              expression: "form.firstname"
                             }
                           })
                         ],
@@ -2328,11 +2565,11 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: { label: "Last name" },
                             model: {
-                              value: _vm.lastname,
+                              value: _vm.form.lastname,
                               callback: function($$v) {
-                                _vm.lastname = $$v
+                                _vm.$set(_vm.form, "lastname", $$v)
                               },
-                              expression: "lastname"
+                              expression: "form.lastname"
                             }
                           })
                         ],
@@ -2344,13 +2581,13 @@ var render = function() {
                         { attrs: { cols: "12", sm: "6", md: "4" } },
                         [
                           _c("v-text-field", {
-                            attrs: { label: "E-mail" },
+                            attrs: { type: "email", label: "E-mail" },
                             model: {
-                              value: _vm.email,
+                              value: _vm.form.email,
                               callback: function($$v) {
-                                _vm.email = $$v
+                                _vm.$set(_vm.form, "email", $$v)
                               },
-                              expression: "email"
+                              expression: "form.email"
                             }
                           })
                         ],
@@ -2364,11 +2601,11 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: { type: "password", label: "Password" },
                             model: {
-                              value: _vm.password,
+                              value: _vm.form.password,
                               callback: function($$v) {
-                                _vm.password = $$v
+                                _vm.$set(_vm.form, "password", $$v)
                               },
-                              expression: "password"
+                              expression: "form.password"
                             }
                           })
                         ],
@@ -2385,11 +2622,11 @@ var render = function() {
                               label: "Confirm Password"
                             },
                             model: {
-                              value: _vm.confirmPassword,
+                              value: _vm.form.confirmPassword,
                               callback: function($$v) {
-                                _vm.confirmPassword = $$v
+                                _vm.$set(_vm.form, "confirmPassword", $$v)
                               },
-                              expression: "confirmPassword"
+                              expression: "form.confirmPassword"
                             }
                           })
                         ],
@@ -2410,11 +2647,11 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: { label: "Bitcoin Address" },
                             model: {
-                              value: _vm.btcAddress,
+                              value: _vm.form.btcAddress,
                               callback: function($$v) {
-                                _vm.btcAddress = $$v
+                                _vm.$set(_vm.form, "btcAddress", $$v)
                               },
-                              expression: "btcAddress"
+                              expression: "form.btcAddress"
                             }
                           })
                         ],
@@ -2428,11 +2665,11 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: { label: "Etherum Address" },
                             model: {
-                              value: _vm.ethAddress,
+                              value: _vm.form.ethAddress,
                               callback: function($$v) {
-                                _vm.ethAddress = $$v
+                                _vm.$set(_vm.form, "ethAddress", $$v)
                               },
-                              expression: "ethAddress"
+                              expression: "form.ethAddress"
                             }
                           })
                         ],
@@ -2446,11 +2683,11 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: { label: "Litecoin Address" },
                             model: {
-                              value: _vm.ltcAddress,
+                              value: _vm.form.ltcAddress,
                               callback: function($$v) {
-                                _vm.ltcAddress = $$v
+                                _vm.$set(_vm.form, "ltcAddress", $$v)
                               },
-                              expression: "ltcAddress"
+                              expression: "form.ltcAddress"
                             }
                           })
                         ],
@@ -2464,11 +2701,11 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: { label: "Bitcoin Cash" },
                             model: {
-                              value: _vm.bchAddress,
+                              value: _vm.form.bchAddress,
                               callback: function($$v) {
-                                _vm.bchAddress = $$v
+                                _vm.$set(_vm.form, "bchAddress", $$v)
                               },
-                              expression: "bchAddress"
+                              expression: "form.bchAddress"
                             }
                           })
                         ],
@@ -2482,11 +2719,11 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: { label: "Dash Address" },
                             model: {
-                              value: _vm.dashAddress,
+                              value: _vm.form.dashAddress,
                               callback: function($$v) {
-                                _vm.dashAddress = $$v
+                                _vm.$set(_vm.form, "dashAddress", $$v)
                               },
-                              expression: "dashAddress"
+                              expression: "form.dashAddress"
                             }
                           })
                         ],
@@ -2502,7 +2739,13 @@ var render = function() {
                     [
                       _c(
                         "v-btn",
-                        { attrs: { dark: "", color: "green darken-2" } },
+                        {
+                          attrs: {
+                            dark: "",
+                            type: "submit",
+                            color: "green darken-2"
+                          }
+                        },
                         [_vm._v("Update Profile")]
                       )
                     ],
@@ -2552,9 +2795,11 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-form",
+            { ref: "withdrawForm" },
             [
               _c("v-text-field", {
                 attrs: {
+                  type: "number",
                   color: "blue darken-2",
                   label: "Amount",
                   required: ""
@@ -2571,28 +2816,36 @@ var render = function() {
               _c("v-select", {
                 attrs: {
                   items: _vm.withdrawAccount,
+                  "item-text": "name",
+                  "item-value": "number",
                   label: "Withdrawal Account",
-                  "return-object": "",
                   "single-line": "",
                   outlined: ""
                 },
                 model: {
-                  value: _vm.select,
+                  value: _vm.form.withdrawAccount,
                   callback: function($$v) {
-                    _vm.select = $$v
+                    _vm.$set(_vm.form, "withdrawAccount", $$v)
                   },
-                  expression: "select"
+                  expression: "form.withdrawAccount"
                 }
               }),
               _vm._v(" "),
               _c("v-select", {
                 attrs: {
                   items: _vm.withdrawalMethod,
-                  "item-text": "name",
-                  "item-value": "abbr",
-                  label: "Payment Method",
+                  "item-text": "coin.name",
+                  "item-value": "coin_id",
+                  label: "Withdrawal Method",
                   "single-line": "",
                   outlined: ""
+                },
+                model: {
+                  value: _vm.form.withdrawalMethod,
+                  callback: function($$v) {
+                    _vm.$set(_vm.form, "withdrawalMethod", $$v)
+                  },
+                  expression: "form.withdrawalMethod"
                 }
               }),
               _vm._v(" "),
@@ -2600,11 +2853,13 @@ var render = function() {
                 "v-btn",
                 {
                   attrs: {
+                    loading: _vm.requesting,
+                    disabled: _vm.requesting,
                     color: "blue darken-3 large blue--text text--lighten-5"
                   },
                   on: {
                     click: function($event) {
-                      _vm.dialogShown = true
+                      return _vm.initiate_withdrawal()
                     }
                   }
                 },
@@ -2695,7 +2950,7 @@ var render = function() {
           staticClass: "elevation-1",
           attrs: {
             headers: _vm.tableHeaders,
-            items: _vm.transactions,
+            items: _vm.transactions.data,
             "items-per-page": 5
           }
         })
@@ -2728,6 +2983,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");

@@ -4,25 +4,38 @@
       <div class="mx-auto md:w-6/12 sm:w-8/12">
         <h4 class="mb-4">Withdraw funds</h4>
 
-        <v-form>
-          <v-text-field v-model="form.amount" color="blue darken-2" label="Amount" required></v-text-field>
+        <v-form ref="withdrawForm">
+          <v-text-field
+            v-model="form.amount"
+            type="number"
+            color="blue darken-2"
+            label="Amount"
+            required
+          ></v-text-field>
           <v-select
-            v-model="select"
+            v-model="form.withdrawAccount"
             :items="withdrawAccount"
+            item-text="name"
+            item-value="number"
             label="Withdrawal Account"
-            return-object
             single-line
             outlined
           ></v-select>
           <v-select
             :items="withdrawalMethod"
-            item-text="name"
-            item-value="abbr"
-            label="Payment Method"
+            item-text="coin.name"
+            item-value="coin_id"
+            label="Withdrawal Method"
+            v-model="form.withdrawalMethod"
             single-line
             outlined
           ></v-select>
-          <v-btn color="blue darken-3 large blue--text text--lighten-5" @click="dialogShown = true">
+          <v-btn
+            :loading="requesting"
+            :disabled="requesting"
+            color="blue darken-3 large blue--text text--lighten-5"
+            @click="initiate_withdrawal()"
+          >
             Request Withdrawal
             <v-icon class="ml-2 text-lg">fa fa-credit-card</v-icon>
           </v-btn>
@@ -53,7 +66,7 @@
       <h4>Recent Withdrawals</h4>
       <v-data-table
         :headers="tableHeaders"
-        :items="transactions"
+        :items="transactions.data"
         :items-per-page="5"
         class="elevation-1"
       ></v-data-table>
@@ -68,8 +81,8 @@ export default {
       dialogShown: false,
       form: {
         amount: "",
-        balance: "",
-        method: "",
+        withdrawAccount: "",
+        withdrawalMethod: "",
       },
 
       withdrawalMethod: [
@@ -77,7 +90,11 @@ export default {
         { name: "Etherum", abbr: "eth" },
       ],
 
-      withdrawAccount: ["Main", "Referral", "Bonus"],
+      withdrawAccount: [
+        { name: "Main", number: 1 },
+        { name: "Referral", number: 2 },
+        { name: "Bonus", number: 3 },
+      ],
 
       tableHeaders: [
         {
@@ -98,15 +115,66 @@ export default {
         },
       ],
 
-      transactions: [
-        {
-          date: "20-22-10",
-          method: "Bitcoin",
-          amount: "$200,00",
-          status: "Pending",
-        },
-      ],
+      transactions: [],
+      balance_details: {},
+
+      requesting: false,
     };
+  },
+
+  methods: {
+    getBalanceDetails() {
+      const REQUEST_URL = "/withdraw";
+      axios
+        .get(REQUEST_URL)
+        .then((response) => {
+          this.balance_details = response.data;
+          this.withdrawalMethod = response.data.usercoin;
+          this.selected_coin = this.user_wallets[0];
+          this.transactions = response.data.withdraws;
+          // this.set_withdraw_amount();
+          this.requesting = false;
+        })
+        .catch((error) => {
+          console.log("error");
+        });
+    },
+
+    initiate_withdrawal() {
+      this.requesting = true;
+      const formdata = new FormData();
+      formdata.append("coin", this.form.withdrawalMethod);
+      formdata.append("withdraw_from", this.form.withdrawAccount);
+      formdata.append("amount", this.form.amount);
+
+      const REQUEST_URL = "withdraw";
+      axios({
+        url: REQUEST_URL,
+        method: "POST",
+        data: formdata,
+        headers: {
+          "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+      }).then((response) => {
+        this.handle_withdraw_response(response.data);
+      });
+    },
+
+    handle_withdraw_response(response_data) {
+      if (response_data.status === "error") {
+        this.error_message = response_data.message;
+        this.loading_data = false;
+        this.error_making_withdraw = true;
+        return;
+      }
+      this.withdraw_data = response_data;
+      this.loading_data = false;
+      this.confirm_withdraw = true;
+    },
+  },
+
+  mounted() {
+    this.getBalanceDetails();
   },
 };
 </script>
