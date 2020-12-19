@@ -6,7 +6,7 @@
       @click="hideNavbarMobile = true"
     >
       <div
-        class="w-9/12 h-full overflow-y-auto bg-green-600 md:h-screen p-9 sm:w-4/12 md:w-full"
+        class="w-9/12 h-full overflow-y-auto bg-green-600 md:fixed md:h-screen p-9 sm:w-5/12 md:w-1/6"
         @click="$event.stopPropagation()"
       >
         <div class="mx-auto mb-12 sm:mb-16 md:mb-24 w-28 logo">
