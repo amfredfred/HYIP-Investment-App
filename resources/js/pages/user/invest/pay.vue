@@ -5,7 +5,7 @@
       <v-row>
         <v-col cols="12" sm="6" md="3">
           <v-card>
-            <v-card-title class="text-lg font-bold text-green-500">Amazing Plan</v-card-title>
+            <v-card-title class="text-lg font-bold text-green-500">{{plan.name}}</v-card-title>
             <div class="card-body">
               <div class="plan-features">
                 <div class="flex justify-between pb-3 mb-12 border-pink-500 feature">
@@ -32,18 +32,25 @@
           </v-card>
         </v-col>
         <v-col cols="12" sm="6" md="9">
-          <v-form>
-            <v-text-field outlined type="number" label="Amount"></v-text-field>
+          <v-alert dismissible v-model="alert" :color="messageType">
+            {{message}}
+            <template slot="close">
+              <v-icon @click="alert = false">fa fa-close</v-icon>
+            </template>
+          </v-alert>
+          <v-form @submit.prevent="initiate_deposit()">
+            <v-text-field v-model="form.amount" outlined type="number" label="Amount"></v-text-field>
             <v-select
               :items="coins"
               item-text="name"
               item-value="id"
               label="Payment Method"
+              v-model="form.coin_id"
               single-line
               outlined
             ></v-select>
 
-            <v-btn class="bg-blue-600 text-blue-50">Make Deposit</v-btn>
+            <v-btn type="submit" :loading="depositing" class="bg-blue-600 text-blue-50">Make Deposit</v-btn>
           </v-form>
         </v-col>
       </v-row>
@@ -57,13 +64,66 @@ export default {
   name: "pay",
   data() {
     return {
-      withdrawalMethod: [
-        { name: "Bitcoin", abbr: "btc" },
-        { name: "Etherum", abbr: "eth" },
-      ],
+      form: {
+        coin_id: "",
+        amount: "",
+      },
+
+      alert: false,
+
+      depositing: false,
+      message: "",
+      messageType: "info",
     };
   },
-  methods: {},
+
+  methods: {
+    initiate_deposit() {
+      this.depositing = true;
+      const REQUEST_URL = "/deposit";
+      let formdata = new FormData();
+      formdata.append("coin_id", this.form.coin_id);
+      formdata.append("amount", this.form.amount);
+      formdata.append("plan_id", this.plan.id);
+
+      axios({
+        url: REQUEST_URL,
+        method: "POST",
+        data: formdata,
+        headers: {
+          "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+      })
+        .then((response) => {
+          let returnedStatus = response.data.status;
+          if (returnedStatus === "error") {
+            this.message = response.data.message;
+            this.messageType = "error";
+            this.depositing = false;
+            this.alert = true;
+            return;
+          }
+          this.handle_deposit(response.data);
+        })
+        .catch((error) => {
+          this.message = "Investment failed, please try again";
+          this.depositing = false;
+          this.alert = true;
+        });
+    },
+
+    handle_deposit(deposit_information) {
+      this.payment_processed = true;
+      if (deposit_information.type === "fund") {
+        this.data_returned = deposit_information;
+        this.funding_error = true;
+        this.making_payment = false;
+        return;
+      }
+      return this.$router.push({ name: "successfulInvest" });
+    },
+  },
+
   computed: {
     ...mapState("user", {
       plan(state) {
@@ -74,7 +134,12 @@ export default {
       balance: (state) => state.userInformation.total_balance,
     }),
   },
-  mounted() {},
+
+  mounted() {
+    if (!this.plan) {
+      return this.$router.push({ name: "Invest" });
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>
