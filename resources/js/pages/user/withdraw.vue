@@ -3,14 +3,20 @@
     <section class="request-withdraw">
       <div class="mx-auto md:w-6/12 sm:w-8/12">
         <h4 class="mb-4">Withdraw funds</h4>
-
-        <v-form ref="withdrawForm">
+        <v-alert dismissible v-model="alert" :color="messageType">
+          {{message}}
+          <template slot="close">
+            <v-icon @click="alert = false">fa fa-close</v-icon>
+          </template>
+        </v-alert>
+        <v-form v-model="formValid" ref="withdrawForm">
           <v-text-field
             v-model="form.amount"
             type="number"
             color="blue darken-2"
             label="Amount"
             required
+            :rules="[rules.amount]"
           ></v-text-field>
           <v-select
             v-model="form.withdrawAccount"
@@ -20,6 +26,8 @@
             label="Withdrawal Account"
             single-line
             outlined
+            :rules="[rules.account]"
+            required
           ></v-select>
           <v-select
             :items="withdrawalMethod"
@@ -29,6 +37,8 @@
             v-model="form.withdrawalMethod"
             single-line
             outlined
+            :rules="[rules.method]"
+            required
           ></v-select>
           <v-btn
             :loading="requesting"
@@ -85,10 +95,7 @@ export default {
         withdrawalMethod: "",
       },
 
-      withdrawalMethod: [
-        { name: "Bitcoin", abbr: "btc" },
-        { name: "Etherum", abbr: "eth" },
-      ],
+      withdrawalMethod: [],
 
       withdrawAccount: [
         { name: "Main", number: 1 },
@@ -118,7 +125,19 @@ export default {
       transactions: [],
       balance_details: {},
 
+      alert: false,
+      message: "",
+      messageType: "",
+
       requesting: false,
+
+      formValid: false,
+
+      rules: {
+        amount: (value) => !!value || "Amount required",
+        account: (value) => !!value || "Select Withdraw Account",
+        method: (value) => !!value || "Select Withdraw Method",
+      },
     };
   },
 
@@ -141,6 +160,10 @@ export default {
     },
 
     initiate_withdrawal() {
+      if (!this.formValid) {
+        return false;
+      }
+
       this.requesting = true;
       const formdata = new FormData();
       formdata.append("coin", this.form.withdrawalMethod);
@@ -162,9 +185,9 @@ export default {
 
     handle_withdraw_response(response_data) {
       if (response_data.status === "error") {
-        this.error_message = response_data.message;
-        this.loading_data = false;
-        this.error_making_withdraw = true;
+        this.message = response_data.message;
+        this.alert = true;
+        this.requesting = false;
         return;
       }
       this.withdraw_data = response_data;
