@@ -692,13 +692,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "setting",
   data: function data() {
@@ -708,13 +701,9 @@ __webpack_require__.r(__webpack_exports__);
         firstname: "",
         lastname: "",
         password: "",
-        confirmPassword: "",
-        btcAddress: "",
-        ethAddress: "",
-        ltcAddress: "",
-        bchAddress: "",
-        dashAddress: ""
+        confirmPassword: ""
       },
+      errorMessages: "",
       userDetail: [],
       country: [],
       paymentMethod: [],
@@ -794,7 +783,7 @@ __webpack_require__.r(__webpack_exports__);
         _this4.message_type = "danger";
         _this4.updating_profile = false;
         message.forEach(function (mes) {
-          _this4.message = mes;
+          _this4.errorMessages = mes;
         });
       });
     },
@@ -2831,250 +2820,192 @@ var render = function() {
   return _c("div", [
     _c("h3", { staticClass: "text-gray-600" }, [_vm._v("Edit Profile")]),
     _vm._v(" "),
-    _c("section", { staticClass: "mt-8 edit-profile" }, [
-      _c(
-        "div",
-        { staticClass: "rounded-lg shadow-sm bg-gray-50" },
-        [
-          _c(
-            "v-form",
-            {
-              ref: "form",
-              on: {
-                submit: function($event) {
-                  $event.preventDefault()
-                  return _vm.collect_form_data()
+    _c(
+      "section",
+      { staticClass: "mt-8 edit-profile" },
+      [
+        _vm.errorMessages
+          ? _c("v-alert", [_vm._v(_vm._s(_vm.errorMessages))])
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "rounded-lg shadow-sm bg-gray-50" },
+          [
+            _c(
+              "v-form",
+              {
+                ref: "form",
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.collect_form_data()
+                  }
                 }
-              }
-            },
-            [
-              _c(
-                "v-container",
-                [
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", sm: "6", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "First name" },
-                            model: {
-                              value: _vm.form.firstname,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "firstname", $$v)
+              },
+              [
+                _c(
+                  "v-container",
+                  [
+                    _c(
+                      "v-row",
+                      [
+                        _c(
+                          "v-col",
+                          { attrs: { cols: "12", sm: "6", md: "4" } },
+                          [
+                            _c("v-text-field", {
+                              attrs: { label: "First name" },
+                              model: {
+                                value: _vm.form.firstname,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "firstname", $$v)
+                                },
+                                expression: "form.firstname"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-col",
+                          { attrs: { cols: "12", sm: "6", md: "4" } },
+                          [
+                            _c("v-text-field", {
+                              attrs: { label: "Last name" },
+                              model: {
+                                value: _vm.form.lastname,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "lastname", $$v)
+                                },
+                                expression: "form.lastname"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-col",
+                          { attrs: { cols: "12", sm: "6", md: "4" } },
+                          [
+                            _c("v-text-field", {
+                              attrs: { type: "email", label: "E-mail" },
+                              model: {
+                                value: _vm.form.email,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "email", $$v)
+                                },
+                                expression: "form.email"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-col",
+                          { attrs: { cols: "12", sm: "6", md: "4" } },
+                          [
+                            _c("v-text-field", {
+                              attrs: { type: "password", label: "Password" },
+                              model: {
+                                value: _vm.form.password,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "password", $$v)
+                                },
+                                expression: "form.password"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-col",
+                          { attrs: { cols: "12", sm: "6", md: "4" } },
+                          [
+                            _c("v-text-field", {
+                              attrs: {
+                                type: "password",
+                                label: "Confirm Password"
                               },
-                              expression: "form.firstname"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", sm: "6", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Last name" },
-                            model: {
-                              value: _vm.form.lastname,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "lastname", $$v)
-                              },
-                              expression: "form.lastname"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", sm: "6", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { type: "email", label: "E-mail" },
-                            model: {
-                              value: _vm.form.email,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "email", $$v)
-                              },
-                              expression: "form.email"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", sm: "6", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { type: "password", label: "Password" },
-                            model: {
-                              value: _vm.form.password,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "password", $$v)
-                              },
-                              expression: "form.password"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", sm: "6", md: "4" } },
-                        [
-                          _c("v-text-field", {
+                              model: {
+                                value: _vm.form.confirmPassword,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "confirmPassword", $$v)
+                                },
+                                expression: "form.confirmPassword"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-row",
+                      { staticClass: "mt-12" },
+                      _vm._l(_vm.paymentMethod, function(payment, index) {
+                        return _c(
+                          "v-col",
+                          {
+                            key: index,
+                            attrs: { cols: "12", sm: "6", md: "4" }
+                          },
+                          [
+                            _c("v-text-field", {
+                              attrs: { label: payment.coin.name },
+                              model: {
+                                value: payment.address,
+                                callback: function($$v) {
+                                  _vm.$set(payment, "address", $$v)
+                                },
+                                expression: "payment.address"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      }),
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "mt-5" },
+                      [
+                        _c(
+                          "v-btn",
+                          {
                             attrs: {
-                              type: "password",
-                              label: "Confirm Password"
-                            },
-                            model: {
-                              value: _vm.form.confirmPassword,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "confirmPassword", $$v)
-                              },
-                              expression: "form.confirmPassword"
+                              dark: "",
+                              type: "submit",
+                              color: "green darken-2",
+                              loading: _vm.updating_profile,
+                              disabled: _vm.updating_profile
                             }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    { staticClass: "mt-12" },
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", sm: "6", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Bitcoin Address" },
-                            model: {
-                              value: _vm.form.btcAddress,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "btcAddress", $$v)
-                              },
-                              expression: "form.btcAddress"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", sm: "6", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Etherum Address" },
-                            model: {
-                              value: _vm.form.ethAddress,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "ethAddress", $$v)
-                              },
-                              expression: "form.ethAddress"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", sm: "6", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Litecoin Address" },
-                            model: {
-                              value: _vm.form.ltcAddress,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "ltcAddress", $$v)
-                              },
-                              expression: "form.ltcAddress"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", sm: "6", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Bitcoin Cash" },
-                            model: {
-                              value: _vm.form.bchAddress,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "bchAddress", $$v)
-                              },
-                              expression: "form.bchAddress"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", sm: "6", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Dash Address" },
-                            model: {
-                              value: _vm.form.dashAddress,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "dashAddress", $$v)
-                              },
-                              expression: "form.dashAddress"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "mt-5" },
-                    [
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: {
-                            dark: "",
-                            type: "submit",
-                            color: "green darken-2"
-                          }
-                        },
-                        [_vm._v("Update Profile")]
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ])
+                          },
+                          [_vm._v("Update Profile")]
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -4345,10 +4276,11 @@ __webpack_require__.r(__webpack_exports__);
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 /* harmony import */ var _node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vuetify-loader/lib/runtime/installComponents.js */ "./node_modules/vuetify-loader/lib/runtime/installComponents.js");
 /* harmony import */ var _node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuetify/lib/components/VBtn */ "./node_modules/vuetify/lib/components/VBtn/index.js");
-/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/index.js");
-/* harmony import */ var vuetify_lib_components_VForm__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib/components/VForm */ "./node_modules/vuetify/lib/components/VForm/index.js");
-/* harmony import */ var vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify/lib/components/VTextField */ "./node_modules/vuetify/lib/components/VTextField/index.js");
+/* harmony import */ var vuetify_lib_components_VAlert__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuetify/lib/components/VAlert */ "./node_modules/vuetify/lib/components/VAlert/index.js");
+/* harmony import */ var vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuetify/lib/components/VBtn */ "./node_modules/vuetify/lib/components/VBtn/index.js");
+/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/index.js");
+/* harmony import */ var vuetify_lib_components_VForm__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify/lib/components/VForm */ "./node_modules/vuetify/lib/components/VForm/index.js");
+/* harmony import */ var vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuetify/lib/components/VTextField */ "./node_modules/vuetify/lib/components/VTextField/index.js");
 
 
 
@@ -4375,7 +4307,8 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 
 
-_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VBtn: vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_4__["VBtn"],VCol: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__["VCol"],VContainer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__["VContainer"],VForm: vuetify_lib_components_VForm__WEBPACK_IMPORTED_MODULE_6__["VForm"],VRow: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__["VRow"],VTextField: vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_7__["VTextField"]})
+
+_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VAlert: vuetify_lib_components_VAlert__WEBPACK_IMPORTED_MODULE_4__["VAlert"],VBtn: vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_5__["VBtn"],VCol: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__["VCol"],VContainer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__["VContainer"],VForm: vuetify_lib_components_VForm__WEBPACK_IMPORTED_MODULE_7__["VForm"],VRow: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__["VRow"],VTextField: vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_8__["VTextField"]})
 
 
 /* hot reload */

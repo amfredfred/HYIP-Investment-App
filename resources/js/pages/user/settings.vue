@@ -3,6 +3,7 @@
     <h3 class="text-gray-600">Edit Profile</h3>
 
     <section class="mt-8 edit-profile">
+      <v-alert v-if="errorMessages">{{errorMessages}}</v-alert>
       <div class="rounded-lg shadow-sm bg-gray-50">
         <v-form @submit.prevent="collect_form_data()" ref="form">
           <v-container>
@@ -30,26 +31,18 @@
               </v-col>
             </v-row>
             <v-row class="mt-12">
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="form.btcAddress" label="Bitcoin Address"></v-text-field>
-              </v-col>
-
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="form.ethAddress" label="Etherum Address"></v-text-field>
-              </v-col>
-
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="form.ltcAddress" label="Litecoin Address"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="form.bchAddress" label="Bitcoin Cash"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="form.dashAddress" label="Dash Address"></v-text-field>
+              <v-col cols="12" sm="6" md="4" v-for="(payment, index) in paymentMethod" :key="index">
+                <v-text-field v-model="payment.address" :label="payment.coin.name"></v-text-field>
               </v-col>
             </v-row>
             <div class="mt-5">
-              <v-btn dark type="submit" color="green darken-2">Update Profile</v-btn>
+              <v-btn
+                dark
+                type="submit"
+                color="green darken-2"
+                :loading="updating_profile"
+                :disabled="updating_profile"
+              >Update Profile</v-btn>
             </div>
           </v-container>
         </v-form>
@@ -67,12 +60,9 @@ export default {
       lastname: "",
       password: "",
       confirmPassword: "",
-      btcAddress: "",
-      ethAddress: "",
-      ltcAddress: "",
-      bchAddress: "",
-      dashAddress: "",
     },
+
+    errorMessages: "",
 
     userDetail: [],
     country: [],
@@ -151,7 +141,7 @@ export default {
         this.message_type = "danger";
         this.updating_profile = false;
         message.forEach((mes) => {
-          this.message = mes;
+          this.errorMessages = mes;
         });
       });
     },
