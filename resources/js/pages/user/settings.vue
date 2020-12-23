@@ -3,7 +3,7 @@
     <h3 class="text-gray-600">Edit Profile</h3>
 
     <section class="mt-8 edit-profile">
-      <v-alert v-if="errorMessages">{{errorMessages}}</v-alert>
+      <v-alert v-if="errorMessages">{{errorMessage}}</v-alert>
       <div class="rounded-lg shadow-sm bg-gray-50">
         <v-form @submit.prevent="collect_form_data()" ref="form">
           <v-container>
@@ -51,6 +51,7 @@
   </div>
 </template>
 <script>
+import messageMixin from "../../mixins/messageMixin";
 export default {
   name: "setting",
   data: () => ({
@@ -61,8 +62,6 @@ export default {
       password: "",
       confirmPassword: "",
     },
-
-    errorMessages: "",
 
     userDetail: [],
     country: [],
@@ -135,16 +134,7 @@ export default {
         this.message = "Profile Updated";
       });
     },
-    display_profile_error(error_message) {
-      Object.keys(error_message).forEach((error) => {
-        let message = error_message[error];
-        this.message_type = "danger";
-        this.updating_profile = false;
-        message.forEach((mes) => {
-          this.errorMessages = mes;
-        });
-      });
-    },
+
     toggle2factorAuth(state) {
       if (state === "yes") {
         return this.enable2factorAuth();
@@ -154,6 +144,7 @@ export default {
         return;
       }
     },
+
     enable2factorAuth() {
       if (this.enable2factor === "no") {
         return;
@@ -169,6 +160,7 @@ export default {
         }
       });
     },
+
     disable2factorAuth() {
       if (this.enable2factor === "yes") {
         return;
@@ -177,8 +169,10 @@ export default {
       axios.get(REQUEST_URL);
     },
   },
+
   mounted() {
     this.user_setting();
   },
+  mixins: [messageMixin],
 };
 </script>

@@ -33,7 +33,7 @@
         </v-col>
         <v-col cols="12" sm="6" md="9">
           <v-alert dismissible v-model="alert" :color="messageType">
-            {{message}}
+            {{errorMessage}}
             <template slot="close">
               <v-icon @click="alert = false">fa fa-close</v-icon>
             </template>
@@ -60,6 +60,8 @@
 <script>
 import { mapState } from "vuex";
 
+import messageMixin from "../../../mixins/messageMixin";
+
 export default {
   name: "pay",
   data() {
@@ -72,8 +74,6 @@ export default {
       alert: false,
 
       depositing: false,
-      message: "",
-      messageType: "info",
     };
   },
 
@@ -96,9 +96,8 @@ export default {
       })
         .then((response) => {
           let returnedStatus = response.data.status;
-          if (returnedStatus === "error") {
-            this.message = response.data.message;
-            this.messageType = "error";
+          if (returnedStatus === 401) {
+            this.displayErrorMessage(response.data.message);
             this.depositing = false;
             this.alert = true;
             return;
@@ -106,7 +105,7 @@ export default {
           this.handle_deposit(response.data);
         })
         .catch((error) => {
-          this.message = "Investment failed, please try again";
+          this.errorMessage = "Investment failed, please try again";
           this.depositing = false;
           this.alert = true;
         });
@@ -140,6 +139,8 @@ export default {
       return this.$router.push({ name: "Invest" });
     }
   },
+
+  mixins: [messageMixin],
 };
 </script>
 <style lang="scss" scoped>

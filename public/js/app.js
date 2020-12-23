@@ -254,6 +254,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _mixins_messageMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../mixins/messageMixin */ "./resources/js/mixins/messageMixin.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -320,6 +321,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "pay",
   data: function data() {
@@ -329,9 +331,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         amount: ""
       },
       alert: false,
-      depositing: false,
-      message: "",
-      messageType: "info"
+      depositing: false
     };
   },
   methods: {
@@ -354,9 +354,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }).then(function (response) {
         var returnedStatus = response.data.status;
 
-        if (returnedStatus === "error") {
-          _this.message = response.data.message;
-          _this.messageType = "error";
+        if (returnedStatus === 401) {
+          _this.displayErrorMessage(response.data.message);
+
           _this.depositing = false;
           _this.alert = true;
           return;
@@ -364,7 +364,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this.handle_deposit(response.data);
       })["catch"](function (error) {
-        _this.message = "Investment failed, please try again";
+        _this.errorMessage = "Investment failed, please try again";
         _this.depositing = false;
         _this.alert = true;
       });
@@ -399,7 +399,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         name: "Invest"
       });
     }
-  }
+  },
+  mixins: [_mixins_messageMixin__WEBPACK_IMPORTED_MODULE_1__["default"]]
 });
 
 /***/ }),
@@ -640,6 +641,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_messageMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/messageMixin */ "./resources/js/mixins/messageMixin.js");
 //
 //
 //
@@ -692,6 +694,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "setting",
   data: function data() {
@@ -703,7 +706,6 @@ __webpack_require__.r(__webpack_exports__);
         password: "",
         confirmPassword: ""
       },
-      errorMessages: "",
       userDetail: [],
       country: [],
       paymentMethod: [],
@@ -775,18 +777,6 @@ __webpack_require__.r(__webpack_exports__);
         _this3.message = "Profile Updated";
       });
     },
-    display_profile_error: function display_profile_error(error_message) {
-      var _this4 = this;
-
-      Object.keys(error_message).forEach(function (error) {
-        var message = error_message[error];
-        _this4.message_type = "danger";
-        _this4.updating_profile = false;
-        message.forEach(function (mes) {
-          _this4.errorMessages = mes;
-        });
-      });
-    },
     toggle2factorAuth: function toggle2factorAuth(state) {
       if (state === "yes") {
         return this.enable2factorAuth();
@@ -797,7 +787,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     enable2factorAuth: function enable2factorAuth() {
-      var _this5 = this;
+      var _this4 = this;
 
       if (this.enable2factor === "no") {
         return;
@@ -808,7 +798,7 @@ __webpack_require__.r(__webpack_exports__);
         var data = response.data;
 
         if (data.check_status === "1") {
-          _this5.$router.push({
+          _this4.$router.push({
             name: "2factorsuccess",
             query: {
               secret: data.secret,
@@ -829,7 +819,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.user_setting();
-  }
+  },
+  mixins: [_mixins_messageMixin__WEBPACK_IMPORTED_MODULE_0__["default"]]
 });
 
 /***/ }),
@@ -2273,7 +2264,9 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n          " + _vm._s(_vm.message) + "\n          "
+                        "\n          " +
+                          _vm._s(_vm.errorMessage) +
+                          "\n          "
                       ),
                       _c(
                         "template",
@@ -2825,7 +2818,7 @@ var render = function() {
       { staticClass: "mt-8 edit-profile" },
       [
         _vm.errorMessages
-          ? _c("v-alert", [_vm._v(_vm._s(_vm.errorMessages))])
+          ? _c("v-alert", [_vm._v(_vm._s(_vm.errorMessage))])
           : _vm._e(),
         _vm._v(" "),
         _c(
@@ -3620,6 +3613,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vuetify_loader_lib_loader_js_ref_11_0_node_modules_vue_loader_lib_index_js_vue_loader_options_navbar_vue_vue_type_template_id_11e733ca_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/mixins/messageMixin.js":
+/*!*********************************************!*\
+  !*** ./resources/js/mixins/messageMixin.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      errorMessage: "",
+      message: ""
+    };
+  },
+  methods: {
+    displayErrorMessage: function displayErrorMessage(error_message) {
+      var _this = this;
+
+      Object.keys(error_message).forEach(function (error) {
+        var message = error_message[error];
+        _this.message_type = "danger";
+        _this.updating_profile = false;
+        message.forEach(function (mes) {
+          _this.errorMessage = mes;
+        });
+      });
+    }
+  }
+});
 
 /***/ }),
 
