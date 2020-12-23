@@ -1,7 +1,8 @@
 const state = () => ({
     userInformation: null,
     plans: [],
-    userCoin: []
+    userCoin: [],
+    withdrawData: {}
 });
 
 const getters = {
@@ -27,6 +28,9 @@ const mutations = {
     updateFullDashboardInformation(state, payload) {
         state.plans = payload.plan;
         state.userCoin = payload.coins;
+    },
+    updateWithdrawData(state, payload) {
+        state.withdrawData = payload;
     }
 };
 

@@ -8,6 +8,9 @@ import choosePlan from "./pages/user/invest/selectPlan.vue";
 import payInvest from "./pages/user/invest/pay.vue";
 import successfulInvest from "./pages/user/invest/success.vue";
 
+import requestWithdraw from "./pages/user/withdraw/request.vue";
+import confirmWithdraw from "./pages/user/withdraw/confirm.vue";
+
 const user_routes = [
     {
         path: "/",
@@ -41,8 +44,19 @@ const user_routes = [
     {
         path: "/withdraw",
         component: withdraw,
-        name: "Withdraw",
-        prop: { icon: "fa-cube" }
+        prop: { icon: "fa-cube" },
+        children: [
+            {
+                name: "Withdraw",
+                path: "",
+                component: requestWithdraw
+            },
+            {
+                name: "confirmWithdraw",
+                path: "confirm",
+                component: confirmWithdraw
+            }
+        ]
     },
     {
         path: "/referral",
