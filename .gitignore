@@ -18,4 +18,5 @@ Homestead.yaml
 /resources/css
 /public/images
 /public/logo
+public/js/app.js
 

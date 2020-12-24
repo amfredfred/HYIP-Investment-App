@@ -96,12 +96,21 @@ export default {
       })
         .then((response) => {
           let returnedStatus = response.data.status;
+
           if (returnedStatus === 401) {
             this.displayErrorMessage(response.data.message);
             this.depositing = false;
             this.alert = true;
             return;
           }
+
+          if (returnedStatus === "error") {
+            this.errorMessage = response.data.message;
+            this.depositing = false;
+            this.alert = false;
+            return;
+          }
+
           this.handle_deposit(response.data);
         })
         .catch((error) => {
@@ -117,7 +126,7 @@ export default {
         this.data_returned = deposit_information;
         this.funding_error = true;
         this.making_payment = false;
-        return;
+        return this.$router.push({ name: "fundAccount" });
       }
       return this.$router.push({ name: "successfulInvest" });
     },

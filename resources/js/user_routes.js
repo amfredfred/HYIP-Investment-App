@@ -7,6 +7,7 @@ import setting from "./pages/user/settings.vue";
 import choosePlan from "./pages/user/invest/selectPlan.vue";
 import payInvest from "./pages/user/invest/pay.vue";
 import successfulInvest from "./pages/user/invest/success.vue";
+import fund from "./pages/user/invest/fund.vue";
 
 import requestWithdraw from "./pages/user/withdraw/request.vue";
 import confirmWithdraw from "./pages/user/withdraw/confirm.vue";
@@ -33,6 +34,7 @@ const user_routes = [
                 component: payInvest,
                 name: "payInvest"
             },
+            { path: "fund-account", component: fund, name: "fundAccount" },
 
             {
                 path: "success",
