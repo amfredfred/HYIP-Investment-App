@@ -1,120 +1,125 @@
-import deposit from './pages/users/deposit.vue';
-import withdraw from './pages/users/withdraw.vue';
-import setting from './pages/users/setting.vue';
-import manageDeposit from './pages/admins/manageDeposit.vue';
-import manageWithdraw from './pages/admins/manageWithdraw.vue';
-import manageUser from './pages/admins/manageUser.vue';
-import mailsystem from './pages/admins/mailsystem.vue';
-import webSetting from './pages/admins/webSetting.vue';
-import homepageSetting from './pages/admins/homepageSetting.vue';
-import pageSettings from './pages/admins/pageSettings.vue';
-import manageplans from './pages/admins/manageplans.vue';
-import managecompounds from './pages/admins/managecompounds.vue';
-import paymentmethods from './pages/admins/paymentmethods.vue';
-import manageFaq from './pages/admins/manageFaq.vue';
-import manageBenefit from './pages/admins/manageBenefit.vue';
-import manageGetStarted from './pages/admins/manageGetStarted.vue';
-import manageSocial from './pages/admins/manageSocial.vue';
-import twoFactorSuccess from './pages/users/2factorEnableSuccess.vue';
+import setting from "./pages/user/settings.vue";
+import manageDeposit from "./pages/admins/manageDeposit.vue";
+import manageWithdraw from "./pages/admins/manageWithdraw.vue";
+import manageUser from "./pages/admins/manageUser.vue";
+import mailsystem from "./pages/admins/mailsystem.vue";
+import webSetting from "./pages/admins/webSetting.vue";
+import homepageSetting from "./pages/admins/homepageSetting.vue";
+import pageSettings from "./pages/admins/pageSettings.vue";
+import manageplans from "./pages/admins/manageplans.vue";
+import managecompounds from "./pages/admins/managecompounds.vue";
+import paymentmethods from "./pages/admins/paymentmethods.vue";
+import manageFaq from "./pages/admins/manageFaq.vue";
+import manageBenefit from "./pages/admins/manageBenefit.vue";
+import manageGetStarted from "./pages/admins/manageGetStarted.vue";
+import manageSocial from "./pages/admins/manageSocial.vue";
+import twoFactorSuccess from "./pages/user/2factorEnableSuccess.vue";
+import dashboard from "./pages/admins/dashboard.vue";
 
-
-import dashboardAdmin from './pages/dashboardAdmin.vue';
-
-const admin_routes = [{
-        path: '/',
-        component: dashboardAdmin,
-        name: 'admin-dashboard'
+const admin_routes = [
+    {
+        path: "/",
+        component: dashboard,
+        name: "Dashboard",
+        prop: { icon: "fa-dashboard" }
     },
     {
-        path: '/deposit',
-        component: deposit,
-        name: 'user-deposit'
-    },
-    {
-        path: '/withdraw',
-        component: withdraw,
-        name: 'user-withdraw'
-    },
-    {
-
-        path: '/setting',
+        path: "/setting",
         component: setting,
-        name: 'user-setting'
+        name: "User setting",
+        prop: { icon: "fa-cog" }
     },
     {
-        path: '/manage-deposit',
+        path: "/manage-deposit",
         component: manageDeposit,
-        name: 'manage-deposit'
+        name: "Manage deposit",
+        prop: { icon: "fa-btc" }
     },
     {
-        path: '/manage-withdraw',
+        path: "/manage-withdraw",
         component: manageWithdraw,
-        name: 'manage-withdraw'
+        name: "Manage withdraw",
+        prop: { icon: "fa-window-maximize" }
     },
     {
-        path: '/manage-user',
+        path: "/manage-user",
         component: manageUser,
-        name: 'manage-user'
+        name: "Manage user",
+        prop: { icon: "fa-users" }
     },
     {
-        path: '/mailsystem',
+        path: "/mailsystem",
         component: mailsystem,
-        name: 'mailsystem'
+        name: "mailsystem",
+        prop: { icon: "fa-envelope" }
     },
     {
-        path: '/page-settings',
+        path: "/Page settings",
         component: pageSettings,
-        name: 'pagesettings'
+        name: "pagesettings",
+        prop: { icon: "fa-globe" }
     },
     {
-        path: '/homepage-settings',
+        path: "/homepage-settings",
         component: homepageSetting,
-        name: 'homepagesettings'
+        name: "Homepage settings",
+        prop: { icon: "fa-home" }
     },
     {
-        path: '/manage-plans',
+        path: "/manage-plans",
         component: manageplans,
-        name: 'manageplans'
+        name: "Manage plans",
+        prop: { icon: "fa-bookmark" }
     },
     {
-        path: '/manage-compounds',
+        path: "/manage-compounds",
         component: managecompounds,
-        name: 'managecompounds'
+        name: "Manage compounds",
+        prop: { icon: "fa-calendar-o" }
     },
     {
-        path: '/payment-methods',
+        path: "/payment-methods",
         component: paymentmethods,
-        name: 'paymentmethods'
+        name: "Payment methods",
+        prop: { icon: "fa-credit-card" }
     },
     {
-        path: '/web-setting',
+        path: "/web-setting",
         component: webSetting,
-        name: 'web-setting'
+        name: "Web setting",
+        prop: { icon: "fa-gavel" }
     },
     {
-        path: '/manage-faq',
+        path: "/manage-faq",
         component: manageFaq,
-        name: 'manage-faq'
+        name: "Manage faq",
+        prop: { icon: "fa-question" }
     },
+    // {
+    //     path: "/manage-benefit",
+    //     component: manageBenefit,
+    //     name: "Manage benefit",
+    //     prop: {}
+    // },
+    // {
+    //     path: "/manage-get-started",
+    //     component: manageGetStarted,
+    //     name: "Manage-get-started",
+    //     prop: {}
+    // },
     {
-        path: '/manage-benefit',
-        component: manageBenefit,
-        name: 'manage-benefit'
-    },
-    {
-        path: '/manage-get-started',
-        component: manageGetStarted,
-        name: 'manage-get-started'
-    },
-    {
-        path: '/manage-social',
+        path: "/manage-social",
         component: manageSocial,
-        name: 'manage-social'
+        name: "Manage social",
+        prop: { icon: "fa-instagram" }
     },
 
-{ path: '/2factor-success', component: twoFactorSuccess, name: "2factorsuccess" }
+    {
+        path: "/2factor-success",
+        component: twoFactorSuccess,
+        name: "2factorsuccess",
+        prop: {}
+    }
 ];
-
-
 
 export default admin_routes;
