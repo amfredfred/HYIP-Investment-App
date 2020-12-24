@@ -7,63 +7,73 @@
 <link href="reg-log/css/style.css" rel="stylesheet" type="text/css" media="all" />
 @endsection
 @extends('layouts.app')
-@section('headerText')
-<div class="header__cta-text text-center" data-aos="fade-up">
-    <div class="col-md-6 col-sm-8 m-auto">
-        <h3 class="mb-0">
-            Reset Password
-        </h3>
+@section('content')
+<div class="page_header" data-parallax-bg-image="{{asset('frontend/assets/img/1920x650-5.jpg')}}" data-parallax-direction="">
+    <div class="header-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="haeder-text">
+                        <h1> Reset Password</h1>
 
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-@endsection
-@section('content')
-
-
-<main>
-    <section class="c-login">
-        <div class="">
-            <div class=" c-login__form">
-                <div class="col-md-5 col-sm-7 m-auto p-md-5 p-3 c-login__the-form rounded" data-aos="fade-up">
+<div class="reg-wrapper">
+    <div class="about_content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-md-offset-3">
                     @if (session('status'))
                     <div class="alert alert-success" role="alert">
                         {{ session('status') }}
                     </div>
                     @endif
+
                     <form method="POST" action="{{ route('confirm') }}">
                         @csrf
-                        <div class="form-group"> 
-                            <input type=text name='email' value="{{ $email ?? old('email') }}" class="form-control form-input @error('email') is-invalid @enderror" placeholder="Type your e-mail" required="required" >
-                            <i class="input__icon  fa fa-envelope"></i>
+                        <span class="input">
+                            <input class="input__field" name="email"  value='{{ $email ?? old('email') }}' type="email" id="email">
+                            <label class="input__label" for="input-1">
+                                <span class="input__label-content"  data-content="Email">Email</span>
+                            </label>
                             @error('email')
-                            <span class="help-block text-danger" role="alert">
+                            <div class="alert alert-danger" role="alert">
                                 <strong>{{ $message }}</strong>
-                            </span>
+                            </div>
                             @enderror
-                        </div>
-                        <div class="form-group"> 
-                            <input type=password name='password'  class="form-control form-input @error('password') is-invalid @enderror" placeholder="Password" required="required" >
-                            <i class="input__icon  fa fa-unlock-alt"></i>
+                        </span>
+                        <span class="input">
+                            <input class="input__field" type="password"  name="password" >
+                            <label class="input__label" for="input-1">
+                                <span class="input__label-content" data-content="Password">New Password</span>
+                            </label>
                             @error('password')
-                            <span class="help-block text-danger" role="alert">
+                            <div class="alert alert-danger" role="alert">
                                 <strong>{{ $message }}</strong>
-                            </span>
+                            </div>
                             @enderror
-                        </div>
-                        <div class="form-group"> 
-                            <input type=password name='password_confirmation'  class="form-control form-input " placeholder="Confirm Password" required="required" >
-                            <i class="input__icon  fa fa-unlock-alt"></i>
-                        </div>
+                        </span>
+                        <span class="input">
+                            <input class="input__field" type="password" name='password_confirmation' >
+                            <label class="input__label" for="input-1">
+                                <span class="input__label-content" data-content="Confirm Password">Confirm Password</span>
+                            </label>
+                        </span>
 
                         <br/>
                         <div class="form-group">
-                            <button class="btn btn-primary px-5 py-2 mb-3">Reset Password</button> 
+                            <button class="btn btn-reg">Reset Password</button> 
                         </div>
+
                     </form>
-                </div>
+                </div> 
             </div>
         </div>
-    </section>
-</main>
+    </div>
+</div>
 
 @endsection

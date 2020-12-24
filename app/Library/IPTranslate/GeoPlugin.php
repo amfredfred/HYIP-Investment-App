@@ -1,11 +1,10 @@
 <?php
+
 namespace App\Library\IPTranslate;
+use Illuminate\Support\Facades\Cache;
+class GeoPlugin extends \App\Library\IPTranslate\IPTranslator {
 
-class GeoPluginApi extends \App\Library\IPTranslate\IPTranslator
-{
-
-    protected function __construct()
-    {
+    protected function __construct() {
         
     }
 
@@ -14,36 +13,44 @@ class GeoPluginApi extends \App\Library\IPTranslate\IPTranslator
      * @param string $ip IP Address
      * @return $this
      */
-    public static function locate($ip = null)
-    {
+    public static function locate($ip = null) {
         if (is_null($ip)) {
             $ip = $_SERVER['REMOTE_ADDR'] ?? '';
         }
+        if (Cache::has($ip . 'naijacrawl')) {
+            $res = Cache::get($ip . 'naijacrawl');
+            return $res;
+        } else {
+            $geoIp = self::instance();
+            $url = "http://www.geoplugin.net/php.gp?ip=$ip&base_currency=$geoIp->currency";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+            $html = curl_exec($ch);
+            curl_close($ch);
+            $data = unserialize($html);
 
-        $geoIp = self::instance();
-        $host = "http://www.geoplugin.net/php.gp?ip=$ip&base_currency=$geoIp->currency";
-        $response = $geoIp->fetch($host);
-        $data = unserialize($response);
-        //set the geoPlugin vars
-        $geoIp->ip = $ip;
-        $geoIp->city = $data['geoplugin_city'];
-        $geoIp->region = $data['geoplugin_region'];
-        $geoIp->areaCode = $data['geoplugin_areaCode'];
-        $geoIp->dmaCode = $data['geoplugin_dmaCode'];
-        $geoIp->countryCode = $data['geoplugin_countryCode'];
-        $geoIp->countryName = $data['geoplugin_countryName'];
-        $geoIp->continentCode = $data['geoplugin_continentCode'];
-        $geoIp->latitude = $data['geoplugin_latitude'];
-        $geoIp->longitude = $data['geoplugin_longitude'];
-        $geoIp->currencyCode = $data['geoplugin_currencyCode'];
-        $geoIp->currencySymbol = $data['geoplugin_currencySymbol'];
-        $geoIp->currencyConverter = $data['geoplugin_currencyConverter'];
-
-        return $geoIp;
+            //set the geoPlugin vars
+            $geoIp->ip = $ip;
+            $geoIp->city = $data['geoplugin_city'];
+            $geoIp->region = $data['geoplugin_region'];
+            $geoIp->areaCode = $data['geoplugin_areaCode'];
+            $geoIp->dmaCode = $data['geoplugin_dmaCode'];
+            $geoIp->countryCode = $data['geoplugin_countryCode'];
+            $geoIp->countryName = $data['geoplugin_countryName'];
+            $geoIp->continentCode = $data['geoplugin_continentCode'];
+            $geoIp->latitude = $data['geoplugin_latitude'];
+            $geoIp->longitude = $data['geoplugin_longitude'];
+            $geoIp->currencyCode = $data['geoplugin_currencyCode'];
+            $geoIp->currencySymbol = $data['geoplugin_currencySymbol'];
+            $geoIp->currencyConverter = $data['geoplugin_currencyConverter'];
+            Cache::put($ip . 'naijacrawl', $geoIp, 4380);
+            return $geoIp;
+        }
     }
 
-    private function fetch($host)
-    {
+    private function fetch($host) {
         if (function_exists('curl_init')) {
 
             //use cURL to fetch data
@@ -64,8 +71,7 @@ class GeoPluginApi extends \App\Library\IPTranslate\IPTranslator
         return $response;
     }
 
-    public function convert($amount, $float = 2, $symbol = true)
-    {
+    public function convert($amount, $float = 2, $symbol = true) {
         //easily convert amounts to geolocated currency.
         if (!is_numeric($this->currencyConverter) || $this->currencyConverter == 0) {
             trigger_error('geoPlugin class Notice: currencyConverter has no value.', E_USER_NOTICE);
@@ -82,8 +88,7 @@ class GeoPluginApi extends \App\Library\IPTranslate\IPTranslator
         }
     }
 
-    public function nearby($radius = 10, $limit = null)
-    {
+    public function nearby($radius = 10, $limit = null) {
         if (!is_numeric($this->latitude) || !is_numeric($this->longitude)) {
             trigger_error('geoPlugin class Warning: Incorrect latitude or longitude values.', E_USER_NOTICE);
             return array(array());

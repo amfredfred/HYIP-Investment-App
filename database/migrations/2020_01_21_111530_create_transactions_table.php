@@ -19,16 +19,16 @@ class CreateTransactionsTable extends Migration {
             $table->text('type')->nullabel();
             $table->text('name_type')->nullabel();
             $table->unsignedBigInteger('coin_id');
-            $table->longText('amount')->nullable();
-            $table->longText('amount_profit')->nullable();
+            $table->decimal('amount', 24, 2)->default(0);
+            $table->decimal('amount_profit', 24, 2)->default(0);
             $table->longText('description');
-            $table->decimal('deposit_investment_charge')->default(0)->nullable();
-            $table->decimal('withdraw_charge')->default(0)->nullable();
+            $table->decimal('deposit_investment_charge')->default(0);
+            $table->decimal('withdraw_charge')->default(0);
             $table->timestamps();
             $table->foreign('user_id')
                     ->references('id')->on('users')
                     ->onDelete('cascade')->onUpdate('cascade');
-            
+
             $table->foreign('coin_id')
                     ->references('id')->on('coins')
                     ->onDelete('cascade')->onUpdate('cascade');

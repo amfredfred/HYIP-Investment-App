@@ -19,6 +19,8 @@ Route::get('/faq', 'FrontController@faq')->name('faq');
 Route::get('/pages/{slug}', 'ViewPageController@index')->name('pages');
 Route::get('/guest_get-plan', 'FrontController@getPlan')->name('guest_get-plan');
 Route::get('/guest_get-coin', 'FrontController@getCoin')->name('guest_get-coin');
+Route::get('/contact-us', 'FrontController@getContact')->name('contact-us');
+
 Route::get('change-theme', 'FrontController@theme')->name('change-theme');
 //cron job
 Route::get('cron', 'CronJobController@index')->name('cron');

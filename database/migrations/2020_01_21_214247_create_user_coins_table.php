@@ -17,9 +17,9 @@ class CreateUserCoinsTable extends Migration {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('coin_id');
             $table->longText('address');
-            $table->longText('amount')->nullable();
-            $table->longText('earn')->nullable();
-            $table->longText('bonus')->nullable();
+            $table->decimal('amount', 24, 2)->default(0);
+            $table->decimal('earn', 24, 2)->default(0);
+            $table->decimal('bonus', 24, 2)->default(0);
             $table->timestamps();
             $table->foreign('user_id')
                     ->references('id')->on('users')

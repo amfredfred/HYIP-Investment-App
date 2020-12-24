@@ -14,7 +14,7 @@ class AddTurnOverToCompound extends Migration
      public function up()
     {
         Schema::table('compounds', function (Blueprint $table) {
-             $table->string('compound_turn_over');
+             $table->string('compound_turn_over')->nullable();
         });
     }
 

@@ -18,10 +18,10 @@ class CreateInvestmentsTable extends Migration {
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('plan_id');
             $table->unsignedBigInteger('coin_id');
-            $table->decimal('deposit_investment_charge')->default(0)->nullable();
-            $table->longText('amount')->nullable();
-            $table->longText('amount_check')->nullable();
-            $table->longText('earn')->nullable();
+            $table->decimal('deposit_investment_charge')->default(0);
+            $table->decimal('amount', 24, 2)->default(0);
+            $table->decimal('amount_check', 24, 2)->default(0);
+            $table->decimal('earn', 24, 2)->default(0);
             $table->string('run_count')->default(0);
             $table->dateTime('due_pay')->nullable();
             $table->boolean('status_deposit')->default(0);

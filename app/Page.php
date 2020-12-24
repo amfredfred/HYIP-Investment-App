@@ -11,6 +11,6 @@ class Page extends Model {
         'title', 'slug', 'description', 'col1', 'col2', 'col3'
     ];
  public function getAbout() {
-        return str_limit(strip_tags($this->description), 400, '...');
+        return str_limit(strip_tags($this->description), 200, '...');
     }
 }

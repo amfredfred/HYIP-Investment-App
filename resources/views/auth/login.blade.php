@@ -6,63 +6,64 @@
 <link href="reg-log/css/style.css" rel="stylesheet" type="text/css" media="all" />
 @endsection
 @extends('layouts.app')
-@section('headerText')
-<div class="header__cta-text text-center" data-aos="fade-up">
-    <div class="col-md-6 col-sm-8 m-auto">
-        <h3 class="mb-0">
-            Please Login
-        </h3>
-
-    </div>
-</div>
-@endsection
 @section('content')
+<div class="page_header" data-parallax-bg-image="{{asset('frontend/assets/img/1920x650-5.jpg')}}" data-parallax-direction="">
+    <div class="header-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="haeder-text">
+                        <h1>  Login into your  Account</h1>
 
-
-
-<main>
-    <section class="c-login">
-        <div class="">
-            <div class=" c-login__form">
-                <div class="col-md-5 col-sm-7 m-auto p-md-5 p-3 c-login__the-form rounded" data-aos="fade-up">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-                        <div class="form-group">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" name="email" id="email" class="form-control form-input">
-                            <i class="input__icon fa fa-envelope"></i>
-                              @error('email')
-                    <span class="help-block text-danger text-center">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                    @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" id="password" class="form-control form-input">
-                            <i class="input__icon fa fa-key"></i><br>
-                              @error('password')
-                    <span class="help-block text-danger text-center">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                              <br/>
-                    @enderror
-                            <a href="{{route('password.request')}}">Forgot password?</a>
-                        </div>
-                        <div class="custom-control custom-checkbox mb-4">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Remember me</label>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary px-5 py-2 mb-3">Log In</button> <a href="{{route('register')}}"
-                                                                                              class="btn"> Create
-                                Account</a>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-</main>
+    </div>
+</div>
+<div class="reg-wrapper">
+    <div class="about_content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-md-offset-3">
+                    <form method="POST" action="{{ route('login') }}">
+
+                        @csrf
+                        <span class="input">
+                            <input class="input__field" name="email" type="email" id="email">
+                            <label class="input__label" for="input-1">
+                                <span class="input__label-content"  data-content="Email">Email</span>
+                            </label>
+                            @error('email')
+                            <div class="alert alert-danger" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                            @enderror
+                        </span>
+
+                        <span class="input">
+                            <input class="input__field" name="password" type="password" id="password">
+                            <label class="input__label" for="input-1">
+                                <span class="input__label-content" data-content="Password">Password</span>
+                            </label>
+                            @error('password')
+                            <div class="alert alert-danger" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                            @enderror
+                        </span>
+
+                        <a  class="checkbox-link"  href="{{route('password.request')}}">Forgot password?</a>
+
+                        <button class="btn btn-reg">Log In</button> <a   class="checkbox-link"href="{{route('register')}}"> Create
+                            Account</a>
+
+                    </form>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @endsection

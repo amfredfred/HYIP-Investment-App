@@ -3,193 +3,257 @@
 <meta  name="description" content="{{ucfirst($settings['site_name'])}}">
 <meta itemprop="keywords" name="keywords" content="{{ucfirst($settings['site_name'])}}"/>
 <meta name="author" content="{{ucfirst($settings['site_name'])}}" />
-
-<style>
-   
-    @if(!empty($homepage->about_us_photo))
-    .c-about-us {
-        padding: 7rem 0;
-        background-image: url({{url($homepage->about_us_photo)}});
-
-    }
-    @endif
-    @if(!empty($homepage->get_start_text_image))
-    .c-what-we-do {
-    background:linear-gradient(128.47deg, hsla(346, 86%, 54%, .7) 14.1%, rgba(239, 35, 133, 0.7) 76.95%), url({{url($homepage->get_start_text_image)}});
-  
-    }
-    @endif
-    @if(!empty($homepage->why_us_text_image))
-    .c-why-us{  
-        background-image: url({{url($homepage->why_us_text_image)}});
-    }
-    @endif
- 
-</style>
-
 @endsection
 @extends('layouts.app')
-@section('headerText')
-<div class="header__cta-text text-center "   data-aos="fade-up">
-    <div class="col-md-6 col-sm-8 m-auto">
-        <h1>
-            {!! $homepage['title'] !!}
-        </h1>
-        <p class="mt-4">
-            {!! $homepage['description'] !!}
-        </p>
-        @Auth
-
-        <a href="{{url('home')}}" class="btn btn--cta mt-5">Dashboard</a>
-        @else
-        <a href="{{url('register')}}" class="btn btn--cta mt-5">Create Account</a>
-        @endAuth
+@section('content')
+<!-- /. End of Navigation -->
+<div class="animation-slide owl-carousel owl-theme" id="animation-slide">
+    <!-- Slide 1-->
+    @foreach($sliders as $slider)
+    <div class="item @if($loop->iteration == 1) slide-one @endif @if($loop->iteration == 2) slide-two @endif @if($loop->iteration == 3) slide-three @endif">
+        <div class="slide-table">
+            <div class="slide-tablecell">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="slide-text text-center">
+                                <h2>{!! $slider->title !!} </h2>
+                                <p>{!! $slider->description !!}</p>
+                                <div class="slide-buttons">
+                                    <a href="{{url('register')}}" class="slide-btn">Join Us</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    @endforeach
+</div>
+<!-- /.End of slider -->
+<div class="ticker">
+    <div class="list-wrpaaer">
+        <iframe class="list-wrpaaer " src="https://widget.coinlib.io/widget?type=horizontal_v2&theme=light&pref_coin_id=1505&invert_hover=" width="100%" height="76px"  frameborder="0" border="0"></iframe>
+    </div>
+
 </div>
 
-<div class="coinlink-marquee">
-    <div
-        style="height:62px; background-color: #1D2330; overflow:hidden; box-sizing: border-box; border: 1px solid #282E3B; border-radius: 4px; text-align: right; line-height:14px; block-size:62px; font-size: 12px; font-feature-settings: normal; text-size-adjust: 100%; box-shadow: inset 0 -20px 0 0 #262B38;padding:1px;padding: 0px; margin: 0px; width: 100%;">
-        <div style="height:40px; padding:0px; margin:0px; width: 100%;"><iframe
-                src="https://widget.coinlib.io/widget?type=horizontal_v2&theme=dark&pref_coin_id=1505&invert_hover="
-                width="100%" height="36px" scrolling="auto" marginwidth="0" marginheight="0" frameborder="0"
-                border="0" style="border:0;margin:0;padding:0;"></iframe></div>
-        <div
-            style="color: #626B7F; line-height: 14px; font-weight: 400; font-size: 11px; box-sizing: border-box; padding: 2px 6px; width: 100%; font-family: Verdana, Tahoma, Arial, sans-serif;">
-            <a href="https://coinlib.io" target="_blank"
-               style="font-weight: 500; color: #626B7F; text-decoration:none; font-size:11px">Cryptocurrency
-                Prices</a>&nbsp;by Coinlib</div>
+<div class="about_content">
+    <div class="container">
+        <div class="row about-text justify-content">
+            <div class="col-md-6">
+                <div class="about-info">
+                    <h2>About Us</h2>
+                    <div class="definition">{{$homepage->about_us_title}}</div>
+
+                    <p> {!! $about->getAbout() !!}</p>
+                    <a href="{{url('pages/about-us')}}" class="btn btn-default mr-20">Read more</a>
+                    <!--<a href="#" class="btn btn-default-o mb-10">Our Service</a>-->
+                    <div class="play-button">
+                        <a href="{{asset($settings['video_1'])}}" class="btn-play popup-youtube">
+                            <div class="play-icon"><i class="fa fa-play"></i></div>
+                            <div class="play-text">
+                                <div class="btn-title-inner">
+                                    <div class="btn-title"><span>Watch Video</span></div>
+                                    <div class="btn-subtitle"><span>About US</span></div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-right">
+                    <img src="{{asset($homepage->about_us_photo)}}" class="img-responsive" alt="">
+                </div>
+                <div class="quote">
+                    {!! $homepage->about_us_quote !!}
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<!-- /.End of about content -->
+<div class="calculate">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="section_title">
+                    <h3>Profit <span>Calculator</span></h3>
+                    <p>  {{$homepage->cal_title}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content">
+            <div class="col-sm-4">
+                <div class="bitcoin-sack">
+                    <img src="{{asset($homepage->cal_photo)}}" class="img-responsive center-block" alt="">
+                </div>
+            </div>
+            <div class="col-sm-8 col-xs-12">
+                <div class="exchange-content ">
+                    <form class="form-inline exchange-form">
+                        <div class="input-group">
+                            <label>Amount </label>
+                            <input type="number" name="amount" id="amount" class="form-control">
+                        </div>
+                        <div class="exchange-btn">
+                            <span class="lnr lnr-arrow-right"></span>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <select class="selectpicker plan" data-width="120px">
+                                    <option value="" disabled selected>Select Plan</option>
+                                    @foreach($plans as $plan)
+                                    <option value="{{$plan->id}}">{{$plan->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class=" mb-5">
+                        <div class="row ">
+                            <div class="col-md-6 col-xs-6">
+                        <span><small>Profit</small></span>
+                        <br>
+                        <p id="net_profit"><small>$0.00</small></p>
+                            </div>
+                              <div class="col-md-6 col-xs-6">
+                        <span><small>Total Return</small></span>
+                        <br>
+                        <p id="return"><small>$0.00</small></p>
+                              </div>
+                        </div>
+                    </div>
+                     <br>
+                    <div class="exchange-info mt-5">
+                        <h4>How it works?</h4>
+                        <p>
+                            {{$homepage->cal_description}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.End of calculate -->
+<div class="features__content">
+    <div id="content__bg"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="section_title">
+                    <h3>Service we <span>Provide</span></h3>
+                    <p> {{$homepage->service_text}}</p>
+                </div>
+            </div>
+        </div>
+        @foreach($services as $service)
+        <div class="col-sm-4 col-md-3">
+            <div class="feature__box">
+                <i class="{!! $service->icon !!}"></i>
+                <div class="feature__content">
+                    <h3>{!! $service->title!!}</h3>
+                    <p>{!! $service->description !!}</p>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+<!-- End of features content -->
+<div class="crypto-strat">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="section_title">
+                    <h3>How to Get  <span>Start</span></h3>
+                    <p> {{$homepage->get_start_text}}</p>
+                </div>
+            </div>
+        </div>
+        <!--<div class="crypto-strat-title"><span>How to Get Start</span></div>-->
+        <div class="start-steps">
+            @foreach($get_started as $get_start)
+            <div class="start-step">
+                <!--<span class="start-step-number">3</span>-->
+                <i class="step-icon {!! $get_start->icon !!}"></i>
+                <div class="start-step-info">
+                    <div class="step-name">
+                        <span> {!! $get_start->title!!}</span>
+                    </div>
+                    <div class="step-text">
+                        <span> {!! $get_start->description !!}</span>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        <a href="{{url('register')}}" class="btn btn-default">Get Start</a>
+    </div>
+</div>
+<!-- /.End of How to Get  Start -->
+
+
+@section('script')
+
+
+<script>
+
+    $('.plan').change(function () {
+        var amount = jQuery('#amount').val();
+        if (!amount) {
+            toastr.error('You must enter amount first', {timeOut: 50000});
+            $(".plan").val("");
+            return false;
+        }
+        var planID = $(this).val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+
+        });
+        if (planID) {
+            $.ajax({
+                type: "GET",
+                url: "{{url('guest_get-coin')}}?amount=" + amount + "&plan_id=" + planID,
+                success: function (res) {
+                    if (res) {
+                        if (res['status'] === 401) {
+                            toastr.error(res['message_danger'], {timeOut: 50000});
+                            $(".plan").val("");
+                            return false;
+                        }
+
+                        $('#return').val('');
+                        $('#net_profit').val('');
+                        $("#net_profit").html(res.net_profit);
+                        $("#return").html(res.return);
+                        $(".plan").val("");
+
+                    } else {
+                        $('#net_profit').val('');
+                        $('#return').val('');
+                        $(".plan").val("");
+                    }
+                }
+            });
+        } else {
+            $('#net_profit').val('');
+            $('#return').val('');
+        }
+
+
+    });
+
+
+</script>
+
 
 @endsection
-@section('content')
-<main>
-    <section class="c-about-us">
-        <div class="container-fluid">
-            <div class="row justify-content-end">
-                <div class="col-md-5 mb-4">
-                    <div class="c-about-us__content">
-                        <article data-aos="fade-up">
-                            <h3 class="mb-3  c-about-us__title">
-                                About us
-                            </h3>
-                            <p>
-                                @if(!empty($about))
-                                {!! $about->getAbout() !!}
-                                @endif
-                            </p>
-                            <a href="{{url('pages/about-us')}}" class="c-link">Learn More >></a>
-                        </article>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="c-intro-video" data-aos="fade-up">
-        <div class="container-fluid">
-            <div class="row justify-content-between">
-                <div class="col-md-6 mb-5">
-
-                    <iframe width="100%" height="315" src=" {{asset($settings['video_1'])}}"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                </div>
-                <div class="col-md-5">
-                    {!! $homepage['video_text'] !!}
-
-                </div>
-            </div>
-        </div>
-    </section>
-    <style>
-       
-    </style>
-    <section class="c-what-we-do ">
-        <div class="container-fluid">
-            <div class="text-center col-sm-8 col-md-6 m-auto" data-aos="fade-up">
-                <h3 class=''>
-                    {!! $homepage['get_beneift_text'] !!}
-                </h3>
-                <a href="{{url('register')}}" class="btn btn-outline-light mt-3 py-2 px-4">Get Started</a>
-            </div>
-        </div>
-    </section>
-    <section class="c-features">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-6 col-md-3">
-                    <div class="c-benefit c-benefit--main">
-                        {!! $homepage['benefit_text'] !!}
-
-                        <a href="{{url('register')}}" class="btn c-benefit__invest-btn px-5">Invest Now <i
-                                class="fa fa-angle-right"></i></a>
-                    </div>
-                </div>
-                @foreach($benefits as $benefit)
-                <div class="col-sm-6 col-md-3">
-
-                    <div class="c-benefit shadow-sm" data-aos="fade-up">
-                        <i class="c-benefit__icon {!! $benefit->icon !!} fa-4x mb-3"></i>
-                        <h5 class="c-benefit__title">
-                            {!! $benefit->title !!}
-                        </h5>
-                        <p class="c-benefit__info">
-                            {!! $benefit->description !!}
-                        </p>
-                    </div>
-                </div>
-                @endforeach
-
-            </div>
-        </div>
-    </section>
-    <section class="c-why-us">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-5 mb-4">
-                    <div class="c-why-us__text p-5 rounded" data-aos="fade-up">
-                        <span>
-                            <h2> Why Invest With Us?</h2>
-                        </span>
-                        {!! $homepage['why_us_text'] !!}
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-   
-    <section class="c-features">
-        <div class="container-fluid">
-            <div class="row justify-content-center">
-                    <div class="col-sm-6 col-md-3">
-                    <div class="c-benefit c-benefit--main">
-                        {!! $homepage['get_start_text'] !!}
-
-
-                        <a href="{{url('register')}}" class="btn c-benefit__invest-btn px-5">Start Investing</a>
-                    </div>
-                </div>
-                @foreach($get_started as $get_start)
-                <div class="col-sm-6 col-md-3">
-                    <div class="c-benefit shadow-sm" data-aos="fade-up">
-                        <i class="c-benefit__icon {!! $get_start->icon !!}  fa-4x mb-3"></i>
-                        <h5 class="c-benefit__title">
-                            {!! $get_start->title!!}
-                        </h5>
-                        <p class="c-benefit__info">
-                            {!! $get_start->description !!}
-                        </p>
-
-                    </div>
-                </div>
-                @endforeach
-            
-            </div>
-        </div>
-    </section>
-</main>
 
 @endsection

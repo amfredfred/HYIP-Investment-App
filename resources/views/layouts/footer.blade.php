@@ -1,133 +1,125 @@
 
 
-<footer class="c-footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-6 col-sm-4 col-md-3">
-                <div class="c-footer-menu">
-                    <h5 class="c-footer-menu__heading">
+<footer class="footer">
+    <div class="footer-breadcrumbs">
+        <div class="container">
+            <div class="breadcrumbs-row">
+                <ul class="f_breadcrumbs">
+                    <li><a href="{{url('/')}}"><span>Home</span></a></li>
+                    <li><a href="{{url('pages/about-us')}}"><span>About</span></a></li>
+                </ul>
+                <div class="scroll-top" id="back-to-top">
+                    <div class="scroll-top-text"><span>Scroll to Top</span></div>
+                    <div class="scroll-top-icon"><i class="fa fa-angle-up"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.End of breadcrumbs -->
+    <div class="action_btn_inner">
+        <a href="{{url('register')}}" class="action_btn">
+            <span class="action_title">Register</span>
+            <span class="lnr lnr-chevron-right action_icon"></span>
+            <span class="action_sub_title">Join the new era of cryptocurrency Investment</span>
+        </a>
+        <a href="{{url('login')}}" class="action_btn">
+            <span class="action_title">Sign in</span>
+            <span class="lnr lnr-chevron-right action_icon"></span>
+            <span class="action_sub_title">Access the cryptocurrency experience from your dashboard</span>
+        </a>
+    </div>
+    <!-- /.End of action button -->
+    <div class="main_footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 col-md-4">
+                    <div class="widget-contact">
+                        <ul class="list-icon">
+                            <li><i class="fa fa-map-marker"></i>   {{$settings['address']}}</li>
+                            <li><i class="fa fa-phone"></i> {{$settings['site_phone']}} </li>
+                            <li><i class="fa fa-envelope"></i> <a href="#"><span>{{$settings['site_email']}}</span></a>
+                            </li>
 
-                        Contact
-                    </h5>
-                    <ul class="list-unstyled">
-                        <li class="c-foooter-menu__item">
-                            <div class="d-flex">
-                                <i class="fa fa-map-marker mr-2 d-block "></i> 
-
-                                <p class="">
-                                    {{ucfirst($settings['address'])}}
-                                </p>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-5 col-md-4 col-md-offset-1">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="footer-box">
+                                <h3 class="footer-title">Our Company</h3>
+                                <ul class="footer-list">
+                                    <li><a href="{{url('plan')}}">Investment Plan</a></li>
+                                    <li><a href="{{url('pages/terms-conditions')}}">Terms of Services</a></li>
+                                    <li><a href="{{url('contact-us')}}">Contact Us</a></li>
+                                    <li><a href="{{url('pages/about-us')}}">About Us</a></li>
+                                    <li><a href="#">24/7 Support</a></li>
+                                </ul>
                             </div>
-                        </li>
-                        <li class="c-foooter-menu__item">
-                            <p>
-                                <i class="fa fa-phone mr-2"></i> {{$settings['site_phone']}}
-                            </p>
-                        </li>
-                        <li class="c-foooter-menu__item">
-                            <p>
-                                <i class="fa fa-envelope mr-2"></i> {{$settings['site_email']}}
-                            </p>
-                        </li>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="footer-box">
+                                <h3 class="footer-title">Service</h3>
+                                <ul class="footer-list">
+                                    <li><a href="{{url('pages/about-us')}}">About Us</a></li>
+                                    <li><a href="{{url('pages/terms-conditions')}}">Service</a></li>
+                                    <li><a href="{{url('contact-us')}}">Contact us</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <div class="newsletter-box">
 
-                    </ul>
-                </div>
-            </div>
-            <div class="col-6 col-sm-3 col-md-3">
-                <div class="c-footer-menu">
-                    <h5 class="c-footer-menu__heading">
-                        {{$settings['site_name']}}
-                    </h5>
-                    <ul class="list-unstyled">
-                        <li class="c-foooter-menu__item">
-                            <a href="{{url('pages/about-us')}}" class="c-footer-menu__link">About Us</a>
-                        </li>
-                        <li class="c-foooter-menu__item">
-                            <a href="{{url('plan')}}"  class="c-footer-menu__link">Investment Plan</a>
-                        </li>
-                        <li class="c-foooter-menu__item">
-                            <a href="{{url('faq')}}"  class="c-footer-menu__link">FAQs</a>
-                        </li>
+                        <div class="footer-box">
+                            <h3 class="footer-title">Downloads</h3>
+                            <ul class="footer-list">
 
-                    </ul>
-                </div>
-            </div>
-            <div class="col-6 col-sm-1 col-md-1">
-                <div class="c-footer-menu">
-                    <h5 class="c-footer-menu__heading">
-                        @Auth
-                        Your Account
-                        @else
-                        Join us
-                        @endAuth
-                    </h5>
-                    <ul class="list-unstyled">
-                        @Auth
-                        <li class="c-foooter-menu__item">
-                            <a href="{{url('dashboard')}}"  class="c-footer-menu__link"> {{Auth::user()->first_name}} {{Auth::user()->last_name}} </a>
-                        </li>
-                        @else
-                        <li class="c-foooter-menu__item">
-                            <a href="{{url('login')}}"  class="c-footer-menu__link">Log in</a>
-                        </li>
-                        <li class="c-foooter-menu__item">
-                            <a href="{{url('register')}}"  class="c-footer-menu__link">Sign Up</a>
-                        </li>
-                        @endAuth
-                    </ul>
-                </div>
-            </div>
-            <div class="col-6 col-sm-4 col-md-2">
-                <div class="c-footer-menu">
-                    <h5 class="c-footer-menu__heading">
-                        Legal
-                    </h5>
-                    <ul class="list-unstyled">
-                        <li class="c-foooter-menu__item">
-                            <a href="{{url('pages/privacy-policy')}}" class="c-footer-menu__link">Privacy Policy</a>
-                        </li>
-                        <li class="c-foooter-menu__item">
-                            <a href="{{url('pages/terms-conditions')}}" class="c-footer-menu__link">Terms & Conditions</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-              <div class="col-6 col-sm-4 col-md-2">
-                <div class="c-footer-menu">
-                    <h5 class="c-footer-menu__heading">
-                        Downloads
-                    </h5>
-                    <ul class="list-unstyled">
-                        <li class="c-foooter-menu__item">
-                            <a href="{{url('certificate-of-incorporation')}}"  target="_blank" class="c-footer-menu__link">Certificate of Incorporation</a>
-                        </li>
-                        <li class="c-foooter-menu__item">
-                            <a href="{{url('confirmation-statement')}}" target="_blank" class="c-footer-menu__link">2020 Confirmation Statement</a>
-                        </li>
-                         <li class="c-foooter-menu__item">
-                            <a href="{{url('full-accounts')}}"  target="_blank" class="c-footer-menu__link">2019 Full Accounts</a>
-                        </li>
-                    </ul>
+                                <li>
+                                    <a href="{{url('certificate-of-incorporation')}}"  target="_blank">Certificate of Incorporation</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('confirmation-statement')}}" target="_blank">2020 Confirmation Statement</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('full-accounts')}}"  target="_blank" >2019 Full Accounts</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- /.End of main footer -->
+    <div class="sub_footer">
+        <div class="container">
+            <div class="logos-wrapper">
+                <div class="logos-row">
+                    <div class="social-content">
+                        <div class="social-row">
 
-    <div class="c-footer__rights-text">
-        <div class="text-center">
-            <p>
-                {{ucfirst($settings['site_name'])}} {{$settings['copy_right']}}
-            </p>
+                            <div class="social_icon">
+                                @foreach($socials as $social)
+                                <a href="{{$social->link}}" class=""><i class="{{$social->icon}}"></i></a>
+                                @endforeach
+                            </div>
+                            <div class="f-language">
+                                <select class="selectpicker flag_link" data-width="fit">
+                                    <option  value="en" data-content='<span class="flag-icon flag-icon-us"></span> English'>English</option>
+                                    <option  value="es" data-content='<span class="flag-icon flag-icon-mx"></span> Español'>Español</option>
+                                    <option  value="ar" data-content='<span class="flag-icon flag-icon-bd"></span> বাংলা'>বাংলা </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <span>  {{ucfirst($settings['site_name'])}} {{$settings['copy_right']}}</span>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="c-footer__social-icons">
-        <div class="text-center">
-            @foreach($socials as $social)
-            <a href="{{$social->link}}" target="_blank" class="c-footer__icon-link">
-                <i class="{{$social->icon}}"></i>
-            </a>
-            @endforeach
-
-        </div>
-    </div>
+    <!-- /.End of sub footer -->
 </footer>

@@ -6,57 +6,52 @@
 <link href="reg-log/css/style.css" rel="stylesheet" type="text/css" media="all" />
 @endsection
 @extends('layouts.app')
-@section('headerText')
-<div class="header__cta-text text-center" data-aos="fade-up">
-    <div class="col-md-6 col-sm-8 m-auto">
-        <h3 class="mb-0">
-            Please Verify your Account
-        </h3>
-
-    </div>
-</div>
-@endsection
 @section('content')
-<style>
-    .c-verify {
-  background-image: url({{url('assets/images/man-in-blue-suit-999267.jpg')}});
-  background-size: cover;
-  background-repeat: no-repeat;
-  margin-top: 0; }
-  .c-verify .c-verify__form {
-    background-color: #3955d1;
-    padding: 5rem 2rem; }
-    @media screen and (min-width: 768px) {
-      .c-verify.c-verify__form {
-        padding: 10rem 5rem; } }
-    .c-verify .c-verify__form .c-verify__the-form {
-      background-color: #fdfffc; }
-   
-</style>
 
-<main>
-    <section class="c-login">
-        <div class="">
-            <div class=" c-login__form">
-                <div class="col-md-5 col-sm-7 m-auto p-md-5 p-3 c-login__the-form rounded" data-aos="fade-up">
-                    <form method="POST" action="{{ route('verify_account') }}">
-                        @csrf
-                        <small class="text-danger"> {{ __('Before proceeding, please check your email for a verification Code.') }}</small>
-                        <br/>
-                        <div class="form-group">
-                            <label for="code" class="form-label">Enter Verification Code</label>
-                            <input type="text" name="code" id="code" class="form-control form-input">
-                           
-                        </div>
+@section('content')
+<div class="page_header" data-parallax-bg-image="{{asset('frontend/assets/img/1920x650-5.jpg')}}" data-parallax-direction="">
+    <div class="header-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="haeder-text">
+                        <h1>  Create New Account</h1>
 
-                        <div class="form-group">
-                            <button class="btn btn-primary px-5 py-2 mb-3">Verify</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-</main>
+    </div>
+</div>
+<div class="reg-wrapper">
+    <div class="about_content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-md-offset-3">
+                        <form method="POST" action="{{ route('verify_account') }}">
+                        @csrf
+                          <div class="alert alert-danger" role="alert">
+                                <strong>  <small> {{ __('Before proceeding, please check your email for a verification Code.') }}</small>
+                      </strong>
+                            </div>
+                        <br/>
+                        <span class="input">
+                            <input class="input__field" type="number" name="code" id="code">
+                            <label class="input__label" for="input-1">
+                                <span class="input__label-content" data-content="Verification Code">Verification Code</span>
+                            </label>
+                        </span>
+                       
+
+                        <div class="form-group">
+                            <button class="btn btn-reg">Verify</button>
+                        </div>
+              </form>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @endsection

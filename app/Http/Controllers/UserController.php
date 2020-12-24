@@ -109,6 +109,7 @@ class UserController extends Controller {
             $type_admin = 'admin';
             $subject_admin = $setting->site_name . ' New Registration ';
             Mail::to($setting->send_notify_email)->send(new RegistrationMail($user, $subject_admin, $type_admin));
+            session()->forget('sponsor');
             Auth::login($user);
             DB::commit();
         } catch (\Exception $e) {

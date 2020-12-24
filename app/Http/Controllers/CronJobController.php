@@ -55,30 +55,24 @@ class CronJobController extends Controller {
                     $c = ($invest->plan->compound->compound / 24);
                     $check = $invest->run_count;
                     if ($check != $c) {
-                        $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
-                        if ($invest->user->compounding == true) {
 
-                            $profit = ($invest->amount + $invest->com_earn) * ($invest->plan->percentage) / 100;
-                        } else {
-                            $profit = $invest->amount * $invest->plan->percentage / 100;
-                        }
+                        $profit = $invest->amount * $invest->plan->percentage / 100;
+
                         // / $c
 
                         $daily_profit = round($profit, 2);
+                        $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
+                        //usercoin 
+                        $usercoin->earn = $usercoin->earn + $daily_profit;
+                        $usercoin->save();
+
                         //update investment 
                         $update_investment = Investment::findOrFail($invest->id);
                         $update_investment->run_count = $invest->run_count + 1;
                         $update_investment->earn = $invest->earn + $daily_profit;
                         $update_investment->com_earn = $invest->com_earn + $daily_profit;
                         $update_investment->save();
-                        //usercoin 
 
-                        if ($invest->plan->id == 2 || $invest->plan->name == '2020 Special Investment Plan') {
-                            $usercoin->earn_promo = $usercoin->earn_promo + $daily_profit;
-                        } else {
-                            $usercoin->earn = $usercoin->earn + $daily_profit;
-                        }
-                        $usercoin->save();
                         //transcation log
                         Transaction::create([
                             'user_id' => $invest->user_id,
@@ -89,7 +83,7 @@ class CronJobController extends Controller {
                             'status' => true,
                             'amount' => $daily_profit,
                             'amount_profit' => $daily_profit,
-                            'description' => 'rofit Notification Under ' . $invest->plan->name
+                            'description' => 'Profit Notification Under ' . $invest->plan->name
                         ]);
                         $text_p = "You’ve earned a profit of $$daily_profit and it has been credited to your account.";
 
@@ -144,13 +138,12 @@ class CronJobController extends Controller {
                     foreach ($invest->user->coin as $ucoin) {
                         if ($invest->coin_id == $ucoin->coin_id) {
 
-                            $address = $ucoin->address;
+                            $address = $ucoin->userCoin->address;
                         }
                     }
                     $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
                     if ($invest->user->compounding == true) {
                         $profitamount = ($invest->amount + $invest->com_earn) * ($invest->plan->percentage) / 100;
-                        
                     } else {
                         $profitamount = $invest->amount * $invest->plan->percentage / 100;
                     }
@@ -164,7 +157,7 @@ class CronJobController extends Controller {
                     $update_investment->save();
                     //usercoin 
                     $usercoin->amount = $usercoin->amount + $invest->amount;
-                    if ($invest->plan->id == 2 || $invest->plan->name == '2020 Special Investment Plan') {
+                    if ($invest->plan->name == '2020 Special Investment Plan') {
                         $usercoin->earn_promo = $usercoin->earn_promo + $profitamount;
                     } else {
                         $usercoin->earn = $usercoin->earn + $profitamount;

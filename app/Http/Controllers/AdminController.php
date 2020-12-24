@@ -40,13 +40,174 @@ class AdminController extends Controller {
         return $data;
     }
 
+    public function getHistory(Request $request) {
+        if ($request->type == null) {
+            $url_path = url('admin-get_history');
+        } else {
+            $url_path = url('admin-get_history?type=' . $request->type);
+        }
+        $data['coins'] = Coin::all();
+        if ($request->type == null) {
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = '';
+        }
+        if ($request->type == 'deposit') {
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->whereType('Deposit Investment')->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = 'deposit';
+        }
+        if ($request->type == 'bonus') {
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->whereType('Bonus')->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = 'bonus';
+        }
+        if ($request->type == 'earning') {
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->whereType('Earning')->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = 'earning';
+        }
+
+        if ($request->type == 'withdrawal') {
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->whereType('Withdrawal')->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = 'withdrawal';
+        }
+
+        if ($request->type == 'commissions') {
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->whereType('Referral Bonus')->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = 'commissions';
+        }
+        if ($request->type == 'bitcoin_address') {
+            $coin = Coin::whereSlug('bitcoin_address')->first();
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->whereCoin_id($coin->id)->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = 'bitcoin_address';
+        }
+        if ($request->type == 'litecoin_address') {
+            $coin = Coin::whereSlug('litecoin_address')->first();
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->whereCoin_id($coin->id)->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = 'litecoin_address';
+        }
+        if ($request->type == 'ethereum_address') {
+            $coin = Coin::whereSlug('ethereum_address')->first();
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->whereCoin_id($coin->id)->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = 'ethereum_address';
+        }
+
+        if ($request->type == 'bitcoin_cash_address') {
+            $coin = Coin::whereSlug('bitcoin_cash_address')->first();
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->whereCoin_id($coin->id)->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = 'bitcoin_cash_address';
+        }
+
+        if ($request->type == 'dash_address') {
+            $coin = Coin::whereSlug('dash_address')->first();
+            $items = Transaction::whereStatus(true)->with('coin', 'user')->orderBy('created_at', 'desc')->whereCoin_id($coin->id)->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 20;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['histories'] = $paginatedItems->setPath($url_path);
+            $data['type'] = 'dash_address';
+        }
+
+//        if ($request->type == 'filter') {
+//            $from = $request->year_from . '-' . $request->month_from . '-' . $request->day_from;
+//
+//            $to = $request->year_to . '-' . $request->month_to . '-' . $request->day_to;
+//             $items = Transaction::whereUser_id(Auth::user()->id)->whereType('Deposit Investment')->whereBetween('created_at', [$from, $to])->orderBy('created_at', 'desc')->get();
+//            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+//            $itemCollection = collect($items);
+//            $perPage = 10;
+//            $currentPageItems = $itemCollection->slice(($currentPage * $perPage) - $perPage, $perPage)->all();
+//            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+//            $data['histories'] = $paginatedItems->setPath($url_path);
+//            $data['type'] = 'date';
+//        }
+//        if ($request->type == 'filterw') {
+//            $from = $request->year_from . '-' . $request->month_from . '-' . $request->day_from;
+//
+//            $to = $request->year_to . '-' . $request->month_to . '-' . $request->day_to;
+//            
+//            $data['histories'] = Transaction::whereUser_id(Auth::user()->id)->whereBetween('created_at', [$from, $to])->whereType('Withdraw')->orderBy('created_at', 'desc')->paginate(15);
+//            $data['type'] = 'date';
+//        }
+//        if ($request->type == 'filtere') {
+//            $from = $request->year_from . '-' . $request->month_from . '-' . $request->day_from;
+//
+//            $to = $request->year_to . '-' . $request->month_to . '-' . $request->day_to;
+//            $data['histories'] = Transaction::whereUser_id(Auth::user()->id)->whereBetween('created_at', [$from, $to])->orderBy('created_at', 'desc')->paginate(15);
+//            $data['type'] = 'date';
+//        }
+//        
+        return $data;
+    }
+
     public function mailing() {
         return view('admin.mailing.index');
     }
+
     public function userRef($id) {
-      $data['refs'] = Reference::whereUser_id($id)->orderBy('created_at', 'desc')->with('refs')->get();
-      return $data;
+        $data['refs'] = Reference::whereUser_id($id)->orderBy('created_at', 'desc')->with('refs')->get();
+        return $data;
     }
+
     public function mailingPost(Request $request) {
         $input = $request->all();
         $rules = ([
@@ -79,7 +240,7 @@ class AdminController extends Controller {
             $url_path = url('users?type=' . $request->type);
         }
         if ($request->q) {
-            $items = User::where('first_name', 'LIKE', '%' . $request->q . '%')->orWhere('last_name', 'LIKE', '%' . $request->q . '%')->orderBy('created_at', 'desc')->get();
+            $items = User::with('usercoinOne')->where('first_name', 'LIKE', '%' . $request->q . '%')->orWhere('last_name', 'LIKE', '%' . $request->q . '%')->orderBy('created_at', 'desc')->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -89,7 +250,7 @@ class AdminController extends Controller {
             $data['type'] = '';
         }
         if ($request->type == '') {
-            $items = User::orderBy('created_at', 'desc')->get();
+            $items = User::with('usercoinOne')->orderBy('created_at', 'desc')->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -99,7 +260,7 @@ class AdminController extends Controller {
             $data['type'] = '';
         }
         if ($request->type == 'verified') {
-            $items = User::whereCode(true)->orderBy('created_at', 'desc')->get();
+            $items = User::with('usercoinOne')->whereCode(true)->orderBy('created_at', 'desc')->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -109,7 +270,7 @@ class AdminController extends Controller {
             $data['type'] = 'verified';
         }
         if ($request->type == 'unverified') {
-            $items = User::whereCode(false)->orderBy('created_at', 'desc')->get();
+            $items = User::with('usercoinOne')->whereCode(false)->orderBy('created_at', 'desc')->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -454,6 +615,7 @@ class AdminController extends Controller {
     public function deleteDeposit(Request $request) {
         $id = $request->id;
         $deposit = Investment::find($id);
+        Transaction::whereTransaction_id($deposit->transaction_id)->delete();
         if ($deposit->delete()) {
             return [
                 'status' => 'error',
@@ -468,100 +630,117 @@ class AdminController extends Controller {
     }
 
     public function confirm(Request $request) {
-        $id = $request->id;
-        $payment = Investment::find($id);
-        $current = Carbon::now();
-        $status_deposit = true;
-        $due = $current->addHours($payment->plan->compound->compound);
-        $due_pay = $due->addMinutes(2);
-        $payment->update([
-            'status_deposit' => $status_deposit,
-            'due_pay' => $due_pay
-        ]);
-        if ($payment->plan->name == 'Remove') {
-            $namep = $payment->amount . ' BTC';
-        } else {
-            $namep = '$' . $payment->amount;
-        }
-        $action = $payment->coin->slug;
-        if ($action == 'bitcoin_address') {
-            $name = 'Bitcoin';
-        }
-        if ($action == 'litecoin_address') {
-
-            $name = 'Litecoin';
-        }
-        if ($action == 'ethereum_address') {
-            $name = 'Erhereum';
-        }
-        if ($action == 'bitcoin_cash_address') {
-            $name = 'Bitcoin Cash';
-        }
-        if ($action == 'dash_address') {
-            $name = 'dash';
-        }
-
-        //check reference for bouns
-        $actionb = $payment->coin->slug;
-        if ($actionb == 'bitcoin_address') {
-            $name = 'Bitcoin';
-        }
-        if ($actionb == 'litecoin_address') {
-
-            $name = 'Litecoin';
-        }
-        if ($actionb == 'ethereum_address') {
-            $name = 'Ethereum';
-        }
-        if ($actionb == 'bitcoin_cash_address') {
-            $name = 'Bitcoin Cash';
-        }
-        if ($actionb == 'dash_address') {
-            $name = 'Dash';
-        }
-        foreach ($payment->user->coin as $ucoin) {
-            if ($payment->coin_id == $ucoin->coin_id) {
-
-                $address = $ucoin->address;
-            }
-        }
-        $user_ref = Reference::whereReferred_id($payment->user_id)->first();
-        if (is_object($user_ref)) {
-            //plan ref percentage
-            $bonus = $payment->amount * $payment->plan->ref / 100;
-            $pay = UserCoin::whereUser_id($user_ref->user_id)->whereCoin_id($payment->coin_id)->first();
-            if (is_object($pay)) {
-                $pay->bonus = $pay->bonus + $bonus;
-                $pay->save();
-                //transcation log
-                Transaction::create([
-                    'user_id' => $user_ref->user_id,
-                    'transaction_id' => $payment->transaction_id,
-                    'type' => 'Referral Bonus',
-                    'name_type' => 'Referral Bonus',
-                    'coin_id' => $payment->coin_id,
-                    'amount' => $bonus,
-                    'status' => true,
-                    'amount_profit' => $bonus,
-                    'description' => 'Referral Bonus Under ' . $payment->plan->name
+        DB::beginTransaction();
+        try {
+            $id = $request->id;
+            $payment = Investment::find($id);
+            if (empty($payment->hash)) {
+                $payment->update([
+                    'hash' => md5(uniqid())
                 ]);
-                $user_pay = $user_ref->refs->first_name . ' ' . $user_ref->refs->last_name;
-                $text = "You earned a referral bonus  of $$bonus for referring  $user_pay.";
-
-
-                $message = $text;
-
-                $this->sendMail($pay->user->email, $pay->user->first_name, 'Referral Bonus Notification', $message);
             }
+            $current = Carbon::now();
+            $status_deposit = true;
+            $due = $current->addHours($payment->plan->compound->compound);
+            $due_pay = $due->addMinutes(2);
+            $payment->update([
+                'status_deposit' => $status_deposit,
+                'due_pay' => $due_pay
+            ]);
+            if ($payment->plan->name == 'Remove') {
+                $namep = $payment->amount . ' BTC';
+            } else {
+                $namep = '$' . $payment->amount;
+            }
+            $action = $payment->coin->slug;
+            if ($action == 'bitcoin_address') {
+                $name = 'Bitcoin';
+            }
+            if ($action == 'litecoin_address') {
+
+                $name = 'Litecoin';
+            }
+            if ($action == 'ethereum_address') {
+                $name = 'Erhereum';
+            }
+            if ($action == 'bitcoin_cash_address') {
+                $name = 'Bitcoin Cash';
+            }
+            if ($action == 'dash_address') {
+                $name = 'dash';
+            }
+
+            //check reference for bouns
+            $actionb = $payment->coin->slug;
+            if ($actionb == 'bitcoin_address') {
+                $name = 'Bitcoin';
+            }
+            if ($actionb == 'litecoin_address') {
+
+                $name = 'Litecoin';
+            }
+            if ($actionb == 'ethereum_address') {
+                $name = 'Ethereum';
+            }
+            if ($actionb == 'bitcoin_cash_address') {
+                $name = 'Bitcoin Cash';
+            }
+            if ($actionb == 'dash_address') {
+                $name = 'Dash';
+            }
+            foreach ($payment->user->coin as $ucoin) {
+                if ($payment->coin_id == $ucoin->coin_id) {
+
+                    $address = $ucoin->address;
+                }
+            }
+
+            $user_ref = Reference::whereReferred_id($payment->user_id)->first();
+            if (is_object($user_ref)) {
+                //plan ref percentage
+                $bonus = $payment->amount * $payment->plan->ref / 100;
+                $pay = UserCoin::whereUser_id($user_ref->user_id)->whereCoin_id($payment->coin_id)->first();
+                if (is_object($pay)) {
+                    $pay->bonus = $pay->bonus + $bonus;
+                    $pay->save();
+                    //transcation log
+                    Transaction::create([
+                        'user_id' => $user_ref->user_id,
+                        'transaction_id' => $payment->transaction_id,
+                        'type' => 'Referral Bonus',
+                        'name_type' => 'Referral Bonus',
+                        'coin_id' => $payment->coin_id,
+                        'amount' => $bonus,
+                        'status' => true,
+                        'amount_profit' => $bonus,
+                        'description' => 'Referral Bonus Under ' . $payment->plan->name
+                    ]);
+                    $user_pay = $user_ref->refs->first_name . ' ' . $user_ref->refs->last_name;
+                    $text = "You earned a referral bonus  of $$bonus for referring  $user_pay.";
+
+
+                    $message = $text;
+
+                    $this->sendMail($pay->user->email, $pay->user->first_name, 'Referral Bonus Notification', $message);
+                }
+            }
+            //trans
+            Transaction::whereTransaction_id($payment->transaction_id)->update([
+                'status' => true
+            ]);
+
+            $email = $payment->user->email;
+            $subject = 'New Investment Notification';
+            $greeting = 'Hello ' . $payment->user->first_name . ' ' . $payment->user->last_name . ',';
+            $message = 'You invested ' . '$' . $payment->amount . " using " . $name . "  Under " . $payment->plan->name . ".";
+
+            Notification::route('mail', $email)
+                    ->notify(new PlanDepositMail($greeting, $subject, $message));
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
         }
-
-        $email = $payment->user->email;
-        $subject = 'New Investment Notification';
-        $greeting = 'Hello ' . $payment->user->first_name . ' ' . $payment->user->last_name . ',';
-        $message = 'You invested ' . '$' . $payment->amount . " using " . $name . "  Under " . $payment->plan->name . ".";
-
-        Notification::route('mail', $email)
-                ->notify(new PlanDepositMail($greeting,$subject, $message));
         session()->flash('message.level', 'success');
         session()->flash('message.color', 'green');
         session()->flash('message.content', 'Payment Successfully Confirmed');
@@ -615,7 +794,7 @@ class AdminController extends Controller {
         $id = $request->id;
 
         $withdraw = Withdraw::find($id);
-
+        Transaction::whereTransaction_id($withdraw->transaction_id)->delete();
 
         if ($withdraw->delete()) {
             return [
@@ -632,7 +811,7 @@ class AdminController extends Controller {
 
     public function confirmWithdraw(Request $request) {
         $id = $request->id;
-      
+
         DB::beginTransaction();
         try {
             $withdraw = Withdraw::find($id);
@@ -670,12 +849,12 @@ class AdminController extends Controller {
                     'amount' => $sub->amount - $withdraw->total_amount
                 ]);
             }
-            if ($withdraw->withdraw_from == 'Normal Balance') {
+            if ($withdraw->withdraw_from == 'Profit Balance') {
                 $sub->update([
                     'earn' => $sub->earn - $withdraw->total_amount
                 ]);
             }
-             if ($withdraw->withdraw_from == 'Special Balance') {
+            if ($withdraw->withdraw_from == 'Special Balance') {
                 $sub->update([
                     'earn_promo' => $sub->earn_promo - $withdraw->total_amount
                 ]);
@@ -690,24 +869,17 @@ class AdminController extends Controller {
             if ($withdraw->withdraw_from == 'All') {
                 $s = $sub->bonus - $withdraw->total_amount;
                 $sub = UserCoin::whereUser_id($withdraw->user_id)->whereCoin_id($withdraw->coin_id)->update([
+                    'amount' => 0,
                     'bonus' => 0,
                     'earn' => 0,
                     'earn_promo' => 0,
                 ]);
             }
-            $message = 'Your withdrawal of $'.$amount.' has been successfully sent to your '.$name. '  ' .$address.'. ';
+            $message = 'Your withdrawal of $' . $amount . ' has been successfully sent to your ' . $name . '  ' . $address . '. ';
 
 //transcation log
-            Transaction::create([
-                'user_id' => $withdraw->user_id,
-                'transaction_id' => $withdraw->transaction_id,
-                'type' => 'Withdrawal',
-                'name_type' => 'Withdrawal',
+            Transaction::whereTransaction_id($withdraw->transaction_id)->update([
                 'status' => true,
-                'withdraw_charge' => $withdraw->withdraw_charge,
-                'coin_id' => $withdraw->coin_id,
-                'amount' => $withdraw->amount - $withdraw->withdraw_charge,
-                'description' => $message
             ]);
             //send mail
             $greeting = 'Hello' . ' ' . $withdraw->user->first_name;
@@ -715,13 +887,14 @@ class AdminController extends Controller {
             $subject = 'Withdrawal Processed';
 
 
+            Notification::route('mail', $email)
+                    ->notify(new SendNotifyMail($greeting, $subject, $message));
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
         }
-        Notification::route('mail', $email)
-                ->notify(new SendNotifyMail($greeting,$subject, $message));
         return [
             'status' => 'success',
             'message' => 'Withdrew successfully Paid'
@@ -854,6 +1027,9 @@ class AdminController extends Controller {
 
     public function deletePlan(Request $request) {
         $id = $request->id;
+        $array = array($id);
+        //deposit
+        Investment::whereIn('plan_id', $array)->delete();
         $plan = Plan::find($id);
         if ($plan->delete()) {
             return [
@@ -1312,6 +1488,26 @@ class AdminController extends Controller {
         return [
             'status' => 'success',
             'message' => 'Homepage Data Successfully Saved'
+        ];
+    }
+
+    public function blackList() {
+        User::whereId(Auth::user()->id)->update([
+            'can_withdraw' => true
+        ]);
+        return [
+            'status' => 'success',
+            'message' => 'User Withdrawal Blacklisted'
+        ];
+    }
+
+    public function UnBlackList() {
+        User::whereId(Auth::user()->id)->update([
+            'can_withdraw' => false
+        ]);
+        return [
+            'status' => 'success',
+            'message' => 'User Withdrawal UnBlacklisted'
         ];
     }
 

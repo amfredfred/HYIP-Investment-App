@@ -7,38 +7,46 @@
 @endsection
 @extends('layouts.app')
 @section('headerText')
-<div class="header__cta-text text-center" data-aos="fade-up">
-    <div class="col-md-6 col-sm-8 m-auto">
-        <h1>
-            Frequently Asked Questions
-        </h1>
 
-    </div>
-</div>
-@endsection
 @section('content')
-<main class="c-faq">
-    <div class="container">
-
-        <ul class="list-unstyled">
-            @foreach($faqs as $key=> $faq)
-            <li>
-                <div class="question p-2 rounded bg-light my-3" data-toggle="collapse" href="#faq-{{$key}}" role="button"
-                     aria-expanded="false" aria-controls="collapseExample">
-                    <a href="#" class="text-dark nav-link"> {!! $faq->title !!}</a>
-                    <div class="answer collapse bg-white shadow-sm p-3 rounded collapse" id="faq-{{$key}}">
-                        <p class="text-black-50">
-                            {!! $faq->description !!}
-                        </p>
+  <div class="page_header" data-parallax-bg-image="{{asset('frontend/assets/img/1920x650-5.jpg')}}" data-parallax-direction="">
+            <div class="header-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2">
+                            <div class="haeder-text">
+                                <h1>Frequently Ask & Question</h1>
+                          
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </li>
-            @endforeach
-        </ul>
-    </div>
-</main>
-
-
-
+            </div>
+        </div>
+        <!--  /.End of page header -->
+        <div class="faq_content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div class="">
+                            <ul class="accordion">
+                                  @foreach($faqs as $key=> $faq)
+                                <li>
+                                    <a>{!! $faq->title !!}</a>
+                                    <p>    {!! $faq->description !!}</p>
+                                </li>
+                                @endforeach
+                          
+                            </ul>
+                            <!-- / accordion -->
+                          
+                            <!-- / accordion -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 @endsection
+
+                   

@@ -16,8 +16,8 @@ class CreatePlansTable extends Migration {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('image')->nullable();
-            $table->float('min');
-            $table->float('max');
+            $table->float('min', 24, 2)->default(0);
+            $table->float('max', 24, 2)->default(0);
             $table->decimal('percentage');
             $table->decimal('deposit_fee');
             $table->decimal('ref')->nullable();

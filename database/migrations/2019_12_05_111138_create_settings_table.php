@@ -22,14 +22,14 @@ class CreateSettingsTable extends Migration {
             $table->longText('site_url')->nullable();
             $table->longText('site_code')->nullable();
             $table->longText('logo')->nullable();
-            $table->decimal('withdraw_charge')->nullable();
+            $table->decimal('withdraw_charge')->default(0);
             $table->longText('favicon')->nullable();
             $table->longText('location_map')->nullable();
             $table->longText('location')->nullable();
             $table->longText('copy_right')->nullable();
             $table->longText('block_io_pin')->nullable();
-            $table->decimal('min_withdraw')->default(0)->nullable();
-            $table->boolean('investment_payment_mode')->default(0)->nullable();
+            $table->decimal('min_withdraw')->default(0);
+            $table->boolean('investment_payment_mode')->default(0);
             $table->boolean('auto_withdraw')->default(0)->nullable();
             $table->binary('email_body');
             $table->longText('video_1')->nullable();

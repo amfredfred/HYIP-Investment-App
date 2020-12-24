@@ -11,10 +11,11 @@ use App\Mail\ContactUsMail;
 use App\Mail\SubscriberMail;
 use App\EmailSubscriber;
 use App\Page;
-use App\Benefit;
 use App\GetStarted;
-use App\Faq;
 use App\Plan;
+use App\service;
+use App\homeSlider;
+use App\Faq;
 use Illuminate\Support\Facades\Cookie;
 
 class FrontController extends Controller {
@@ -22,18 +23,18 @@ class FrontController extends Controller {
     use HasError;
 
     public function index() {
-//        $data['deposits'] = Investment::whereStatus_deposit(1)->orderBy('created_at', 'desc')->take(10)->get();
-//        $data['withdraws'] = Withdraw::whereStatus(1)->orderBy('created_at', 'desc')->take(10)->get();
-//        $data['plans'] = Plan::all();
-//        $data['users_count'] = User::count();
-//        $data['total_deposit'] = Investment::whereStatus_deposit(1)->sum('amount');
-//        $data['total_withdraw'] = Withdraw::whereStatus(1)->sum('amount');
+
 
         $data['about'] = Page::whereSlug('about-us')->first();
-        $data['benefits'] = Benefit::orderBy('created_at', 'desc')->get();
+        $data['services'] = service::orderBy('created_at', 'desc')->get();
         $data['get_started'] = GetStarted::orderBy('created_at', 'desc')->get();
-
+        $data['sliders'] = homeSlider::orderBy('created_at', 'desc')->get();
+        $data['plans'] = Plan::orderBy('created_at', 'desc')->get();
         return view('welcome', $data);
+    }
+
+    public function getContact() {
+        return view('pages.contact-us');
     }
 
     public function contact(Request $request) {
@@ -111,17 +112,19 @@ class FrontController extends Controller {
         $plan = Plan::whereId($request->plan_id)->first();
 
         if ($request->amount < $plan->min) {
-            $data['message_danger'] = 'You amount is less than the minimum price  ';
+            $data['message_danger'] = 'Amount less than minimum price  ';
             $data['status'] = 401;
+            return $data;
         }
         if ($request->amount > $plan->max) {
-            $data['message_danger'] = 'You amount is greater than the Max price  ';
+            $data['message_danger'] = 'Amount greater than Max price  ';
             $data['status'] = 401;
+            return $data;
         }
         $net_profit = $request->amount * $plan->percentage / 100;
         $return = $request->amount + $net_profit;
-        $data['net_profit'] = '$' . $net_profit;
-        $data['return'] = '$' . $return;
+        $data['net_profit'] = '$' . number_format($net_profit);
+        $data['return'] = '$' . number_format($return);
         return $data;
     }
 
@@ -153,12 +156,12 @@ class FrontController extends Controller {
 
     public function cofirmation() {
         $file = public_path('files/Confirmation Statement For Maven Investment.pdf');
-         return response()->file($file);
+        return response()->file($file);
     }
 
     public function full() {
         $file = public_path('files/Full Accounts For Maven Investment.pdf');
-         return response()->file($file);
+        return response()->file($file);
     }
 
 }

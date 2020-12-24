@@ -18,6 +18,8 @@ class CreateHomePageTextsTable extends Migration {
             $table->longText('description');
             $table->text('photo')->nullable();
             $table->text('about_us_photo')->nullable();
+            $table->text('about_us_quote')->nullable();
+            $table->text('about_us_title')->nullable();
             $table->text('video_text')->nullable();
             $table->text('get_start_text')->nullable();
             $table->text('get_start_text_image')->nullable();
@@ -27,8 +29,12 @@ class CreateHomePageTextsTable extends Migration {
             $table->text('files')->nullable();
             $table->text('files_1')->nullable();
             $table->text('files_2')->nullable();
+            $table->text('service_text')->nullable();
             $table->text('get_beneift_text')->nullable();
-            
+            $table->text('cal_title')->nullable();
+            $table->text('cal_description')->nullable();
+            $table->text('cal_photo')->nullable();
+
             $table->timestamps();
         });
     }

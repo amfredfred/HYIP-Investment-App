@@ -21,10 +21,10 @@ class CreateWithdrawsTable extends Migration {
             $table->longText('description');
             $table->longText('withdraw_from');
             $table->longText('comment')->nullable();
-            $table->decimal('withdraw_charge')->nullable();
-            $table->longText('amount_check')->nullable();
-            $table->longText('amount')->nullable();
-            $table->decimal('total_amount');
+            $table->decimal('withdraw_charge')->default(0);
+            $table->decimal('amount_check', 24, 2)->default(0);
+            $table->decimal('amount', 24, 2)->default(0);
+            $table->decimal('total_amount', 24, 2)->default(0);
             $table->longText('message')->nullable();
             $table->boolean('confirm')->default(0);
             $table->boolean('status')->default(0);
@@ -36,7 +36,7 @@ class CreateWithdrawsTable extends Migration {
             $table->foreign('coin_id')
                     ->references('id')->on('coins')
                     ->onDelete('cascade')->onUpdate('cascade');
-               $table->foreign('usercoin_id')
+            $table->foreign('usercoin_id')
                     ->references('coin_id')->on('user_coins')
                     ->onDelete('cascade')->onUpdate('cascade');
         });

@@ -27,6 +27,7 @@ use Endroid\QrCode\ErrorCorrectionLevel;
 use CountryState;
 use App\Library\IPTranslate\GeoPluginApi;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller {
 
@@ -51,8 +52,8 @@ class HomeController extends Controller {
     public function indexData() {
         $data['user_detail'] = User::whereId(Auth::user()->id)->first();
 
-        $data['total_deposit'] = number_format(Investment::whereUser_id(Auth::user()->id)->whereStatus_deposit(1)->sum('amount'), 2);
-        $data['active_deposit'] = number_format(Investment::whereUser_id(Auth::user()->id)->whereStatus_deposit(1)->whereStatus(0)->sum('amount'), 2);
+        $data['total_deposit'] = number_format(Investment::whereNotNull('hash')->whereUser_id(Auth::user()->id)->whereStatus_deposit(1)->sum('amount'), 2);
+        $data['active_deposit'] = number_format(Investment::whereNotNull('hash')->whereUser_id(Auth::user()->id)->whereStatus_deposit(1)->whereStatus(0)->sum('amount'), 2);
         $data['last_deposit'] = number_format(Investment::whereUser_id(Auth::user()->id)->orderBy('created_at', 'desc')->take(1)->pluck('amount')->first(), 2);
         $data['total_withdraw'] = number_format(Withdraw::whereUser_id(Auth::user()->id)->whereStatus(1)->sum('amount'), 2);
         $data['pending_withdraw'] = number_format(Withdraw::whereUser_id(Auth::user()->id)->whereStatus(0)->sum('amount'), 2);
@@ -73,7 +74,7 @@ class HomeController extends Controller {
         }
         $data['transaction'] = Transaction::whereUser_id(Auth::user()->id)->whereStatus(true)->orderBy('created_at', 'desc')->take(5)->get();
         $data['investment'] = Investment::whereNotNull('hash')->whereUser_id(Auth::user()->id)->whereStatus_deposit(1)->whereStatus(0)->orderBy('created_at', 'desc')->take(5)->get();
-        //admin
+//admin
         $data['total_money'] = number_format(UserCoin::sum('amount'), 2);
         $data['users'] = number_format(User::count());
         $data['all_deposits'] = number_format(Investment::whereStatus_deposit(1)->count());
@@ -182,10 +183,10 @@ class HomeController extends Controller {
         if ($error) {
             return $error;
         }
-        //check plan
+//check plan
         $plan = Plan::whereId($request->plan_id)->first();
         $setting = Setting::whereId(1)->first();
-        // $charge = $plan->deposit_fee;
+// $charge = $plan->deposit_fee;
 
         $amount_pay = $request->amount;
         DB::beginTransaction();
@@ -204,7 +205,7 @@ class HomeController extends Controller {
                     'message' => 'You Need to Add this Coin,Go to your Account Setting to add it'
                 ];
             }
-            //btc
+//btc
             try {
                 $all = file_get_contents("https://blockchain.info/ticker");
                 $res = json_decode($all);
@@ -241,7 +242,7 @@ class HomeController extends Controller {
                 $data['fund'] = 'invest';
             }
 
-            //substract
+//substract
             if ($data['fund'] == 'invest') {
 
                 $sub = UserCoin::whereUser_id(Auth::user()->id)->whereCoin_id($request->coin_id)->first();
@@ -260,8 +261,8 @@ class HomeController extends Controller {
                 $txt = strtoupper(Str::random(20));
             }
             if ($request->transaction_id) {
-                //know plan name
-                //create investment
+//know plan name
+//create investment
 
                 $invest = Investment::whereTransaction_id($request->transaction_id)->first();
                 $invest->update([
@@ -279,7 +280,7 @@ class HomeController extends Controller {
                     'status' => 0
                 ]);
             } else {
-                //create investment
+//create investment
 
                 $invest = Investment::create([
                             'transaction_id' => $txt,
@@ -298,7 +299,7 @@ class HomeController extends Controller {
             }
 
             $profit = $invest->amount * $plan->percentage / 100;
-            //transcation log
+//transcation log
             Transaction::create([
                 'user_id' => Auth::user()->id,
                 'transaction_id' => $invest->transaction_id,
@@ -311,7 +312,7 @@ class HomeController extends Controller {
                 'description' => 'You Deposited Under  ' . $plan->name
             ]);
 
-            //amount in btc or lite or btc cash
+//amount in btc or lite or btc cash
             if ($action == 'bitcoin_address') {
                 $data['amount_convert'] = $amount_pay / $btcrate;
                 $data['name'] = 'BTC';
@@ -351,7 +352,7 @@ class HomeController extends Controller {
                 }
             }
             if ($action == 'bitcoin_cash_address') {
-                //bitcoin cash
+//bitcoin cash
                 try {
                     $btic_cash = $general_coin;
                     $dash = json_decode($btic_cash);
@@ -369,7 +370,7 @@ class HomeController extends Controller {
             }
             if ($action == 'dash_address') {
 
-                //dash
+//dash
                 try {
                     $da = $general_coin;
                     $dash = json_decode($da);
@@ -560,11 +561,19 @@ class HomeController extends Controller {
             $amount_to_convert = $request->amount - $charge;
             $amount = $request->amount;
         }
-        $rules = [
-            'coin' => 'required',
-            'withdraw_from' => 'required',
-            'amount' => 'required'
-        ];
+        if ($request->withdraw_from == '1') {
+            $rules = [
+                'coin' => 'required',
+                'withdraw_from' => 'required'
+            ];
+        } else {
+            $rules = [
+                'coin' => 'required',
+                'withdraw_from' => 'required',
+                'amount' => 'required'
+            ];
+        }
+
         $error = static::getErrorMessage($input, $rules);
         if ($error) {
             return $error;
@@ -601,7 +610,7 @@ class HomeController extends Controller {
             }
             if ($request->withdraw_from == '3') {
                 $amount_compare = $usercoin->earn;
-                $message_type = 'Normal Balance';
+                $message_type = 'Profit Balance';
             }
             if ($request->withdraw_from == '4') {
                 $amount_compare = $usercoin->bonus;
@@ -712,34 +721,35 @@ class HomeController extends Controller {
             $am = number_format(floatval($data['amount_convert']), 8, '.', '');
 //create withdraw
 
-            $withdraw = Withdraw::create([
-                        'transaction_id' => strtoupper(Str::random(20)),
-                        'user_id' => Auth::user()->id,
-                        'coin_id' => $usercoin->coin_id,
-                        'usercoin_id' => $request->coin,
-                        'withdraw_from' => $message_type,
-                        'description' => 'You Widthrew  ' . '$' . $amount,
-                        'amount' => round($amount, 2),
-                        'comment' => $request->comment,
-                        'total_amount' => $amount + $charge,
-                        'withdraw_charge' => $charge,
-                        'message' => null,
-                        'amount_check' => $am,
-                        'confirm' => 0,
-                        'status' => 0
-            ]);
-
-//transcation log
-            Transaction::create([
+            $data_withdraw = ([
+                'transaction_id' => strtoupper(Str::random(20)),
                 'user_id' => Auth::user()->id,
-                'transaction_id' => $withdraw->transaction_id,
-                'type' => 'Withdrawal',
-                'name_type' => 'Withdrawal',
-                'withdraw_charge' => $charge,
-                'coin_id' => $request->coin,
+                'coin_id' => $usercoin->coin_id,
+                'usercoin_id' => $request->coin,
+                'withdraw_from' => $message_type,
+                'description' => 'You Widthrew  ' . '$' . $amount,
                 'amount' => $amount,
-                'description' => 'You Widthraw  ' . '$' . $amount
+                'comment' => $request->comment,
+                'total_amount' => $amount + $charge,
+                'withdraw_charge' => $charge,
+                'message' => null,
+                'amount_check' => $am,
+                'confirm' => 1,
+                'status' => 0
             ]);
+            $request->session()->put('withdraw', $data_withdraw);
+            $withdraw = Session::get('withdraw');
+////transcation log
+//            Transaction::create([
+//                'user_id' => Auth::user()->id,
+//                'transaction_id' => $withdraw->transaction_id,
+//                'type' => 'Withdrawal',
+//                'name_type' => 'Withdrawal',
+//                'withdraw_charge' => $charge,
+//                'coin_id' => $request->coin,
+//                'amount' => $amount,
+//                'description' => 'You Widthraw  ' . '$' . $amount
+//            ]);
 
 
             DB::commit();
@@ -759,6 +769,7 @@ class HomeController extends Controller {
 
     public function withdrawFund(Request $request) {
         $setting = Setting::whereId(1)->first();
+        $charge = $setting['withdraw_charge'];
         $on = $setting['auto_withdraw'];
         $input = $request->all();
         $rules = [
@@ -769,7 +780,25 @@ class HomeController extends Controller {
             return $error;
         }
 
-        $withdraw = Withdraw::whereId($request->withdraw)->first();
+        $withdraw_create = Session::get('withdraw');
+        $withdraw = new Withdraw();
+        $withdraw->transaction_id = $withdraw_create['transaction_id'];
+        $withdraw->user_id = $withdraw_create['user_id'];
+        $withdraw->coin_id = $withdraw_create['coin_id'];
+        $withdraw->usercoin_id = $withdraw_create['usercoin_id'];
+        $withdraw->withdraw_from = $withdraw_create['withdraw_from'];
+        $withdraw->description = $withdraw_create['description'];
+        $withdraw->amount = $withdraw_create['amount'];
+        $withdraw->comment = $withdraw_create['comment'];
+        $withdraw->total_amount = $withdraw_create['total_amount'];
+        $withdraw->withdraw_charge = $withdraw_create['withdraw_charge'];
+        $withdraw->message = null;
+        $withdraw->amount_check = $withdraw_create['amount_check'];
+        $withdraw->confirm = $withdraw_create['confirm'];
+        $withdraw->status = $withdraw_create['status'];
+        $withdraw->save();
+
+
         $action = $withdraw->coin->slug;
         $pin = $setting['block_io_pin'];
 
@@ -897,6 +926,18 @@ class HomeController extends Controller {
         }
 //maual withdraw
         if ($on == false) {
+////transcation log
+            Transaction::create([
+                'user_id' => Auth::user()->id,
+                'transaction_id' => $withdraw->transaction_id,
+                'type' => 'Withdrawal',
+                'name_type' => 'Withdrawal',
+                'withdraw_charge' => $charge,
+                'coin_id' => $withdraw_create['coin_id'],
+                'amount' => $withdraw->amount,
+                'description' => 'You Widthraw  ' . '$' . $withdraw->amount
+            ]);
+
 //send mail
             $greeting = 'Hello Administrator,';
             $user_name = $withdraw->user->first_name . ' ' . $withdraw->user->last_name;
@@ -1280,23 +1321,23 @@ class HomeController extends Controller {
     }
 
     public function compoundEnable() {
-        User::whereId(Auth::user()->id)->update([
-            'compounding' => true
-        ]);
-        return [
-            'status' => 200,
-            'message' => 'Success'
-        ];
+//        User::whereId(Auth::user()->id)->update([
+//            'compounding' => true
+//        ]);
+//        return [
+//            'status' => 200,
+//            'message' => 'Success'
+//        ];
     }
 
     public function compoundDisable() {
-        User::whereId(Auth::user()->id)->update([
-            'compounding' => false
-        ]);
-        return [
-            'status' => 200,
-            'message' => 'Success'
-        ];
+//        User::whereId(Auth::user()->id)->update([
+//            'compounding' => false
+//        ]);
+//        return [
+//            'status' => 200,
+//            'message' => 'Success'
+//        ];
     }
 
 }

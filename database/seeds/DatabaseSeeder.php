@@ -15,6 +15,12 @@ class DatabaseSeeder extends Seeder {
         $this->call(UserCoinTableDataSeeder::class);
         $this->call(CompoundTableDataSeeder::class);
         $this->call(PlanTableDataSeeder::class);
+        $this->call(getStartedSeeder::class);
+        $this->call(homePageTextSeeder::class);
+        $this->call(homePageSliderSeeder::class);
+        $this->call(serviceSeeder::class);
+        $this->call(settingsSeeder::class);
+         $this->call(pagesSeeder::class);
     }
 
 }
