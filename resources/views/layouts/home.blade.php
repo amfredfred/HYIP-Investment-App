@@ -16,7 +16,7 @@
         window.user = '{{Auth::user()->type}}';
     </script>
     @yield('title')
-    <link rel="stylesheet" href="{{asset('assets/icons/font-awesome/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital@1&display=swap" rel="stylesheet">
 
  <link href="{{ asset('css/app.css')}}" rel="stylesheet" />
