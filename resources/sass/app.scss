@@ -1,8 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
+
+.v-data-table {
+    table {
+        tbody {
+            td {
+                @apply text-gray-600;
+                font-size: 1.1rem !important;
+            }
+        }
+        thead {
+            th {
+                font-size: 1rem !important;
+            }
+        }
+    }
+}

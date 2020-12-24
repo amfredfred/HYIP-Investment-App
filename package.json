@@ -11,24 +11,30 @@
     },
     "devDependencies": {
         "axios": "^0.19",
-        "bootstrap": "^4.0.0",
-        "cross-env": "^7.0",
-        "eslint": "^7.3.1",
+        "bootstrap": "4.5.3",
+        "cross-env": "7.0.3",
+        "eslint": "7.13.0",
         "eslint-plugin-vue": "^6.2.2",
         "jquery": "^3.2",
-        "laravel-mix": "^5.0.1",
-        "lodash": "^4.17.13",
+        "laravel-mix": "5.0.9",
+        "lodash": "4.17.20",
         "popper.js": "^1.12",
         "resolve-url-loader": "^2.3.1",
-        "sass": "^1.20.1",
+        "sass": "1.29.0",
         "sass-loader": "^8.0.0",
-        "vue": "^2.5.17",
-        "vue-template-compiler": "^2.6.10"
+        "vue": "2.6.12",
+        "vue-template-compiler": "2.6.12",
+        "postcss": "7.0.35",
+        "autoprefixer": "9.8.6",
+        "vuetify-loader": "1.5.0"
     },
     "dependencies": {
-        "animate.css": "^4.1.0",
-        "moment": "^2.26.0",
+        "animate.css": "4.1.1",
+        "moment": "2.29.1",
+        "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.0.1",
         "vue-clipboard2": "^0.3.1",
-        "vue-router": "^3.3.2"
+        "vue-router": "3.4.9",
+        "vuetify": "2.3.19",
+        "vuex": "3.6.0"
     }
 }
