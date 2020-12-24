@@ -132,7 +132,7 @@
 <script>
 import moment from "moment";
 
-import formatMixin from "../../mixins/utitlitiesMixin";
+import formatMixin from "../../mixins/formattingMixin";
 import confirmMixin from "../../mixins/confirmationMixin";
 
 import svaLoader from "../../components/loader.vue";

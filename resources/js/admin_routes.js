@@ -20,88 +20,105 @@ const admin_routes = [
     {
         path: "/",
         component: dashboard,
-        name: "admin-dashboard"
+        name: "Dashboard",
+        prop: { icon: "fa-dashboard" }
     },
     {
         path: "/setting",
         component: setting,
-        name: "user-setting"
+        name: "User setting",
+        prop: { icon: "fa-cog" }
     },
     {
         path: "/manage-deposit",
         component: manageDeposit,
-        name: "manage-deposit"
+        name: "Manage deposit",
+        prop: { icon: "fa-btc" }
     },
     {
         path: "/manage-withdraw",
         component: manageWithdraw,
-        name: "manage-withdraw"
+        name: "Manage withdraw",
+        prop: { icon: "fa-window-maximize" }
     },
     {
         path: "/manage-user",
         component: manageUser,
-        name: "manage-user"
+        name: "Manage user",
+        prop: { icon: "fa-users" }
     },
     {
         path: "/mailsystem",
         component: mailsystem,
-        name: "mailsystem"
+        name: "mailsystem",
+        prop: { icon: "fa-envelope" }
     },
     {
-        path: "/page-settings",
+        path: "/Page settings",
         component: pageSettings,
-        name: "pagesettings"
+        name: "pagesettings",
+        prop: { icon: "fa-globe" }
     },
     {
         path: "/homepage-settings",
         component: homepageSetting,
-        name: "homepagesettings"
+        name: "Homepage settings",
+        prop: { icon: "fa-home" }
     },
     {
         path: "/manage-plans",
         component: manageplans,
-        name: "manageplans"
+        name: "Manage plans",
+        prop: { icon: "fa-bookmark" }
     },
     {
         path: "/manage-compounds",
         component: managecompounds,
-        name: "managecompounds"
+        name: "Manage compounds",
+        prop: { icon: "fa-calendar-o" }
     },
     {
         path: "/payment-methods",
         component: paymentmethods,
-        name: "paymentmethods"
+        name: "Payment methods",
+        prop: { icon: "fa-credit-card" }
     },
     {
         path: "/web-setting",
         component: webSetting,
-        name: "web-setting"
+        name: "Web setting",
+        prop: { icon: "fa-gavel" }
     },
     {
         path: "/manage-faq",
         component: manageFaq,
-        name: "manage-faq"
+        name: "Manage faq",
+        prop: { icon: "fa-question" }
     },
-    {
-        path: "/manage-benefit",
-        component: manageBenefit,
-        name: "manage-benefit"
-    },
-    {
-        path: "/manage-get-started",
-        component: manageGetStarted,
-        name: "manage-get-started"
-    },
+    // {
+    //     path: "/manage-benefit",
+    //     component: manageBenefit,
+    //     name: "Manage benefit",
+    //     prop: {}
+    // },
+    // {
+    //     path: "/manage-get-started",
+    //     component: manageGetStarted,
+    //     name: "Manage-get-started",
+    //     prop: {}
+    // },
     {
         path: "/manage-social",
         component: manageSocial,
-        name: "manage-social"
+        name: "Manage social",
+        prop: { icon: "fa-instagram" }
     },
 
     {
         path: "/2factor-success",
         component: twoFactorSuccess,
-        name: "2factorsuccess"
+        name: "2factorsuccess",
+        prop: {}
     }
 ];
 

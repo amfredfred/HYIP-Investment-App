@@ -525,7 +525,7 @@
 <script>
 import moment from "moment";
 
-import formatMixin from "../../mixins/utilitiesMixin";
+import formatMixin from "../../mixins/formattingMixin";
 import messageMixin from "../../mixins/messageMixin";
 
 import svaLoader from "../../components/loader.vue";

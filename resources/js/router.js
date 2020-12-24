@@ -6,6 +6,7 @@ import admin_routes from "./admin_routes";
 
 Vue.use(Router);
 
+let routes;
 if (window.user === "admin") {
     routes = admin_routes;
 } else {
