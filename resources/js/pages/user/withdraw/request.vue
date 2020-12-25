@@ -109,10 +109,9 @@ export default {
       withdrawalMethod: [],
 
       withdrawAccount: [
-        { name: "All", number: 1 },
-        { name: "Main", number: 2 },
-        { name: "Referral", number: 3 },
-        { name: "Bonus", number: 4 },
+        { name: "Main Balance", number: 2 },
+        { name: "Profit Balance", number: 3 },
+        { name: "Referral Bonus", number: 4 },
       ],
 
       tableHeaders: [

@@ -239,7 +239,7 @@ class HomeController extends Controller {
             if ($useramount < $amount_pay) {
                 $data['fund'] = 'fund';
             } else {
-                $data['fund'] = 'invest';
+                $data['fund'] = 'fund';
             }
 
 //substract
