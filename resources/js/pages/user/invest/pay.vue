@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 import messageMixin from "../../../mixins/messageMixin";
 
@@ -123,13 +123,14 @@ export default {
     handle_deposit(deposit_information) {
       this.payment_processed = true;
       if (deposit_information.type === "fund") {
-        this.data_returned = deposit_information;
+        this.updateFundDetails(deposit_information);
         this.funding_error = true;
         this.making_payment = false;
         return this.$router.push({ name: "fundAccount" });
       }
       return this.$router.push({ name: "successfulInvest" });
     },
+    ...mapMutations("user", ["updateFundDetails"]),
   },
 
   computed: {

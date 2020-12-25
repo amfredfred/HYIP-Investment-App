@@ -2,7 +2,9 @@ const state = () => ({
     userInformation: null,
     plans: [],
     userCoin: [],
-    withdrawData: {}
+    withdrawData: {},
+
+    fundDetails: {}
 });
 
 const getters = {
@@ -16,6 +18,10 @@ const getters = {
 
     userCoin(state) {
         return state.userCoin;
+    },
+
+    fundDetails(state) {
+        return state.fundDetails;
     }
 };
 
@@ -31,6 +37,9 @@ const mutations = {
     },
     updateWithdrawData(state, payload) {
         state.withdrawData = payload;
+    },
+    updateFundDetails(state, payload) {
+        state.fundDetails = payload;
     }
 };
 

@@ -6,7 +6,7 @@
       @click="hideNavbarMobile = true"
     >
       <div
-        class="w-9/12 h-full overflow-y-auto bg-green-600 md:fixed md:h-screen p-9 sm:w-5/12 md:w-1/6"
+        class="w-9/12 h-full overflow-y-auto bg-gray-50 shadow-sm md:fixed md:h-screen p-9 sm:w-5/12 md:w-1/6"
         @click="$event.stopPropagation()"
       >
         <div class="mx-auto mb-12 sm:mb-16 md:mb-24 w-28 logo">
@@ -14,20 +14,35 @@
             <img :src="logourl" class="max-w-full" alt="site logo" />
           </router-link>
         </div>
-        <ul>
-          <li v-for="(route, index) in routes" class="mb-10 text-lg" :key="index">
-            <router-link :to="{name:route.name}">
-              <i class="mr-3 fa" :class="route.icon"></i>
-              {{route.name}}
-            </router-link>
-          </li>
-          <li class="mb-10 text-lg">
-            <a href>
+        <v-list rounded>
+          <v-list-item-group color="green" v-model="selectedLink">
+            <v-list-item
+              :to="route.route"
+              class="mb-5"
+              v-for="(route, index) in routes"
+              :key="index"
+            >
+              <v-list-item-icon>
+                <v-icon>{{route.icon}}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>{{route.name}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+
+        <v-spacer></v-spacer>
+        <v-divider></v-divider>
+
+        <v-list>
+          <v-list-item class="mb-10 text-lg">
+            <a href="/logout">
               <i class="mr-3 fa fa-power-off"></i>
               Logout
             </a>
-          </li>
-        </ul>
+          </v-list-item>
+        </v-list>
       </div>
     </div>
 
@@ -48,8 +63,8 @@ export default {
   name: "navbar",
   data() {
     return {
+      selectedLink: 0,
       routes: [],
-
       hideNavbarMobile: true,
     };
   },
@@ -59,14 +74,20 @@ export default {
   methods: {
     fetchRoutes() {
       this.$router.options.routes.forEach((route) => {
+        console.log(route);
         if (route.children && route.children[0].path === "") {
           const defaultChildRoute = route.children[0];
           return this.routes.push({
             name: defaultChildRoute.name,
             icon: route.prop.icon,
+            route: route.path,
           });
         }
-        return this.routes.push({ name: route.name, icon: route.prop.icon });
+        return this.routes.push({
+          name: route.name,
+          icon: route.prop.icon,
+          route: route.path,
+        });
       });
     },
   },
@@ -77,12 +98,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-a {
-  @apply text-green-100 #{!important};
-  &:hover {
-    @apply text-green-100;
-    text-decoration: none;
-  }
-}
-</style>
