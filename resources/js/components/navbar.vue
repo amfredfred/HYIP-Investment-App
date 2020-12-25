@@ -74,7 +74,6 @@ export default {
   methods: {
     fetchRoutes() {
       this.$router.options.routes.forEach((route) => {
-        console.log(route);
         if (route.children && route.children[0].path === "") {
           const defaultChildRoute = route.children[0];
           return this.routes.push({

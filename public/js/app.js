@@ -394,8 +394,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.$router.options.routes.forEach(function (route) {
-        console.log(route);
-
         if (route.children && route.children[0].path === "") {
           var defaultChildRoute = route.children[0];
           return _this.routes.push({
@@ -6026,7 +6024,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         if (returnedStatus === "error") {
           _this.errorMessage = response.data.message;
           _this.depositing = false;
-          _this.alert = false;
+          _this.alert = true;
           return;
         }
 
@@ -18562,7 +18560,7 @@ var render = function() {
                   _c(
                     "v-alert",
                     {
-                      attrs: { dismissible: "", color: _vm.messageType },
+                      attrs: { dismissible: "" },
                       model: {
                         value: _vm.alert,
                         callback: function($$v) {

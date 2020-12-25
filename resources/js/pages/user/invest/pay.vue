@@ -32,7 +32,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" sm="6" md="9">
-          <v-alert dismissible v-model="alert" :color="messageType">
+          <v-alert dismissible v-model="alert">
             {{errorMessage}}
             <template slot="close">
               <v-icon @click="alert = false">fa fa-close</v-icon>
@@ -107,7 +107,7 @@ export default {
           if (returnedStatus === "error") {
             this.errorMessage = response.data.message;
             this.depositing = false;
-            this.alert = false;
+            this.alert = true;
             return;
           }
 
