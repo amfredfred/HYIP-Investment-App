@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 import utilitiesMixin from "../../../mixins/utilitiesMixin";
 import userInformationMixin from "../../../mixins/userInformation";
@@ -55,7 +55,7 @@ export default {
   mixins: [utilitiesMixin, userInformationMixin],
 
   computed: {
-    ...mapGetters("user", ["plans"]),
+    ...mapState("user", ["plans"]),
   },
 
   mounted() {},

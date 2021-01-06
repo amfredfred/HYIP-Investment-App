@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 
 import navbar from "./components/navbar.vue";
+import "./bootstrap";
 
 import "animate.css";
 import "./quill.snow.css";

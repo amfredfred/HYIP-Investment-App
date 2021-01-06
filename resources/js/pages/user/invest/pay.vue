@@ -32,7 +32,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" sm="6" md="9">
-          <v-alert dismissible v-model="alert" :color="messageType">
+          <v-alert dismissible v-model="alert">
             {{errorMessage}}
             <template slot="close">
               <v-icon @click="alert = false">fa fa-close</v-icon>
@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 import messageMixin from "../../../mixins/messageMixin";
 
@@ -96,12 +96,21 @@ export default {
       })
         .then((response) => {
           let returnedStatus = response.data.status;
+
           if (returnedStatus === 401) {
             this.displayErrorMessage(response.data.message);
             this.depositing = false;
             this.alert = true;
             return;
           }
+
+          if (returnedStatus === "error") {
+            this.errorMessage = response.data.message;
+            this.depositing = false;
+            this.alert = true;
+            return;
+          }
+
           this.handle_deposit(response.data);
         })
         .catch((error) => {
@@ -114,13 +123,14 @@ export default {
     handle_deposit(deposit_information) {
       this.payment_processed = true;
       if (deposit_information.type === "fund") {
-        this.data_returned = deposit_information;
+        this.updateFundDetails(deposit_information);
         this.funding_error = true;
         this.making_payment = false;
-        return;
+        return this.$router.push({ name: "fundAccount" });
       }
       return this.$router.push({ name: "successfulInvest" });
     },
+    ...mapMutations("user", ["updateFundDetails"]),
   },
 
   computed: {

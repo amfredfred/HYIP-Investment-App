@@ -7,6 +7,7 @@ import setting from "./pages/user/settings.vue";
 import choosePlan from "./pages/user/invest/selectPlan.vue";
 import payInvest from "./pages/user/invest/pay.vue";
 import successfulInvest from "./pages/user/invest/success.vue";
+import fundAccount from "./pages/user/invest/fund.vue";
 
 import requestWithdraw from "./pages/user/withdraw/request.vue";
 import confirmWithdraw from "./pages/user/withdraw/confirm.vue";
@@ -16,12 +17,12 @@ const user_routes = [
         path: "/",
         component: dashboard,
         name: "Dashboard",
-        prop: { icon: "fa-home" }
+        prop: { icon: "fa-dashboard" }
     },
     {
         path: "/invest",
         component: invest,
-        prop: { icon: "fa-diamond" },
+        prop: { icon: "fa-bank" },
         children: [
             {
                 name: "Invest",
@@ -32,6 +33,11 @@ const user_routes = [
                 path: "pay/:planId",
                 component: payInvest,
                 name: "payInvest"
+            },
+            {
+                path: "fund-account",
+                component: fundAccount,
+                name: "fundAccount"
             },
 
             {
@@ -44,7 +50,7 @@ const user_routes = [
     {
         path: "/withdraw",
         component: withdraw,
-        prop: { icon: "fa-cube" },
+        prop: { icon: "fa-money" },
         children: [
             {
                 name: "Withdraw",

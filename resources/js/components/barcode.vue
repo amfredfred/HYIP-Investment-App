@@ -1,6 +1,6 @@
 <template>
   <div class="barcode-image">
-    <div class="text-center">
+    <div class>
       <img :src="qr_image" width="200px" alt class="img-fluid" />
       <div class="light-text">Scan to pay</div>
     </div>
@@ -40,7 +40,7 @@
           </div>
         </li>
         <li>
-          <div class="amount-paying mt-4">
+          <div class="mt-4 amount-paying">
             <h6 class="d-inline-block">{{full_data.name}} -</h6>
             {{full_data.amount_convert}}
           </div>
@@ -59,7 +59,7 @@ export default {
       qr_image: null,
       coin_details: {},
       invest_details: {},
-      full_data: {}
+      full_data: {},
     };
   },
   methods: {
@@ -67,7 +67,7 @@ export default {
       this.qr_image = data.image_qrcode;
       this.coin_details = data.coin;
       (this.invest_details = data.invest), (this.full_data = data);
-    }
+    },
   },
   mounted() {
     this.mount_data(this.data);
@@ -78,10 +78,10 @@ export default {
         parseFloat(this.invest_details.deposit_investment_charge) +
         parseFloat(this.invest_details.amount)
       );
-    }
+    },
   },
   props: ["data"],
-  components: { svaCopy }
+  components: { svaCopy },
 };
 </script>
 
