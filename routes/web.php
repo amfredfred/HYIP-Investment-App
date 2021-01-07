@@ -69,7 +69,7 @@ Route::get('/user-compounding/disable', 'HomeController@compoundDisable');
 Route::group(['middleware' => 'can:isAdmin'], function () {
     //user reffer
     Route::get('/user-referrals/{id}', 'AdminController@userRef')->name('user-referrals');
-    
+
 //    user-logout
     //settigs
     Route::get('/settings', 'AdminController@setting')->name('settings');
@@ -86,6 +86,8 @@ Route::group(['middleware' => 'can:isAdmin'], function () {
     Route::post('delete-user', 'AdminController@delete')->name('delete-user');
     Route::get('view-user/{id}', 'AdminController@viewUser')->name('view-user');
     Route::get('user-login/{id}', 'AdminController@login')->name('user-login');
+    Route::post('blacklist-user', 'AdminController@blackList');
+    Route::post('unblacklist-user', 'AdminController@unBlackList');
 
 //deposit
     Route::get('/manage-deposit', 'AdminController@deposit')->name('manage-deposit');
@@ -117,8 +119,8 @@ Route::group(['middleware' => 'can:isAdmin'], function () {
     Route::get('/homepage', 'AdminController@homepage')->name('homepage');
     Route::post('/homepage', 'AdminController@homepagePost');
 // verify user
- Route::post('/verify-user', 'AdminController@userVerify');
-    
+    Route::post('/verify-user', 'AdminController@userVerify');
+
     //faq
     Route::get('/faqs', 'FaqController@index')->name('faqs');
     Route::post('/add-faqs', 'FaqController@create');
@@ -135,15 +137,15 @@ Route::group(['middleware' => 'can:isAdmin'], function () {
     Route::post('/edit-getstarts', 'GetStartedController@edit');
     Route::post('/delete-getstarts', 'GetStartedController@delete');
     //social
-     Route::get('/socials', 'SocialController@index')->name('socials');
+    Route::get('/socials', 'SocialController@index')->name('socials');
     Route::post('/add-socials', 'SocialController@create');
     Route::post('/edit-socials', 'SocialController@edit');
     Route::post('/delete-socials', 'SocialController@delete');
-       //pages
-       Route::get('/pages', 'PageController@index')->name('pages');
-       Route::post('/add-page', 'PageController@create');
-       Route::post('/edit-page', 'PageController@edit');
-       Route::post('/delete-page', 'PageController@delete');
+    //pages
+    Route::get('/pages', 'PageController@index')->name('pages');
+    Route::post('/add-page', 'PageController@create');
+    Route::post('/edit-page', 'PageController@edit');
+    Route::post('/delete-page', 'PageController@delete');
 });
 
 Auth::routes();

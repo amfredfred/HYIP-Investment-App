@@ -688,13 +688,7 @@ class AdminController extends Controller {
             if ($actionb == 'dash_address') {
                 $name = 'Dash';
             }
-            foreach ($payment->user->coin as $ucoin) {
-                if ($payment->coin_id == $ucoin->coin_id) {
-
-                    $address = $ucoin->address;
-                }
-            }
-
+           
             $user_ref = Reference::whereReferred_id($payment->user_id)->first();
             if (is_object($user_ref)) {
                 //plan ref percentage

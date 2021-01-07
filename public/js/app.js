@@ -3614,6 +3614,68 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3654,12 +3716,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.loading_referrals = true;
-      var REQUEST_URL = "/referrals/".concat(referral_user_id);
+      var REQUEST_URL = "/user-referrals/".concat(referral_user_id);
       axios.get(REQUEST_URL).then(function (response) {
-        _this2.referrals = response.data.user_details;
+        _this2.referrals = response.data.refs;
         _this2.shown_referrals = true;
         _this2.loading_referrals = false;
-        _this2.country = response.data.country;
       })["catch"](function (error) {
         console.log("error");
       });
@@ -3702,8 +3763,46 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
-    edit_user: function edit_user(form) {
+    blacklist_user: function blacklist_user(id) {
       var _this5 = this;
+
+      if (confirm("Are you sure you want to this?")) {
+        var REQUEST_URL = "/blacklist-user";
+        var formdata = new FormData();
+        formdata.append("id", id);
+        axios({
+          url: REQUEST_URL,
+          method: "POST",
+          data: formdata,
+          headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+          }
+        }).then(function () {
+          _this5.get_users();
+        });
+      }
+    },
+    unblacklist_user: function unblacklist_user(id) {
+      var _this6 = this;
+
+      if (confirm("Are you sure you want to this?")) {
+        var REQUEST_URL = "/unblacklist-user";
+        var formdata = new FormData();
+        formdata.append("id", id);
+        axios({
+          url: REQUEST_URL,
+          method: "POST",
+          data: formdata,
+          headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+          }
+        }).then(function () {
+          _this6.get_users();
+        });
+      }
+    },
+    edit_user: function edit_user(form) {
+      var _this7 = this;
 
       if (confirm("Are you sure you want to update this user??")) {
         this.message = [];
@@ -3721,27 +3820,27 @@ __webpack_require__.r(__webpack_exports__);
           }
         }).then(function (response) {
           if (parseInt(response.data.status) === 401) {
-            return _this5.display_error(response.data.message);
+            return _this7.display_error(response.data.message);
           }
 
-          _this5.message = [];
-          _this5.message_type = "success";
+          _this7.message = [];
+          _this7.message_type = "success";
 
-          _this5.message.push("User updated successfully");
+          _this7.message.push("User updated successfully");
 
           form.reset();
 
-          _this5.get_users();
+          _this7.get_users();
         })["catch"](function () {
-          _this5.message = [];
-          _this5.message_type = "danger";
+          _this7.message = [];
+          _this7.message_type = "danger";
 
-          _this5.message.push("Cannot update user");
+          _this7.message.push("Cannot update user");
         });
       }
     },
     confirm_user: function confirm_user(id) {
-      var _this6 = this;
+      var _this8 = this;
 
       if (confirm("Are you sure you want to verify this user?")) {
         var REQUEST_URL = "/verify-user";
@@ -3755,12 +3854,12 @@ __webpack_require__.r(__webpack_exports__);
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
           }
         }).then(function () {
-          _this6.get_users();
+          _this8.get_users();
         });
       }
     },
     add_user: function add_user(form) {
-      var _this7 = this;
+      var _this9 = this;
 
       if (confirm("Add user?")) {
         this.message = [];
@@ -3777,25 +3876,25 @@ __webpack_require__.r(__webpack_exports__);
           }
         }).then(function (response) {
           if (parseInt(response.data.status) === 401) {
-            return _this7.display_error(response.data.message);
+            return _this9.display_error(response.data.message);
           }
 
-          _this7.message = [];
-          _this7.message_type = "success";
+          _this9.message = [];
+          _this9.message_type = "success";
 
-          _this7.message.push("User added successfully");
+          _this9.message.push("User added successfully");
 
           form.reset();
-          _this7.updating_user = false;
+          _this9.updating_user = false;
 
-          _this7.get_users();
+          _this9.get_users();
 
           $("#modal-default").modal("hide");
         })["catch"](function () {
-          _this7.message = [];
-          _this7.message_type = "danger";
+          _this9.message = [];
+          _this9.message_type = "danger";
 
-          _this7.message.push("Cannot update user");
+          _this9.message.push("Cannot update user");
         });
       }
     }
@@ -13268,10 +13367,10 @@ var render = function() {
         _vm._v(" "),
         _c(
           "div",
-          { staticClass: "p-5 transaction-table dark-bg--lighter" },
+          { staticClass: "transaction-table p-5 dark-bg--lighter" },
           [
             _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "mb-5 col-sm-6 col-md-3" }, [
+              _c("div", { staticClass: "col-sm-6 col-md-3 mb-5" }, [
                 _c(
                   "select",
                   {
@@ -13321,8 +13420,8 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "mb-5 col-sm-10 col-md-7" }, [
-                _c("form", { staticClass: "my-2 form-inline my-lg-0" }, [
+              _c("div", { staticClass: "col-sm-10 col-md-7 mb-5" }, [
+                _c("form", { staticClass: "form-inline my-2 my-lg-0" }, [
                   _c("input", {
                     staticClass: "form-control mr-sm-2",
                     attrs: {
@@ -13335,10 +13434,10 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "my-2 btn btn-outline-primary my-sm-0",
+                      staticClass: "btn btn-outline-primary my-2 my-sm-0",
                       attrs: { type: "submit" }
                     },
-                    [_vm._v("Search")]
+                    [_vm._v("\n              Search\n            ")]
                   )
                 ])
               ])
@@ -13347,14 +13446,14 @@ var render = function() {
             _c(
               "button",
               {
-                staticClass: "mb-5 btn btn-theme btn-circle btn-success",
+                staticClass: "btn btn-theme btn-circle btn-success mb-5",
                 attrs: {
                   type: "button",
                   "data-toggle": "modal",
                   "data-target": "#modal-default"
                 }
               },
-              [_vm._v("Add New Users")]
+              [_vm._v("\n        Add New Users\n      ")]
             ),
             _vm._v(" "),
             _c(
@@ -13562,7 +13661,11 @@ var render = function() {
                                                 disabled: ""
                                               }
                                             },
-                                            [_vm._v("Select User Type")]
+                                            [
+                                              _vm._v(
+                                                "\n                          Select User Type\n                        "
+                                              )
+                                            ]
                                           ),
                                           _vm._v(" "),
                                           _c(
@@ -13599,7 +13702,11 @@ var render = function() {
                                                 disabled: ""
                                               }
                                             },
-                                            [_vm._v("Select Country")]
+                                            [
+                                              _vm._v(
+                                                "\n                          Select Country\n                        "
+                                              )
+                                            ]
                                           ),
                                           _vm._v(" "),
                                           _vm._l(_vm.country, function(
@@ -13636,7 +13743,11 @@ var render = function() {
                                           "data-dismiss": "modal"
                                         }
                                       },
-                                      [_vm._v("Close")]
+                                      [
+                                        _vm._v(
+                                          "\n                    Close\n                  "
+                                        )
+                                      ]
                                     ),
                                     _vm._v(" "),
                                     _c(
@@ -13645,7 +13756,11 @@ var render = function() {
                                         staticClass: "btn btn-theme btn-circle",
                                         attrs: { type: "submit" }
                                       },
-                                      [_vm._v("Add")]
+                                      [
+                                        _vm._v(
+                                          "\n                    Add\n                  "
+                                        )
+                                      ]
                                     )
                                   ]
                                 )
@@ -13964,7 +14079,11 @@ var render = function() {
                                           disabled: ""
                                         }
                                       },
-                                      [_vm._v("Select User Type")]
+                                      [
+                                        _vm._v(
+                                          "\n                          Select User Type\n                        "
+                                        )
+                                      ]
                                     ),
                                     _vm._v(" "),
                                     _c(
@@ -14029,7 +14148,11 @@ var render = function() {
                                           disabled: ""
                                         }
                                       },
-                                      [_vm._v("Select Country")]
+                                      [
+                                        _vm._v(
+                                          "\n                          Select Country\n                        "
+                                        )
+                                      ]
                                     ),
                                     _vm._v(" "),
                                     _vm._l(_vm.country, function(country) {
@@ -14063,7 +14186,11 @@ var render = function() {
                                     "data-dismiss": "modal"
                                   }
                                 },
-                                [_vm._v("Close")]
+                                [
+                                  _vm._v(
+                                    "\n                    Close\n                  "
+                                  )
+                                ]
                               ),
                               _vm._v(" "),
                               _c(
@@ -14072,7 +14199,11 @@ var render = function() {
                                   staticClass: "btn btn-theme btn-circle",
                                   attrs: { type: "submit" }
                                 },
-                                [_vm._v("Edit")]
+                                [
+                                  _vm._v(
+                                    "\n                    Edit\n                  "
+                                  )
+                                ]
                               )
                             ]
                           )
@@ -14109,6 +14240,20 @@ var render = function() {
                         _vm._v(" "),
                         _c("th", { attrs: { scope: "col" } }, [_vm._v("Type")]),
                         _vm._v(" "),
+                        _c("th", { attrs: { scope: "col" } }, [_vm._v("Main")]),
+                        _vm._v(" "),
+                        _c("th", { attrs: { scope: "col" } }, [
+                          _vm._v("Profit")
+                        ]),
+                        _vm._v(" "),
+                        _c("th", { attrs: { scope: "col" } }, [
+                          _vm._v("Bonus")
+                        ]),
+                        _vm._v(" "),
+                        _c("th", { attrs: { scope: "col" } }, [
+                          _vm._v("Can Withdraw")
+                        ]),
+                        _vm._v(" "),
                         _c("th", { attrs: { scope: "col" } }, [
                           _vm._v("Date Joined")
                         ]),
@@ -14128,31 +14273,85 @@ var render = function() {
                       _vm._l(_vm.users.data, function(user, index) {
                         return _c(
                           "tr",
-                          {
-                            key: index,
-                            staticClass: "light-text",
-                            on: {
-                              click: function($event) {
-                                return _vm.get_referrals(user.id)
-                              }
-                            }
-                          },
+                          { key: index, staticClass: "light-text" },
                           [
                             _c("td", [_vm._v(_vm._s(index + 1))]),
                             _vm._v(" "),
-                            _c("td", [
-                              _vm._v(
-                                _vm._s(user.first_name) +
-                                  " " +
-                                  _vm._s(user.last_name)
-                              )
-                            ]),
+                            _c(
+                              "td",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    return _vm.get_referrals(user.id)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                " +
+                                    _vm._s(user.first_name) +
+                                    " " +
+                                    _vm._s(user.last_name) +
+                                    "\n              "
+                                )
+                              ]
+                            ),
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(user.email))]),
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(user.phone_no))]),
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(user.type))]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "\n                " +
+                                  _vm._s(
+                                    user.usercoin_one
+                                      ? user.usercoin_one.amount
+                                      : 0
+                                  ) +
+                                  "\n              "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "\n                " +
+                                  _vm._s(
+                                    user.usercoin_one
+                                      ? user.usercoin_one.earn
+                                      : 0
+                                  ) +
+                                  "\n              "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _vm._v(
+                                "\n                " +
+                                  _vm._s(
+                                    user.usercoin_one
+                                      ? user.usercoin_one.bonus
+                                      : 0
+                                  ) +
+                                  "\n              "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              user.can_withdraw == 0
+                                ? _c("span", { staticClass: "text-success" }, [
+                                    _vm._v("Yes")
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              user.can_withdraw == 1
+                                ? _c("span", { staticClass: "text-danger" }, [
+                                    _vm._v("Blacklisted")
+                                  ])
+                                : _vm._e()
+                            ]),
                             _vm._v(" "),
                             _c("td", [
                               _vm._v(_vm._s(_vm.format_date(user.created_at)))
@@ -14176,7 +14375,7 @@ var render = function() {
                               "td",
                               {
                                 staticClass:
-                                  "border rounded-right border-left-0"
+                                  "rounded-right border border-left-0"
                               },
                               [
                                 _c(
@@ -14316,7 +14515,59 @@ var render = function() {
                                               " Delete\n                    "
                                             )
                                           ]
-                                        )
+                                        ),
+                                        _vm._v(" "),
+                                        user.can_withdraw == 0
+                                          ? _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "dropdown-item text-danger noHover",
+                                                attrs: { type: "button" },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.blacklist_user(
+                                                      user.id
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass: "fa fa-ban"
+                                                }),
+                                                _vm._v(
+                                                  " Blacklist Withdrawal \n                    "
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        user.can_withdraw == 1
+                                          ? _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "dropdown-item text-danger noHover",
+                                                attrs: { type: "button" },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.unblacklist_user(
+                                                      user.id
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass: "fa fa-ban"
+                                                }),
+                                                _vm._v(
+                                                  " UnBlacklist Withdrawal \n                    "
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e()
                                       ]
                                     )
                                   ]
@@ -14331,12 +14582,12 @@ var render = function() {
                   ])
                 : _vm._e(),
               _vm._v(" "),
-              _c("div", { staticClass: "mt-5 row justify-content-between" }, [
+              _c("div", { staticClass: "row justify-content-between mt-5" }, [
                 _vm.users.prev_page_url
                   ? _c(
                       "button",
                       {
-                        staticClass: "px-5 btn",
+                        staticClass: "btn px-5",
                         on: {
                           click: function($event) {
                             return _vm.get_navigation(_vm.users.prev_page_url)
@@ -14351,7 +14602,7 @@ var render = function() {
                   ? _c(
                       "button",
                       {
-                        staticClass: "px-5 btn",
+                        staticClass: "btn px-5",
                         on: {
                           click: function($event) {
                             return _vm.get_navigation(_vm.users.next_page_url)
@@ -14366,233 +14617,86 @@ var render = function() {
               !_vm.loading_referrals &&
               !_vm.loading_transactions &&
               _vm.shown_referrals
-                ? _c("table", { staticClass: "table" }, [
-                    _c("thead", [
-                      _c("tr", { staticClass: "lighter-text" }, [
-                        _c("th", { attrs: { scope: "col" } }, [_vm._v("S/No")]),
-                        _vm._v(" "),
-                        _c("th", { attrs: { scope: "col" } }, [_vm._v("User")]),
-                        _vm._v(" "),
-                        _c("th", { attrs: { scope: "col" } }, [
-                          _vm._v("Email")
-                        ]),
-                        _vm._v(" "),
-                        _c("th", { attrs: { scope: "col" } }, [
-                          _vm._v("Phone No")
-                        ]),
-                        _vm._v(" "),
-                        _c("th", { attrs: { scope: "col" } }, [_vm._v("Type")]),
-                        _vm._v(" "),
-                        _c("th", { attrs: { scope: "col" } }, [
-                          _vm._v("Date Joined")
-                        ]),
-                        _vm._v(" "),
-                        _c("th", { attrs: { scope: "col" } }, [
-                          _vm._v("Status")
-                        ]),
-                        _vm._v(" "),
-                        _c("th", { attrs: { scope: "col" } }, [
-                          _vm._v("Actions")
+                ? _c("div", [
+                    _c("table", { staticClass: "table" }, [
+                      _c("thead", [
+                        _c("tr", { staticClass: "lighter-text" }, [
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v("S/No")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v("User")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v("Email")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v("Date Joined")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { scope: "col" } }, [
+                            _vm._v("Amount Invested")
+                          ])
                         ])
-                      ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.referrals, function(user, index) {
+                          return _c(
+                            "tr",
+                            { key: index, staticClass: "light-text" },
+                            [
+                              _c("td", [_vm._v(_vm._s(index + 1))]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(user.first_name) +
+                                    " " +
+                                    _vm._s(user.refs.last_name)
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(user.refs.email))]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(_vm.format_date(user.refs.created_at))
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  "\n                  $" +
+                                    _vm._s(
+                                      user.refs.active_in[0]
+                                        ? user.refs.active_in[0].total
+                                        : 0
+                                    ) +
+                                    "\n                "
+                                )
+                              ])
+                            ]
+                          )
+                        }),
+                        0
+                      )
                     ]),
                     _vm._v(" "),
                     _c(
-                      "tbody",
-                      _vm._l(_vm.referrals, function(user, index) {
-                        return _c(
-                          "tr",
-                          { key: index, staticClass: "light-text" },
-                          [
-                            _c("td", [_vm._v(_vm._s(index + 1))]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _vm._v(
-                                _vm._s(user.first_name) +
-                                  " " +
-                                  _vm._s(user.last_name)
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(user.email))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(user.phone_no))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(user.type))]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _vm._v(_vm._s(_vm.format_date(user.created_at)))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [
-                              user.code == 0
-                                ? _c("span", { staticClass: "text-info" }, [
-                                    _vm._v("Unverified")
-                                  ])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              user.code == 1
-                                ? _c("span", { staticClass: "text-success" }, [
-                                    _vm._v("Verified")
-                                  ])
-                                : _vm._e()
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              {
-                                staticClass:
-                                  "border rounded-right border-left-0"
-                              },
-                              [
-                                _c(
-                                  "div",
-                                  { staticClass: "dropdown dropleft" },
-                                  [
-                                    _c(
-                                      "a",
-                                      {
-                                        staticClass:
-                                          "btn btn-white light-text btn-sm",
-                                        attrs: {
-                                          href: "#",
-                                          role: "button",
-                                          id: "dropdownMenuLink",
-                                          "data-toggle": "dropdown",
-                                          "aria-haspopup": "true",
-                                          "aria-expanded": "false"
-                                        }
-                                      },
-                                      [
-                                        _c("i", {
-                                          staticClass: "fa fa-ellipsis-v"
-                                        })
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass: "dropdown-menu",
-                                        attrs: {
-                                          "aria-labelledby": "dropdownMenuLink"
-                                        }
-                                      },
-                                      [
-                                        user.code == 0
-                                          ? _c(
-                                              "span",
-                                              { staticClass: "text-info" },
-                                              [
-                                                _c(
-                                                  "button",
-                                                  {
-                                                    staticClass:
-                                                      "dropdown-item text-success noHover",
-                                                    attrs: { type: "button" },
-                                                    on: {
-                                                      click: function($event) {
-                                                        return _vm.confirm_user(
-                                                          user.id
-                                                        )
-                                                      }
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("i", {
-                                                      staticClass: "fa fa-check"
-                                                    }),
-                                                    _vm._v(
-                                                      " Verify User\n                      "
-                                                    )
-                                                  ]
-                                                )
-                                              ]
-                                            )
-                                          : _vm._e(),
-                                        _vm._v(" "),
-                                        _c(
-                                          "button",
-                                          {
-                                            staticClass:
-                                              "dropdown-item text-success noHover",
-                                            attrs: {
-                                              "data-toggle": "modal",
-                                              "data-target": "#modal-edituser"
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.set_edituser(index)
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("i", {
-                                              staticClass: "fa fa-edit"
-                                            }),
-                                            _vm._v(
-                                              " Edit\n                    "
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        user.google2fa_secret_status == 1
-                                          ? _c(
-                                              "span",
-                                              { staticClass: "text-info" },
-                                              [
-                                                _c(
-                                                  "button",
-                                                  {
-                                                    staticClass:
-                                                      "dropdown-item text-primary noHover",
-                                                    attrs: { type: "button" }
-                                                  },
-                                                  [
-                                                    _c("i", {
-                                                      staticClass:
-                                                        "fa fa-remove"
-                                                    }),
-                                                    _vm._v(
-                                                      " Remove 2factor\n                      "
-                                                    )
-                                                  ]
-                                                )
-                                              ]
-                                            )
-                                          : _vm._e(),
-                                        _vm._v(" "),
-                                        _c(
-                                          "button",
-                                          {
-                                            staticClass:
-                                              "dropdown-item text-danger noHover",
-                                            attrs: { type: "button" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.delete_user(user.id)
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("i", {
-                                              staticClass: "fa fa-trash"
-                                            }),
-                                            _vm._v(
-                                              " Delete\n                    "
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  ]
-                                )
-                              ]
-                            )
-                          ]
-                        )
-                      }),
-                      0
+                      "button",
+                      {
+                        staticClass: "btn btn-info mt-3",
+                        on: {
+                          click: function($event) {
+                            _vm.shown_referrals = false
+                          }
+                        }
+                      },
+                      [_vm._v("\n            Back\n          ")]
                     )
                   ])
                 : _vm._e()

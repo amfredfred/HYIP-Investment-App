@@ -16,7 +16,7 @@ class User extends Authenticatable {
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'type', 'country','compounding', 'phone_no', 'email', 'ref_check', 'password', 'can_withdraw', 'verified_code', 'ref_code', 'code', 'google2fa_secret', 'google2fa_secret_status',
+        'first_name', 'last_name', 'type', 'country', 'compounding', 'phone_no', 'email', 'ref_check', 'password', 'can_withdraw', 'verified_code', 'ref_code', 'code', 'google2fa_secret', 'google2fa_secret_status',
     ];
 
     /**
@@ -45,10 +45,13 @@ class User extends Authenticatable {
         return $this->hasMany(UserCoin::class, 'user_id');
     }
 
+    public function usercoinOne() {
+        return $this->hasOne(UserCoin::class, 'user_id');
+    }
+
     public function activeIn() {
         return $this->hasMany(Investment::class, 'user_id')
-                ->selectRaw('investments.user_id,SUM(investments.amount) as total')->groupBy('investments.user_id');
-       
+                        ->selectRaw('investments.user_id,SUM(investments.amount) as total')->groupBy('investments.user_id');
     }
-   
+
 }

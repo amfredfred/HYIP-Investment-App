@@ -8,13 +8,8 @@ use App\Investment;
 use App\Transaction;
 use App\Models\Admin\Setting;
 use App\UserCoin;
-use App\Reference;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use BlockIo;
-use App\Coin;
-use App\Withdraw;
-use App\UserCompounding;
 
 class CronJobController extends Controller {
 
@@ -45,22 +40,15 @@ class CronJobController extends Controller {
                     if ($action == 'dash_address') {
                         $name = 'Dash';
                     }
-                    foreach ($invest->user->coin as $ucoin) {
-                        if ($invest->coin_id == $ucoin->coin_id) {
-
-                            $address = $ucoin->address;
-                        }
-                    }
+                    $address = $invest->userCoin->address;
 
                     $c = ($invest->plan->compound->compound / 24);
                     $check = $invest->run_count;
                     if ($check != $c) {
 
                         $profit = $invest->amount * $invest->plan->percentage / 100;
-
                         // / $c
-
-                        $daily_profit = round($profit, 2);
+                        $daily_profit = $profit;
                         $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
                         //usercoin 
                         $usercoin->earn = $usercoin->earn + $daily_profit;
@@ -90,14 +78,15 @@ class CronJobController extends Controller {
                         $this->sendMail($invest->user->email, $invest->user->first_name, 'Profit Notification', $text_p);
                     } else {
 
-                        //update investment 
-                        $update_investment = Investment::findOrFail($invest->id);
-                        $update_investment->status = true;
-                        $update_investment->save();
                         //usercoin 
                         $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
                         $usercoin->amount = $usercoin->amount + $invest->amount;
                         $usercoin->save();
+                        //update investment 
+                        $update_investment = Investment::findOrFail($invest->id);
+                        $update_investment->status = true;
+                        $update_investment->save();
+
                         //transcation log
                         Transaction::create([
                             'user_id' => $invest->user_id,
@@ -135,19 +124,14 @@ class CronJobController extends Controller {
                     if ($action == 'dash_address') {
                         $name = 'Dash';
                     }
-                    foreach ($invest->user->coin as $ucoin) {
-                        if ($invest->coin_id == $ucoin->coin_id) {
-
-                            $address = $ucoin->userCoin->address;
-                        }
-                    }
+                    $address = $invest->userCoin->address;
                     $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
-                    if ($invest->user->compounding == true) {
-                        $profitamount = ($invest->amount + $invest->com_earn) * ($invest->plan->percentage) / 100;
-                    } else {
-                        $profitamount = $invest->amount * $invest->plan->percentage / 100;
-                    }
 
+                    $profitamount = $invest->amount * $invest->plan->percentage / 100;
+                    //usercoin 
+                    $usercoin->amount = $usercoin->amount + $invest->amount;
+                    $usercoin->earn = $usercoin->earn + $profitamount;
+                    $usercoin->save();
 
                     //update investment 
                     $update_investment = Investment::findOrFail($invest->id);
@@ -155,15 +139,7 @@ class CronJobController extends Controller {
                     $update_investment->earn = $update_investment->earn + $profitamount;
                     $update_investment->com_earn = $update_investment->com_earn + $profitamount;
                     $update_investment->save();
-                    //usercoin 
-                    $usercoin->amount = $usercoin->amount + $invest->amount;
-                    if ($invest->plan->name == '2020 Special Investment Plan') {
-                        $usercoin->earn_promo = $usercoin->earn_promo + $profitamount;
-                    } else {
-                        $usercoin->earn = $usercoin->earn + $profitamount;
-                    }
 
-                    $usercoin->save();
                     //transcation log profit
                     Transaction::create([
                         'user_id' => $invest->user_id,
@@ -203,6 +179,5 @@ class CronJobController extends Controller {
         }
         return 'success';
     }
-
 
 }
