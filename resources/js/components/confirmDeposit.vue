@@ -55,10 +55,10 @@ export default {
         .then((response) => {
           if (parseInt(response.data.status) === 401) {
             this.confirming_deposit = false;
-            return this.display_error(response.data.message);
+            return this.displayErrorMessage(response.data.message);
           }
 
-          return this.$router.push({ name: "user-dashboard" });
+          return this.$router.push({ name: "Dashboard" });
         })
         .catch((error) => {
           this.message = [];

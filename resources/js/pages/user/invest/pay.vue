@@ -55,12 +55,30 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <section class="mt-12">
+      <!-- Recent Investments -->
+      <h4 class="mb-3 text-lg to-gray-600">Recent Investments</h4>
+      <v-data-table
+        :headers="tableHeaders"
+        :items="investments"
+        :items-per-page="5"
+        class="elevation-1"
+      >
+        <template #item.created_at="{ item }">{{item.created_at | formatDate }}</template>
+        <template #item.status="{ item }">
+          <v-chip v-if="item.status == 1" color="green" text-color="white">Completed</v-chip>
+          <v-chip v-if="item.status == 0" color="yellow" text-color="white">Pending</v-chip>
+        </template>
+      </v-data-table>
+    </section>
   </div>
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
 
 import messageMixin from "../../../mixins/messageMixin";
+import utilitiesMixin from "../../../mixins/utilitiesMixin";
 
 export default {
   name: "pay",
@@ -70,6 +88,25 @@ export default {
         coin_id: "",
         amount: "",
       },
+
+      tableHeaders: [
+        {
+          text: "Date",
+          value: "created_at",
+        },
+        {
+          text: "Transaction Id",
+          value: "transaction_id",
+        },
+        {
+          text: "Amount",
+          value: "amount",
+        },
+        {
+          text: "Status",
+          value: "status",
+        },
+      ],
 
       alert: false,
 
@@ -139,6 +176,8 @@ export default {
         return state.plans[this.$route.params.planId];
       },
 
+      investments: "recentDeposits",
+
       coins: "userCoin",
       balance: (state) => state.userInformation.total_balance,
     }),
@@ -150,7 +189,7 @@ export default {
     }
   },
 
-  mixins: [messageMixin],
+  mixins: [messageMixin, utilitiesMixin],
 };
 </script>
 <style lang="scss" scoped>
