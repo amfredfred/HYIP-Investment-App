@@ -1,4 +1,5 @@
 import dashboard from "./pages/user/dashboard.vue";
+import transactions from "./pages/user/transactions.vue";
 import invest from "./pages/user/invest.vue";
 import withdraw from "./pages/user/withdraw.vue";
 import referral from "./pages/user/referral.vue";
@@ -19,6 +20,7 @@ const user_routes = [
         name: "Dashboard",
         prop: { icon: "fa-dashboard" }
     },
+
     {
         path: "/invest",
         component: invest,
@@ -63,6 +65,12 @@ const user_routes = [
                 component: confirmWithdraw
             }
         ]
+    },
+    {
+        path: "/transactions",
+        component: transactions,
+        name: "Transactions",
+        prop: { icon: "fa-cog" }
     },
     {
         path: "/referral",

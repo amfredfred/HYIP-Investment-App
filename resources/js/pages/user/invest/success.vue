@@ -5,9 +5,10 @@
         <v-row justify="space-between">
           <v-col cols="12" md="7">
             <h1 class="font-bold text-green-900">Great! Investment has been Made.</h1>
-            <p
-              class="text-lg text-gray-600 mt-7"
-            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid nam accusamus nesciunt eos.</p>
+            <p class="text-lg text-gray-600 mt-7">
+              Investment has been made and payment details is currently being
+              reviewed
+            </p>
 
             <v-btn class="text-green-100 bg-green-800" :to="{name: 'Dashboard'}">
               Back to home

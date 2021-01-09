@@ -58,7 +58,7 @@ export default {
             return this.displayErrorMessage(response.data.message);
           }
 
-          return this.$router.push({ name: "Dashboard" });
+          return this.$router.push({ name: "successfulInvest" });
         })
         .catch((error) => {
           this.message = [];
