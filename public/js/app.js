@@ -6962,27 +6962,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -6998,13 +6977,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       withdrawalMethod: [],
       withdrawAccount: [{
         name: "Main Balance",
-        number: 2
+        number: 2,
+        icon: "fa-industry"
       }, {
         name: "Profit Balance",
-        number: 3
+        number: 3,
+        icon: "fa-life-ring"
       }, {
         name: "Referral Bonus",
-        number: 4
+        number: 4,
+        icon: "fa-magnet"
       }],
       tableHeaders: [{
         text: "Date",
@@ -19999,99 +19981,35 @@ var render = function() {
           ),
           _vm._v(" "),
           _c(
-            "v-form",
-            {
-              ref: "withdrawForm",
-              model: {
-                value: _vm.formValid,
-                callback: function($$v) {
-                  _vm.formValid = $$v
-                },
-                expression: "formValid"
-              }
-            },
-            [
-              _c("v-text-field", {
-                attrs: {
-                  type: "number",
-                  color: "blue darken-2",
-                  label: "Amount",
-                  required: "",
-                  rules: [_vm.rules.amount]
-                },
-                model: {
-                  value: _vm.form.amount,
-                  callback: function($$v) {
-                    _vm.$set(_vm.form, "amount", $$v)
-                  },
-                  expression: "form.amount"
-                }
-              }),
-              _vm._v(" "),
-              _c("v-select", {
-                attrs: {
-                  items: _vm.withdrawAccount,
-                  "item-text": "name",
-                  "item-value": "number",
-                  label: "Withdrawal Account",
-                  "single-line": "",
-                  outlined: "",
-                  rules: [_vm.rules.account],
-                  required: ""
-                },
-                model: {
-                  value: _vm.form.withdrawAccount,
-                  callback: function($$v) {
-                    _vm.$set(_vm.form, "withdrawAccount", $$v)
-                  },
-                  expression: "form.withdrawAccount"
-                }
-              }),
-              _vm._v(" "),
-              _c("v-select", {
-                attrs: {
-                  items: _vm.withdrawalMethod,
-                  "item-text": "coin.name",
-                  "item-value": "coin_id",
-                  label: "Withdrawal Method",
-                  "single-line": "",
-                  outlined: "",
-                  rules: [_vm.rules.method],
-                  required: ""
-                },
-                model: {
-                  value: _vm.form.withdrawalMethod,
-                  callback: function($$v) {
-                    _vm.$set(_vm.form, "withdrawalMethod", $$v)
-                  },
-                  expression: "form.withdrawalMethod"
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: {
-                    loading: _vm.requesting,
-                    disabled: _vm.requesting,
-                    color: "blue darken-3 large blue--text text--lighten-5"
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.initiate_withdrawal()
-                    }
-                  }
-                },
-                [
-                  _vm._v("\n          Request Withdrawal\n          "),
-                  _c("v-icon", { staticClass: "ml-2 text-lg" }, [
-                    _vm._v("fa fa-credit-card")
-                  ])
-                ],
-                1
-              )
-            ],
-            1
+            "section",
+            { staticClass: "card-wthdrawls" },
+            _vm._l(_vm.withdrawAccount, function(account, index) {
+              return _c("div", { key: index }, [
+                _c(
+                  "div",
+                  { staticClass: "p-3 mb-3 bg-white rounded shadow-sm" },
+                  [
+                    _c("h6", { staticClass: "text-sm text-black-50" }, [
+                      _vm._v(_vm._s(account.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mt-4" }, [
+                      _c("div", { staticClass: "px-3 row" }, [
+                        _c("div", { staticClass: "mr-5 icon" }, [
+                          _c("i", {
+                            staticClass: "fa text-info",
+                            class: account.icon
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _vm._m(0, true)
+                      ])
+                    ])
+                  ]
+                )
+              ])
+            }),
+            0
           ),
           _vm._v(" "),
           _c(
@@ -20212,7 +20130,24 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "details" }, [
+      _c("h5", { staticClass: "mb-4" }, [_vm._v("$300")]),
+      _vm._v(" "),
+      _c("button", { staticClass: "px-4 mr-2 btn btn-success" }, [
+        _vm._v("Withdraw")
+      ]),
+      _vm._v(" "),
+      _c("button", { staticClass: "px-4 btn btn-primary" }, [
+        _vm._v("Reinvest")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -23570,11 +23505,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_lib_components_VDataTable__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuetify/lib/components/VDataTable */ "./node_modules/vuetify/lib/components/VDataTable/index.js");
 /* harmony import */ var vuetify_lib_components_VDialog__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuetify/lib/components/VDialog */ "./node_modules/vuetify/lib/components/VDialog/index.js");
 /* harmony import */ var vuetify_lib_components_VDivider__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuetify/lib/components/VDivider */ "./node_modules/vuetify/lib/components/VDivider/index.js");
-/* harmony import */ var vuetify_lib_components_VForm__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuetify/lib/components/VForm */ "./node_modules/vuetify/lib/components/VForm/index.js");
-/* harmony import */ var vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vuetify/lib/components/VIcon */ "./node_modules/vuetify/lib/components/VIcon/index.js");
-/* harmony import */ var vuetify_lib_components_VSelect__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vuetify/lib/components/VSelect */ "./node_modules/vuetify/lib/components/VSelect/index.js");
-/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/index.js");
-/* harmony import */ var vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! vuetify/lib/components/VTextField */ "./node_modules/vuetify/lib/components/VTextField/index.js");
+/* harmony import */ var vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuetify/lib/components/VIcon */ "./node_modules/vuetify/lib/components/VIcon/index.js");
+/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/index.js");
 
 
 
@@ -23607,10 +23539,7 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 
 
-
-
-
-_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VAlert: vuetify_lib_components_VAlert__WEBPACK_IMPORTED_MODULE_4__["VAlert"],VBtn: vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_5__["VBtn"],VCard: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_6__["VCard"],VCardActions: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_6__["VCardActions"],VCardText: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_6__["VCardText"],VCardTitle: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_6__["VCardTitle"],VChip: vuetify_lib_components_VChip__WEBPACK_IMPORTED_MODULE_7__["VChip"],VDataTable: vuetify_lib_components_VDataTable__WEBPACK_IMPORTED_MODULE_8__["VDataTable"],VDialog: vuetify_lib_components_VDialog__WEBPACK_IMPORTED_MODULE_9__["VDialog"],VDivider: vuetify_lib_components_VDivider__WEBPACK_IMPORTED_MODULE_10__["VDivider"],VForm: vuetify_lib_components_VForm__WEBPACK_IMPORTED_MODULE_11__["VForm"],VIcon: vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_12__["VIcon"],VSelect: vuetify_lib_components_VSelect__WEBPACK_IMPORTED_MODULE_13__["VSelect"],VSpacer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_14__["VSpacer"],VTextField: vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_15__["VTextField"]})
+_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VAlert: vuetify_lib_components_VAlert__WEBPACK_IMPORTED_MODULE_4__["VAlert"],VBtn: vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_5__["VBtn"],VCard: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_6__["VCard"],VCardActions: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_6__["VCardActions"],VCardText: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_6__["VCardText"],VCardTitle: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_6__["VCardTitle"],VChip: vuetify_lib_components_VChip__WEBPACK_IMPORTED_MODULE_7__["VChip"],VDataTable: vuetify_lib_components_VDataTable__WEBPACK_IMPORTED_MODULE_8__["VDataTable"],VDialog: vuetify_lib_components_VDialog__WEBPACK_IMPORTED_MODULE_9__["VDialog"],VDivider: vuetify_lib_components_VDivider__WEBPACK_IMPORTED_MODULE_10__["VDivider"],VIcon: vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_11__["VIcon"],VSpacer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_12__["VSpacer"]})
 
 
 /* hot reload */
