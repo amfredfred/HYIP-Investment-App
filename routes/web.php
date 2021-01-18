@@ -48,6 +48,8 @@ Route::get('/get-coin', 'HomeController@getCoin')->name('get-coin');
 Route::get('/withdraw', 'HomeController@withdraw')->name('withdraw');
 Route::post('/withdraw', 'HomeController@withdrawPost');
 Route::post('/withdraw-fund', 'HomeController@withdrawFund')->name('withdraw-fund');
+//reinvest
+Route::post('/reinvest', 'HomeController@reinvest');
 //confirm_deposit
 Route::post('/confirm_deposit', 'HomeController@confirmDeposit');
 //deposit list

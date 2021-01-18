@@ -6979,6 +6979,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -20063,13 +20082,6 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "mt-4" }, [
                         _c("div", { staticClass: "px-3 row" }, [
-                          _c("div", { staticClass: "mr-5 icon" }, [
-                            _c("i", {
-                              staticClass: "fa text-info",
-                              class: _vm.withdrawIcons[index].icon
-                            })
-                          ]),
-                          _vm._v(" "),
                           _c("div", { staticClass: "details" }, [
                             _c("h5", { staticClass: "mb-2" }, [
                               _vm._v("$" + _vm._s(account.amount))
@@ -20097,7 +20109,11 @@ var render = function() {
                                   }
                                 }
                               },
-                              [_vm._v("Withdraw")]
+                              [
+                                _vm._v(
+                                  "\n                    Withdraw\n                  "
+                                )
+                              ]
                             ),
                             _vm._v(" "),
                             _c(
@@ -20112,7 +20128,11 @@ var render = function() {
                                   }
                                 }
                               },
-                              [_vm._v("Re-invest")]
+                              [
+                                _vm._v(
+                                  "\n                    Re-invest\n                  "
+                                )
+                              ]
                             )
                           ])
                         ])
@@ -20149,7 +20169,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-card-text", { staticClass: "mt-3" }, [
                     _vm._v(
-                      "\n            Your withdraw request has been made and is being\n            processed\n          "
+                      "\n            Your withdraw request has been made and is being processed\n          "
                     )
                   ]),
                   _vm._v(" "),
@@ -32699,8 +32719,8 @@ var user_routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/melo/projects/braveisnt/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/melo/projects/braveisnt/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\naijacrawl soft\newJide_coin\new_jide_coin\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\naijacrawl soft\newJide_coin\new_jide_coin\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

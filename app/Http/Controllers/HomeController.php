@@ -459,7 +459,7 @@ class HomeController extends Controller {
             $greeting = 'Hello ' . Auth::user()->first_name . ' ' . Auth::user()->last_name . ',';
             $email = Auth::user()->email;
             $subject = 'New Investment Notification';
-            $message = ' You invested' . '$' . $invest->amount . " using" . $data ['name'] . " Under " . $plan->name . "  .";
+            $message = ' You invested' . '$' . $invest->amount . " using " . $data ['name'] . " Under " . $plan->name . "  .";
 
             Notification:: route('mail', $email)
                     ->notify(new PlanDepositMail($greeting, $subject, $message));
@@ -536,44 +536,11 @@ class HomeController extends Controller {
     }
 
     public function withdrawPost(Request $request) {
-        $input = $request->all();
         $setting = Setting::whereId(1)->first();
-        $check = Withdraw::whereUser_id(Auth::user()->id)->orderBy('created_at', 'desc')->whereStatus(false)->first();
-        if (is_object($check)) {
-            return [
-                'status' => 'error',
-                'message' => 'You have a pending withdrawal. Wait for it to be processed before requesting another one.'
-            ];
-        }
         $charge = $setting['withdraw_charge'];
-        $usercoin = UserCoin::whereUser_id(Auth::user()->id)->whereCoin_id($request->coin)->first();
-        if ($request->withdraw_from == '1') {
-            $amount_all = $usercoin->amount + $usercoin->earn + $usercoin->bonus;
-            $amount = $amount_all;
-            $amount_to_withdraw = $amount_all + $charge;
-            $amount_to_convert = $amount_all - $charge;
-        } else {
-            $amount_to_withdraw = $request->amount + $charge;
-            $amount_to_convert = $request->amount - $charge;
-            $amount = $request->amount;
-        }
-        if ($request->withdraw_from == '1') {
-            $rules = [
-                'coin' => 'required',
-                'withdraw_from' => 'required'
-            ];
-        } else {
-            $rules = [
-                'coin' => 'required',
-                'withdraw_from' => 'required',
-                'amount' => 'required'
-            ];
-        }
-
-        $error = static::getErrorMessage($input, $rules);
-        if ($error) {
-            return $error;
-        }
+        $usercoin = UserWithdrawal::whereId($request->id)->first();
+        $amount_to_convert = $usercoin->amount - $charge;
+        $amount = $usercoin->amount;
         if ($amount < $setting->min_withdraw) {
             return [
                 'status' => 'error',
@@ -596,39 +563,7 @@ class HomeController extends Controller {
         DB::beginTransaction();
         try {
 
-            if ($request->withdraw_from == '1') {
-                $amount_compare = $usercoin->amount + $usercoin->earn + $usercoin->bonus;
-                $message_type = 'All';
-            }
-            if ($request->withdraw_from == '2') {
-                $amount_compare = $usercoin->amount;
-                $message_type = 'Balance';
-            }
-            if ($request->withdraw_from == '3') {
-                $amount_compare = $usercoin->earn;
-                $message_type = 'Profit Balance';
-            }
-            if ($request->withdraw_from == '4') {
-                $amount_compare = $usercoin->bonus;
-                $message_type = 'Referral Bonus';
-            }
-            if ($request->withdraw_from == '5') {
-                $amount_compare = $usercoin->bonus;
-                $message_type = 'Special Balance';
-            }
 
-            if ($amount_to_withdraw > $amount_compare) {
-                return [
-                    'status' => 'error',
-                    'message' => 'You haven’t entered an amount to withdraw'
-                ];
-            }
-            if ($amount < 1) {
-                return [
-                    'status' => 'error',
-                    'message' => 'You haven’t entered an amount to withdraw'
-                ];
-            }
 
 //btc
             try {
@@ -641,7 +576,7 @@ class HomeController extends Controller {
                     'message' => 'Bitcoin Server Very Busy , Try Again'
                 ];
             }
-            $coin = Coin::whereId($request->coin)->first();
+            $coin = Coin::whereId($usercoin->coin_id)->first();
             $action = $coin->slug;
             $general_coin = file_get_contents('https://api.coincap.io/v2/assets');
 //amount in btc or lite or btc cash
@@ -721,11 +656,12 @@ class HomeController extends Controller {
                 'transaction_id' => strtoupper(Str::random(20)),
                 'user_id' => Auth::user()->id,
                 'coin_id' => $usercoin->coin_id,
-                'usercoin_id' => $request->coin,
-                'withdraw_from' => $message_type,
+                'usercoin_id' => $usercoin->coin_id,
+                'user_withdrawal_id' => $request->id,
+                'withdraw_from' => $usercoin->type,
                 'description' => 'You Widthrew  ' . '$' . $amount,
                 'amount' => $amount,
-                'comment' => $request->comment,
+                //'comment' => $request->comment,
                 'total_amount' => $amount + $charge,
                 'withdraw_charge' => $charge,
                 'message' => null,
@@ -753,9 +689,10 @@ class HomeController extends Controller {
             DB::rollback();
             throw $e;
         }
+        $usercoin_address = UserCoin::whereUser_id(Auth::user()->id)->whereCoin_id($usercoin->coin_id)->first();
         $data['amount_convert'] = number_format(floatval($data['amount_convert']), 8, '.', '');
         $data['withdraw'] = $withdraw;
-        $data['address'] = $usercoin->address;
+        $data['address'] = $usercoin_address->address;
         $data['total_balance'] = number_format(UserCoin::whereUser_id(Auth::user()->id)->sum('amount'), 2);
         $data['total_earn'] = number_format(UserCoin::whereUser_id(Auth::user()->id)->sum('earn'), 2);
         $data['total_bonus'] = number_format(UserCoin::whereUser_id(Auth::user()->id)->sum('bonus'), 2);
@@ -781,11 +718,12 @@ class HomeController extends Controller {
         $withdraw->transaction_id = $withdraw_create['transaction_id'];
         $withdraw->user_id = $withdraw_create['user_id'];
         $withdraw->coin_id = $withdraw_create['coin_id'];
+        $withdraw->user_withdrawal_id = $withdraw_create['user_withdrawal_id'];
         $withdraw->usercoin_id = $withdraw_create['usercoin_id'];
         $withdraw->withdraw_from = $withdraw_create['withdraw_from'];
         $withdraw->description = $withdraw_create['description'];
         $withdraw->amount = $withdraw_create['amount'];
-        $withdraw->comment = $withdraw_create['comment'];
+        //$withdraw->comment = $withdraw_create['comment'];
         $withdraw->total_amount = $withdraw_create['total_amount'];
         $withdraw->withdraw_charge = $withdraw_create['withdraw_charge'];
         $withdraw->message = null;
@@ -914,14 +852,12 @@ class HomeController extends Controller {
                 ];
             }
         }
-        foreach ($withdraw->user->coin as $ucoin) {
-            if ($withdraw->coin_id == $ucoin->coin_id) {
 
-                $address = $ucoin->address;
-            }
-        }
+
+
 //maual withdraw
         if ($on == false) {
+            $address = $withdraw->usercoin->address;
 ////transcation log
             Transaction::create([
                 'user_id' => Auth::user()->id,
@@ -933,7 +869,10 @@ class HomeController extends Controller {
                 'amount' => $withdraw->amount,
                 'description' => 'You Widthraw  ' . '$' . $withdraw->amount
             ]);
-
+//set user withdrawal status
+            UserWithdrawal::whereId($withdraw->user_withdrawal_id)->update([
+                'status' => false
+            ]);
 //send mail
             $greeting = 'Hello Administrator,';
             $user_name = $withdraw->user->first_name . ' ' . $withdraw->user->last_name;
@@ -972,6 +911,204 @@ class HomeController extends Controller {
         return [
             'status' => 'success',
             'message' => 'Withdrawal Successfully Confirmed'
+        ];
+    }
+
+    public function reinvest(Request $request) {
+        $usercoin = UserWithdrawal::whereId($request->id)->first();
+//check plan
+        $plan = Plan::whereId($usercoin->plan_id)->first();
+        DB::beginTransaction();
+        try {
+            $coin = Coin::whereId($usercoin->coin_id)->first();
+            if (!is_object($coin)) {
+                return [
+                    'status' => 'error',
+                    'message' => 'Invalid Payment Method'
+                ];
+            }
+
+//btc
+            try {
+                $all = file_get_contents("https://blockchain.info/ticker");
+                $res = json_decode($all);
+                $btcrate = $res->USD->last;
+            } catch (\Exception $e) {
+                return [
+                    'status' => 'error',
+                    'message' => 'Bitcoin Server Very Busy , Try Again'
+                ];
+            }
+            $action = $coin->slug;
+            $current = Carbon::now();
+            $status_deposit = true;
+            $due = $current->addHours($plan->compound->compound);
+            $due_pay = $due->addMinutes(2);
+            $txt = strtoupper(Str::random(20));
+
+
+//create investment
+
+            $invest = Investment::create([
+                        'transaction_id' => $txt,
+                        'user_id' => Auth::user()->id,
+                        'plan_id' => $usercoin->plan_id,
+                        'coin_id' => $usercoin->coin_id,
+                        'amount' => $usercoin->amount,
+                        'user_withdrawal_id' => $request->id,
+                        'run_count' => 0,
+                        'earn' => 0,
+                        'due_pay' => $due_pay,
+                        'status_deposit' => $status_deposit,
+                        'settled_status' => 0,
+                        'status' => 0
+            ]);
+
+
+            $profit = $invest->amount * $plan->percentage / 100;
+//transcation log
+            Transaction::create([
+                'user_id' => Auth::user()->id,
+                'transaction_id' => $invest->transaction_id,
+                'type' => "$usercoin->type Re-investment",
+                'name_type' => 'Deposit',
+                //'deposit_investment_charge' => $charge,
+                'coin_id' => $usercoin->coin_id,
+                'amount' => $invest->amount,
+                'amount_profit' => $profit,
+                'description' => "You Re-invested your $usercoin->type Under  " . $plan->name
+            ]);
+
+//amount in btc or lite or btc cash
+            if ($action == 'bitcoin_address') {
+                $data['name'] = 'BTC';
+                $data['name_full'] = 'bitcoin';
+            }
+            if ($action == 'litecoin_address') {
+                try {
+                    $data['name'] = 'LTE';
+                    $data['name_full'] = 'litecoin';
+                } catch (\Exception $e) {
+                    return [
+                        'status' => 'error',
+                        'message' => 'Litecoin Server Very Busy , Try Again'
+                    ];
+                }
+            }
+            if ($action == 'ethereum_address') {
+
+                try {
+                    $data['name'] = 'ETH';
+                    $data['name_full'] = 'ethereum';
+                } catch (\Exception $e) {
+
+                    return [
+                        'status' => 'error',
+                        'message' => 'Ethereum Server Very Busy , Try Again'
+                    ];
+                }
+            }
+            if ($action == 'bitcoin_cash_address') {
+//bitcoin cash
+                try {
+                    $data['name'] = 'BTC Cash';
+                    $data['name_full'] = 'bitcoin-cash';
+                } catch (\Exception $e) {
+
+                    return [
+                        'status' => 'error',
+                        'message' => 'Bitcoin Cash Server Very Busy , Try Again'
+                    ];
+                }
+            }
+            if ($action == 'dash_address') {
+//dash
+                try {
+                    $data['name'] = 'dash';
+                    $data['name_full'] = 'dash';
+                } catch (\Exception $e) {
+
+                    return [
+                        'status' => 'error',
+                        'message' => 'Dash Cash Server Very Busy , Try Again'
+                    ];
+                }
+            }
+
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+
+//check reference for bouns
+        $actionb = $invest->coin->slug;
+        if ($actionb == 'bitcoin_address') {
+            $name = 'Bitcoin';
+        }
+        if ($actionb == 'litecoin_address') {
+
+            $name = 'Litecoin';
+        }
+        if ($actionb == 'ethereum_address') {
+            $name = 'Ethereum';
+        }
+        if ($actionb == 'bitcoin_cash_address') {
+            $name = 'Bitcoin Cash';
+        }
+        if ($actionb == 'dash_address') {
+            $name = 'Dash';
+        }
+
+        $user_ref = Reference::whereReferred_id($invest->user_id)->first();
+        if (is_object($user_ref)) {
+//plan ref percentage
+            $bonus = $invest->amount * $invest->plan->ref / 100;
+            $pay = UserCoin::whereUser_id($user_ref->user_id)->whereCoin_id($invest->coin_id)->first();
+            if (is_object($pay)) {
+                $pay->bonus = $pay->bonus + $bonus;
+                $pay->save();
+//transcation log
+                Transaction::create([
+                    'user_id' => $user_ref->user_id,
+                    'transaction_id' => $invest->transaction_id,
+                    'type' => 'Re-invest Referral Bonus',
+                    'name_type' => 'Referral Bonus',
+                    'coin_id' => $invest->coin_id,
+                    'amount' => $bonus,
+                    'status' => true,
+                    'amount_profit' => $bonus,
+                    'description' => 'Re-invest Referral Bonus Under ' . $invest->plan->name
+                ]);
+                $user_pay = $user_ref->refs->first_name . ' ' . $user_ref->refs->last_name;
+                $text = "You earned a referral bonus  of $$bonus for referring  $user_pay.";
+
+
+                $message = $text;
+
+                $this->sendMail($pay->user->email, $pay->user->first_name, 'Referral Bonus Notification', $message);
+            }
+        }
+        //set user withdrawal status
+        UserWithdrawal::whereId($invest->user_withdrawal_id)->update([
+            'status' => false
+        ]);
+
+        $greeting = 'Hello ' . Auth::user()->first_name . ' ' . Auth::user()->last_name . ',';
+        $email = Auth::user()->email;
+        $subject = 'New Re-Investment Notification';
+        $message = ' You Re-invested your ' . $usercoin->type . ' $' . $invest->amount . " using " . $data ['name'] . "  Under " . $plan->name . "  .";
+
+        Notification:: route('mail', $email)
+                ->notify(new PlanDepositMail($greeting, $subject, $message));
+
+        return [
+            'status' => 'success',
+            'message' => "The Re-investment of your $usercoin->type Successfully done",
+            'plan' => $plan,
+            'invest' => $invest,
+            'type' => 'invest'
         ];
     }
 

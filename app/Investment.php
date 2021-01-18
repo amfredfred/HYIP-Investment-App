@@ -8,7 +8,7 @@ class Investment extends Model {
 
     protected $dates = ['due_pay'];
     protected $fillable = [
-        'transaction_id', 'user_id', 'plan_id', 'coin_id', 'earn', 'com_earn', 'hash', 'amount', 'run_count', 'due_pay', 'status_deposit', 'deposit_investment_charge', 'settled_status', 'status',
+        'transaction_id', 'user_id', 'plan_id', 'coin_id', 'earn', 'user_withdrawal_id', 'com_earn', 'hash', 'amount', 'run_count', 'due_pay', 'status_deposit', 'deposit_investment_charge', 'settled_status', 'status',
     ];
 
     public function user() {

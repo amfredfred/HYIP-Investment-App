@@ -5,7 +5,7 @@
       <div class="mx-auto md:w-6/12 sm:w-8/12">
         <h4 class="mb-4">Withdraw funds</h4>
         <v-alert dismissible v-model="alert" :color="messageType">
-          {{message}}
+          {{ message }}
           <template slot="close">
             <v-icon @click="alert = false">fa fa-close</v-icon>
           </template>
@@ -19,28 +19,34 @@
           </div>
           <div v-for="(account, index) in withdrawData" :key="index">
             <div class="p-3 mb-3 bg-white rounded shadow-sm">
-              <h6 class="text-sm text-black-50">{{account.type}}</h6>
+              <h6 class="text-sm text-black-50">{{ account.type }}</h6>
 
               <div class="mt-4">
                 <div class="px-3 row">
-                  <div class="mr-5 icon">
+                  <!-- <div class="mr-5 icon">
                     <i class="fa text-info" :class="withdrawIcons[index].icon"></i>
-                  </div>
+                  </div> -->
                   <div class="details">
-                    <h5 class="mb-2">${{account.amount}}</h5>
+                    <h5 class="mb-2">${{ account.amount }}</h5>
                     <div class="date mb-4">
-                      <span class="text-secondary">{{account.created_at | formatDate}}</span>
+                      <span class="text-secondary">{{
+                        account.created_at | formatDate
+                      }}</span>
                     </div>
                     <button
                       @click.prevent="initiate_withdrawal(account.id)"
                       class="px-4 mr-2 btn btn-success"
                       :disabled="requesting"
-                    >Withdraw</button>
+                    >
+                      Withdraw
+                    </button>
                     <button
                       @click.prevent="initiate_invest(account.id)"
                       class="px-4 btn btn-primary"
                       :disabled="requesting"
-                    >Re-invest</button>
+                    >
+                      Re-invest
+                    </button>
                   </div>
                 </div>
               </div>
@@ -50,18 +56,25 @@
 
         <v-dialog v-model="dialogShown" width="500">
           <v-card>
-            <v-card-title class="text-gray-600 headline grey lighten-2">Request Made</v-card-title>
+            <v-card-title class="text-gray-600 headline grey lighten-2"
+              >Request Made</v-card-title
+            >
 
             <v-card-text class="mt-3">
-              Your withdraw request has been made and is being
-              processed
+              Your withdraw request has been made and is being processed
             </v-card-text>
 
             <v-divider></v-divider>
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-2" dark text @click="dialogShown = false">Okay</v-btn>
+              <v-btn
+                color="green darken-2"
+                dark
+                text
+                @click="dialogShown = false"
+                >Okay</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -77,10 +90,16 @@
         :items-per-page="5"
         class="elevation-1"
       >
-        <template #item.created_at="{ item }">{{item.created_at | formatDate }}</template>
+        <template #item.created_at="{ item }">{{
+          item.created_at | formatDate
+        }}</template>
         <template #item.status="{ item }">
-          <v-chip v-if="item.status == 1" color="green" text-color="white">Completed</v-chip>
-          <v-chip v-if="item.status == 0" color="yellow" text-color="white">Pending</v-chip>
+          <v-chip v-if="item.status == 1" color="green" text-color="white"
+            >Completed</v-chip
+          >
+          <v-chip v-if="item.status == 0" color="yellow" text-color="white"
+            >Pending</v-chip
+          >
         </template>
       </v-data-table>
     </section>
@@ -199,7 +218,7 @@ export default {
         this.requesting = false;
         return;
       }
-
+    
       this.updateWithdrawData(response_data);
       this.$router.push({ name: "confirmWithdraw" });
     },

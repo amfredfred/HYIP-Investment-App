@@ -67,7 +67,7 @@ class CronJobController extends Controller {
                         $update_investment = Investment::findOrFail($invest->id);
                         $update_investment->run_count = $invest->run_count + 1;
                         $update_investment->earn = $invest->earn + $daily_profit;
-                        $update_investment->com_earn = $invest->com_earn + $daily_profit;
+                       // $update_investment->com_earn = $invest->com_earn + $daily_profit;
                         $update_investment->save();
 
                         //transcation log
