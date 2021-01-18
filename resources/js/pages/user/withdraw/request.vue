@@ -11,19 +11,36 @@
           </template>
         </v-alert>
         <section class="card-wthdrawls">
-          <div v-for="(account, index) in withdrawAccount" :key="index">
+          <div
+            v-if="withdrawData.length <= 0"
+            class="p-3 text-black-50 mb-3 bg-white rounded text-center shadow-sm"
+          >
+            <span>Nothing to withdraw yet ...</span>
+          </div>
+          <div v-for="(account, index) in withdrawData" :key="index">
             <div class="p-3 mb-3 bg-white rounded shadow-sm">
-              <h6 class="text-sm text-black-50">{{account.name}}</h6>
+              <h6 class="text-sm text-black-50">{{account.type}}</h6>
 
               <div class="mt-4">
                 <div class="px-3 row">
                   <div class="mr-5 icon">
-                    <i class="fa text-info" :class="account.icon"></i>
+                    <i class="fa text-info" :class="withdrawIcons[index].icon"></i>
                   </div>
                   <div class="details">
-                    <h5 class="mb-4">$300</h5>
-                    <button class="px-4 mr-2 btn btn-success">Withdraw</button>
-                    <button class="px-4 btn btn-primary">Re-invest</button>
+                    <h5 class="mb-2">${{account.amount}}</h5>
+                    <div class="date mb-4">
+                      <span class="text-secondary">{{account.created_at | formatDate}}</span>
+                    </div>
+                    <button
+                      @click.prevent="initiate_withdrawal(account.id)"
+                      class="px-4 mr-2 btn btn-success"
+                      :disabled="requesting"
+                    >Withdraw</button>
+                    <button
+                      @click.prevent="initiate_invest(account.id)"
+                      class="px-4 btn btn-primary"
+                      :disabled="requesting"
+                    >Re-invest</button>
                   </div>
                 </div>
               </div>
@@ -79,19 +96,16 @@ export default {
   data() {
     return {
       dialogShown: false,
-      form: {
-        amount: "",
-        withdrawAccount: "",
-        withdrawalMethod: "",
-      },
 
       withdrawalMethod: [],
 
-      withdrawAccount: [
-        { name: "Main Balance", number: 2, icon: "fa-industry" },
-        { name: "Profit Balance", number: 3, icon: "fa-life-ring" },
-        { name: "Referral Bonus", number: 4, icon: "fa-magnet" },
+      withdrawIcons: [
+        { icon: "fa-industry" },
+        { icon: "fa-life-ring" },
+        { icon: "fa-magnet" },
       ],
+
+      withdrawData: [],
 
       tableHeaders: [
         {
@@ -119,14 +133,6 @@ export default {
       messageType: "",
 
       requesting: false,
-
-      formValid: false,
-
-      rules: {
-        amount: (value) => !!value || "Amount required",
-        account: (value) => !!value || "Select Withdraw Account",
-        method: (value) => !!value || "Select Withdraw Method",
-      },
     };
   },
   mixins: [utilitiesMixin],
@@ -137,22 +143,18 @@ export default {
         .get(REQUEST_URL)
         .then((response) => {
           this.transactions = response.data.withdraws;
+          this.withdrawData = response.data.user_withdrawal;
         })
         .catch((error) => {
           console.log(error);
         });
     },
 
-    initiate_withdrawal() {
-      if (!this.formValid) {
-        return false;
-      }
-
+    initiate_withdrawal(id) {
       this.requesting = true;
       const formdata = new FormData();
-      formdata.append("coin", this.form.withdrawalMethod);
-      formdata.append("withdraw_from", this.form.withdrawAccount);
-      formdata.append("amount", this.form.amount);
+
+      formdata.append("id", id);
 
       const REQUEST_URL = "withdraw";
       axios({
@@ -164,12 +166,33 @@ export default {
         },
       })
         .then((response) => {
-          this.handle_withdraw_response(response.data);
+          this.handle_response(response.data);
         })
         .catch((e) => console.log(e));
     },
 
-    handle_withdraw_response(response_data) {
+    initiate_invest(id) {
+      this.requesting = true;
+      const formdata = new FormData();
+
+      formdata.append("id", id);
+
+      const REQUEST_URL = "reinvest";
+      axios({
+        url: REQUEST_URL,
+        method: "POST",
+        data: formdata,
+        headers: {
+          "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+      })
+        .then((response) => {
+          this.handle_response(response.data);
+        })
+        .catch((e) => console.log(e));
+    },
+
+    handle_response(response_data) {
       if (response_data.status === "error") {
         this.message = response_data.message;
         this.alert = true;
@@ -189,3 +212,15 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.card-withdraws {
+  height: 30rem;
+  overflow: auto;
+
+  .date {
+    span {
+      font-size: 0.8rem;
+    }
+  }
+}
+</style>

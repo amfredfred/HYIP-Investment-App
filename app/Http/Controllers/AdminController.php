@@ -738,8 +738,8 @@ class AdminController extends Controller {
             $greeting = 'Hello ' . $payment->user->first_name . ' ' . $payment->user->last_name . ',';
             $message = 'You invested ' . '$' . $payment->amount . " using " . $name . "  Under " . $payment->plan->name . ".";
 
-            Notification::route('mail', $email)
-                    ->notify(new PlanDepositMail($greeting, $subject, $message));
+            /* Notification::route('mail', $email) */
+            /*         ->notify(new PlanDepositMail($greeting, $subject, $message)); */
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();

@@ -84,7 +84,7 @@ class CronJobController extends Controller {
                         ]);
                         $text_p = "You’ve earned a profit of $$daily_profit and it has been credited to your account.";
 
-                        $this->sendMail($invest->user->email, $invest->user->first_name, 'Profit Notification', $text_p);
+                        /* $this->sendMail($invest->user->email, $invest->user->first_name, 'Profit Notification', $text_p); */
                     } else {
 
                         //usercoin 
@@ -117,7 +117,7 @@ class CronJobController extends Controller {
                             'description' => 'You Investment Amount Returned  Under ' . $invest->plan->name
                         ]);
                         $text = "Your investment of $$invest->amount have been returned.";
-                        $this->sendMail($invest->user->email, $invest->user->first_name, 'Investment  Completed.', $text);
+                        /* $this->sendMail($invest->user->email, $invest->user->first_name, 'Investment  Completed.', $text); */
                     }
                 }
             } else {
