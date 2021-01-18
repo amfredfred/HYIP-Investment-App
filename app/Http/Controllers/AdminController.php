@@ -29,6 +29,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use CountryState;
 use App\HomePageText;
 use Bitly;
+use App\UserWithdrawal;
 
 class AdminController extends Controller {
 
@@ -688,7 +689,7 @@ class AdminController extends Controller {
             if ($actionb == 'dash_address') {
                 $name = 'Dash';
             }
-           
+
             $user_ref = Reference::whereReferred_id($payment->user_id)->first();
             if (is_object($user_ref)) {
                 //plan ref percentage
@@ -697,6 +698,15 @@ class AdminController extends Controller {
                 if (is_object($pay)) {
                     $pay->bonus = $pay->bonus + $bonus;
                     $pay->save();
+                    //user withdrawal
+                    $user_withdraw = new UserWithdrawal();
+                    $user_withdraw->amount = $bonus;
+                    $user_withdraw->user_id = $user_ref->user_id;
+                    $user_withdraw->coin_id = $payment->coin_id;
+                    $user_withdraw->type = "Referral Bonus";
+                    $user_withdraw->status = true;
+                    $user_withdraw->plan_id = $payment->plan_id;
+                    $user_withdraw->save();
                     //transcation log
                     Transaction::create([
                         'user_id' => $user_ref->user_id,

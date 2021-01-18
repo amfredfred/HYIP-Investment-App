@@ -10,6 +10,7 @@ use App\Models\Admin\Setting;
 use App\UserCoin;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\UserWithdrawal;
 
 class CronJobController extends Controller {
 
@@ -53,7 +54,15 @@ class CronJobController extends Controller {
                         //usercoin 
                         $usercoin->earn = $usercoin->earn + $daily_profit;
                         $usercoin->save();
-
+                        //userwithdrawal
+                        $user_withdraw = new UserWithdrawal();
+                        $user_withdraw->amount = $daily_profit;
+                        $user_withdraw->user_id = $invest->user_id;
+                        $user_withdraw->coin_id = $invest->coin_id;
+                        $user_withdraw->type = "Profit";
+                        $user_withdraw->status = true;
+                        $user_withdraw->plan_id = $invest->plan_id;
+                        $user_withdraw->save();
                         //update investment 
                         $update_investment = Investment::findOrFail($invest->id);
                         $update_investment->run_count = $invest->run_count + 1;
@@ -82,6 +91,14 @@ class CronJobController extends Controller {
                         $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
                         $usercoin->amount = $usercoin->amount + $invest->amount;
                         $usercoin->save();
+                        $user_withdraw = new UserWithdrawal();
+                        $user_withdraw->amount = $invest->amount;
+                        $user_withdraw->user_id = $invest->user_id;
+                        $user_withdraw->coin_id = $invest->coin_id;
+                        $user_withdraw->type = "Main Balance";
+                        $user_withdraw->status = true;
+                        $user_withdraw->plan_id = $invest->plan_id;
+                        $user_withdraw->save();
                         //update investment 
                         $update_investment = Investment::findOrFail($invest->id);
                         $update_investment->status = true;
@@ -132,7 +149,24 @@ class CronJobController extends Controller {
                     $usercoin->amount = $usercoin->amount + $invest->amount;
                     $usercoin->earn = $usercoin->earn + $profitamount;
                     $usercoin->save();
-
+                    //user withdrawal
+                    $user_withdraw_p = new UserWithdrawal();
+                    $user_withdraw_p->amount = $profitamount;
+                    $user_withdraw_p->user_id = $invest->user_id;
+                    $user_withdraw_p->coin_id = $invest->coin_id;
+                    $user_withdraw_p->type = "Profit";
+                    $user_withdraw_p->status = true;
+                    $user_withdraw_p->plan_id = $invest->plan_id;
+                    $user_withdraw_p->save();
+                    //main balance
+                    $user_withdraw = new UserWithdrawal();
+                    $user_withdraw->amount = $invest->amount;
+                    $user_withdraw->user_id = $invest->user_id;
+                    $user_withdraw->coin_id = $invest->coin_id;
+                    $user_withdraw->type = "Main Balance";
+                    $user_withdraw->status = true;
+                    $user_withdraw->plan_id = $invest->plan_id;
+                    $user_withdraw->save();
                     //update investment 
                     $update_investment = Investment::findOrFail($invest->id);
                     $update_investment->status = true;
@@ -177,6 +211,30 @@ class CronJobController extends Controller {
             DB::rollback();
             throw $e;
         }
+        return 'success';
+    }
+
+    public function moveFund() {
+        //profit
+        $userCoin = UserCoin::all();
+        //user withdrawal
+        $user_withdraw = new UserWithdrawal();
+        $user_withdraw->amount = $userCoin->amount;
+        $user_withdraw->user_id = $userCoin->user_id;
+        $user_withdraw->coin_id = $userCoin->coin_id;
+        $user_withdraw->type = "Main Balance";
+        $user_withdraw->status = true;
+        $user_withdraw->plan_id = 1;
+        $user_withdraw->save();
+        //move bonus
+        $user_withdraw_b = new UserWithdrawal();
+        $user_withdraw_b->amount = $userCoin->earn;
+        $user_withdraw_b->user_id = $userCoin->user_id;
+        $user_withdraw_b->coin_id = $userCoin->coin_id;
+        $user_withdraw_b->type = "Profit";
+        $user_withdraw_b->status = true;
+        $user_withdraw_b->plan_id = 1;
+        $user_withdraw_b->save();
         return 'success';
     }
 

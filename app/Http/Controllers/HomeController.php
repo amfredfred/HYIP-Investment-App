@@ -28,6 +28,7 @@ use CountryState;
 use App\Library\IPTranslate\GeoPluginApi;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Session;
+use App\UserWithdrawal;
 
 class HomeController extends Controller {
 
@@ -529,12 +530,7 @@ class HomeController extends Controller {
     }
 
     public function withdraw() {
-        $data['total_balance'] = UserCoin::whereUser_id(Auth::user()->id)->sum('amount');
-        $data['total_earn'] = UserCoin::whereUser_id(Auth::user()->id)->sum('earn');
-        $data['total_earn_s'] = UserCoin::whereUser_id(Auth::user()->id)->sum('earn_promo');
-        $data['total_bonus'] = UserCoin::whereUser_id(Auth::user()->id)->sum('bonus');
-        $data['pending_withdraw'] = Withdraw::whereUser_id(Auth::user()->id)->whereStatus(0)->sum('amount');
-        $data['usercoin'] = UserCoin::whereUser_id(Auth::user()->id)->with('coin')->get();
+        $data['user_withdrawal'] = UserWithdrawal::whereUser_id(Auth::user()->id)->whereStatus(true)->get();
         $data['withdraws'] = Withdraw::whereUser_id(Auth::user()->id)->whereStatus(true)->with('coin')->orderBy('created_at', 'desc')->paginate(10);
         return $data;
     }

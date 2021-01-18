@@ -7002,7 +7002,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "status"
       }],
       transactions: [],
-      balance_details: {},
       alert: false,
       message: "",
       messageType: "",
@@ -7028,8 +7027,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var REQUEST_URL = "/withdraw";
       axios.get(REQUEST_URL).then(function (response) {
-        _this.balance_details = response.data;
-        _this.withdrawalMethod = response.data.usercoin;
         _this.transactions = response.data.withdraws;
       })["catch"](function (error) {
         console.log(error);
@@ -20143,7 +20140,7 @@ var staticRenderFns = [
       ]),
       _vm._v(" "),
       _c("button", { staticClass: "px-4 btn btn-primary" }, [
-        _vm._v("Reinvest")
+        _vm._v("Re-invest")
       ])
     ])
   }

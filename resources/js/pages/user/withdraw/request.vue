@@ -23,7 +23,7 @@
                   <div class="details">
                     <h5 class="mb-4">$300</h5>
                     <button class="px-4 mr-2 btn btn-success">Withdraw</button>
-                    <button class="px-4 btn btn-primary">Reinvest</button>
+                    <button class="px-4 btn btn-primary">Re-invest</button>
                   </div>
                 </div>
               </div>
@@ -113,7 +113,6 @@ export default {
       ],
 
       transactions: [],
-      balance_details: {},
 
       alert: false,
       message: "",
@@ -137,8 +136,6 @@ export default {
       axios
         .get(REQUEST_URL)
         .then((response) => {
-          this.balance_details = response.data;
-          this.withdrawalMethod = response.data.usercoin;
           this.transactions = response.data.withdraws;
         })
         .catch((error) => {
