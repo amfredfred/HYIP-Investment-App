@@ -32656,8 +32656,8 @@ var user_routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/melo/projects/braveisnt/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/melo/projects/braveisnt/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\naijacrawl soft\newJide_coin\new_jide_coin\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\naijacrawl soft\newJide_coin\new_jide_coin\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
