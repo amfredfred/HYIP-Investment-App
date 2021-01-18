@@ -10,47 +10,26 @@
             <v-icon @click="alert = false">fa fa-close</v-icon>
           </template>
         </v-alert>
-        <v-form v-model="formValid" ref="withdrawForm">
-          <v-text-field
-            v-model="form.amount"
-            type="number"
-            color="blue darken-2"
-            label="Amount"
-            required
-            :rules="[rules.amount]"
-          ></v-text-field>
-          <v-select
-            v-model="form.withdrawAccount"
-            :items="withdrawAccount"
-            item-text="name"
-            item-value="number"
-            label="Withdrawal Account"
-            single-line
-            outlined
-            :rules="[rules.account]"
-            required
-          ></v-select>
-          <v-select
-            :items="withdrawalMethod"
-            item-text="coin.name"
-            item-value="coin_id"
-            label="Withdrawal Method"
-            v-model="form.withdrawalMethod"
-            single-line
-            outlined
-            :rules="[rules.method]"
-            required
-          ></v-select>
-          <v-btn
-            :loading="requesting"
-            :disabled="requesting"
-            color="blue darken-3 large blue--text text--lighten-5"
-            @click="initiate_withdrawal()"
-          >
-            Request Withdrawal
-            <v-icon class="ml-2 text-lg">fa fa-credit-card</v-icon>
-          </v-btn>
-        </v-form>
+        <section class="card-wthdrawls">
+          <div v-for="(account, index) in withdrawAccount" :key="index">
+            <div class="p-3 mb-3 bg-white rounded shadow-sm">
+              <h6 class="text-sm text-black-50">{{account.name}}</h6>
+
+              <div class="mt-4">
+                <div class="px-3 row">
+                  <div class="mr-5 icon">
+                    <i class="fa text-info" :class="account.icon"></i>
+                  </div>
+                  <div class="details">
+                    <h5 class="mb-4">$300</h5>
+                    <button class="px-4 mr-2 btn btn-success">Withdraw</button>
+                    <button class="px-4 btn btn-primary">Reinvest</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <v-dialog v-model="dialogShown" width="500">
           <v-card>
@@ -109,9 +88,9 @@ export default {
       withdrawalMethod: [],
 
       withdrawAccount: [
-        { name: "Main Balance", number: 2 },
-        { name: "Profit Balance", number: 3 },
-        { name: "Referral Bonus", number: 4 },
+        { name: "Main Balance", number: 2, icon: "fa-industry" },
+        { name: "Profit Balance", number: 3, icon: "fa-life-ring" },
+        { name: "Referral Bonus", number: 4, icon: "fa-magnet" },
       ],
 
       tableHeaders: [
