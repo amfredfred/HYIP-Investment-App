@@ -10,14 +10,26 @@
             <v-icon @click="alert = false">fa fa-close</v-icon>
           </template>
         </v-alert>
-        <section class="card-wthdrawls">
+        <section class="card-withdraws">
+          <div class="alert alert-danger" v-if="errorMessage.length" role="alert">
+            {{errorMessage}}
+            <button
+              type="button"
+              class="close"
+              aria-label="Close"
+              @click="errorMessage = ''"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
           <div
             v-if="withdrawData.length <= 0"
-            class="p-3 text-black-50 mb-3 bg-white rounded text-center shadow-sm"
+            class="p-3 mb-3 text-center bg-white rounded text-black-50 shadow-sm"
           >
             <span>Nothing to withdraw yet ...</span>
           </div>
-          <div v-for="(account, index) in withdrawData" :key="index">
+          <div v-for="(account, index) in withdrawData" :key="account.id">
             <div class="p-3 mb-3 bg-white rounded shadow-sm">
               <h6 class="text-sm text-black-50">{{ account.type }}</h6>
 
@@ -25,28 +37,26 @@
                 <div class="px-3 row">
                   <!-- <div class="mr-5 icon">
                     <i class="fa text-info" :class="withdrawIcons[index].icon"></i>
-                  </div> -->
+                  </div>-->
                   <div class="details">
                     <h5 class="mb-2">${{ account.amount }}</h5>
-                    <div class="date mb-4">
-                      <span class="text-secondary">{{
+                    <div class="mb-4 date">
+                      <span class="text-secondary">
+                        {{
                         account.created_at | formatDate
-                      }}</span>
+                        }}
+                      </span>
                     </div>
                     <button
-                      @click.prevent="initiate_withdrawal(account.id)"
+                      @click.prevent="initiate_withdrawal(account.id, index)"
                       class="px-4 mr-2 btn btn-success"
                       :disabled="requesting"
-                    >
-                      Withdraw
-                    </button>
+                    >Withdraw</button>
                     <button
-                      @click.prevent="initiate_invest(account.id)"
+                      @click.prevent="initiate_invest(account.id, index)"
                       class="px-4 btn btn-primary"
                       :disabled="requesting"
-                    >
-                      Re-invest
-                    </button>
+                    >Re-invest</button>
                   </div>
                 </div>
               </div>
@@ -56,25 +66,15 @@
 
         <v-dialog v-model="dialogShown" width="500">
           <v-card>
-            <v-card-title class="text-gray-600 headline grey lighten-2"
-              >Request Made</v-card-title
-            >
+            <v-card-title class="text-gray-600 headline grey lighten-2">Request Made</v-card-title>
 
-            <v-card-text class="mt-3">
-              Your withdraw request has been made and is being processed
-            </v-card-text>
+            <v-card-text class="mt-3">Your withdraw request has been made and is being processed</v-card-text>
 
             <v-divider></v-divider>
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
-                color="green darken-2"
-                dark
-                text
-                @click="dialogShown = false"
-                >Okay</v-btn
-              >
+              <v-btn color="green darken-2" dark text @click="dialogShown = false">Okay</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -90,16 +90,14 @@
         :items-per-page="5"
         class="elevation-1"
       >
-        <template #item.created_at="{ item }">{{
+        <template #item.created_at="{ item }">
+          {{
           item.created_at | formatDate
-        }}</template>
+          }}
+        </template>
         <template #item.status="{ item }">
-          <v-chip v-if="item.status == 1" color="green" text-color="white"
-            >Completed</v-chip
-          >
-          <v-chip v-if="item.status == 0" color="yellow" text-color="white"
-            >Pending</v-chip
-          >
+          <v-chip v-if="item.status == 1" color="green" text-color="white">Completed</v-chip>
+          <v-chip v-if="item.status == 0" color="yellow" text-color="white">Pending</v-chip>
         </template>
       </v-data-table>
     </section>
@@ -152,6 +150,8 @@ export default {
       messageType: "",
 
       requesting: false,
+
+      errorMessage: "",
     };
   },
   mixins: [utilitiesMixin],
@@ -169,7 +169,7 @@ export default {
         });
     },
 
-    initiate_withdrawal(id) {
+    initiate_withdrawal(id, index) {
       this.requesting = true;
       const formdata = new FormData();
 
@@ -185,12 +185,12 @@ export default {
         },
       })
         .then((response) => {
-          this.handle_response(response.data);
+          this.handleWithdrawResponse(response.data, index);
         })
         .catch((e) => console.log(e));
     },
 
-    initiate_invest(id) {
+    initiate_invest(id, index) {
       this.requesting = true;
       const formdata = new FormData();
 
@@ -206,21 +206,41 @@ export default {
         },
       })
         .then((response) => {
-          this.handle_response(response.data);
+          this.handleInvestResponse(response.data, index);
         })
-        .catch((e) => console.log(e));
+        .catch((e) => {
+          console.log(e);
+          this.errorMessage = "Could not perform this action";
+          this.requesting = false;
+        });
     },
 
-    handle_response(response_data) {
+    handleWithdrawResponse(response_data, index) {
       if (response_data.status === "error") {
         this.message = response_data.message;
         this.alert = true;
         this.requesting = false;
         return;
       }
-    
-      this.updateWithdrawData(response_data);
-      this.$router.push({ name: "confirmWithdraw" });
+
+      this.removeWithdrawData(index);
+      this.dialogShown = true;
+    },
+
+    handleInvestResponse(response_data, index) {
+      if (response_data.status === "error") {
+        this.message = response_data.message;
+        this.alert = true;
+        this.requesting = false;
+        return;
+      }
+
+      this.removeWithdrawData(index);
+      this.$router.push({ name: "successfulInvest" });
+    },
+
+    removeWithdrawData(index) {
+      this.withdrawData.splice(index, 1);
     },
 
     ...mapMutations("user", ["updateWithdrawData"]),
@@ -233,7 +253,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .card-withdraws {
-  height: 30rem;
+  height: 15rem;
+  max-height: 15rem;
   overflow: auto;
 
   .date {

@@ -6996,8 +6996,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7031,7 +7029,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       alert: false,
       message: "",
       messageType: "",
-      requesting: false
+      requesting: false,
+      errorMessage: ""
     };
   },
   mixins: [_mixins_utilitiesMixin__WEBPACK_IMPORTED_MODULE_1__["default"]],
@@ -7047,7 +7046,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(error);
       });
     },
-    initiate_withdrawal: function initiate_withdrawal(id) {
+    initiate_withdrawal: function initiate_withdrawal(id, index) {
       var _this2 = this;
 
       this.requesting = true;
@@ -7062,12 +7061,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
         }
       }).then(function (response) {
-        _this2.handle_response(response.data);
+        _this2.handleWithdrawResponse(response.data, index);
       })["catch"](function (e) {
         return console.log(e);
       });
     },
-    initiate_invest: function initiate_invest(id) {
+    initiate_invest: function initiate_invest(id, index) {
       var _this3 = this;
 
       this.requesting = true;
@@ -7082,12 +7081,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
         }
       }).then(function (response) {
-        _this3.handle_response(response.data);
+        _this3.handleInvestResponse(response.data, index);
       })["catch"](function (e) {
-        return console.log(e);
+        console.log(e);
+        _this3.errorMessage = "Could not perform this action";
+        _this3.requesting = false;
       });
     },
-    handle_response: function handle_response(response_data) {
+    handleWithdrawResponse: function handleWithdrawResponse(response_data, index) {
       if (response_data.status === "error") {
         this.message = response_data.message;
         this.alert = true;
@@ -7095,10 +7096,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.updateWithdrawData(response_data);
+      this.removeWithdrawData(index);
+      this.dialogShown = true;
+    },
+    handleInvestResponse: function handleInvestResponse(response_data, index) {
+      if (response_data.status === "error") {
+        this.message = response_data.message;
+        this.alert = true;
+        this.requesting = false;
+        return;
+      }
+
+      this.removeWithdrawData(index);
       this.$router.push({
-        name: "confirmWithdraw"
+        name: "successfulInvest"
       });
+    },
+    removeWithdrawData: function removeWithdrawData(index) {
+      this.withdrawData.splice(index, 1);
     }
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])("user", ["updateWithdrawData"])),
   mounted: function mounted() {
@@ -7500,7 +7515,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".card-withdraws[data-v-677b2c96] {\n  height: 30rem;\n  overflow: auto;\n}\n.card-withdraws .date span[data-v-677b2c96] {\n  font-size: 0.8rem;\n}", ""]);
+exports.push([module.i, ".card-withdraws[data-v-677b2c96] {\n  height: 15rem;\n  max-height: 15rem;\n  overflow: auto;\n}\n.card-withdraws .date span[data-v-677b2c96] {\n  font-size: 0.8rem;\n}", ""]);
 
 // exports
 
@@ -8960,7 +8975,7 @@ var render = function() {
               "v-list",
               [
                 _c("v-list-item", { staticClass: "mb-10 text-lg" }, [
-                  _c("a", { attrs: { href: "/logout" } }, [
+                  _c("a", { attrs: { href: "/user-logout" } }, [
                     _c("i", { staticClass: "mr-3 fa fa-power-off" }),
                     _vm._v("\n            Logout\n          ")
                   ])
@@ -20057,21 +20072,55 @@ var render = function() {
           _vm._v(" "),
           _c(
             "section",
-            { staticClass: "card-wthdrawls" },
+            { staticClass: "card-withdraws" },
             [
+              _vm.errorMessage.length
+                ? _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _vm._v(
+                        "\n          " +
+                          _vm._s(_vm.errorMessage) +
+                          "\n          "
+                      ),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "close",
+                          attrs: { type: "button", "aria-label": "Close" },
+                          on: {
+                            click: function($event) {
+                              _vm.errorMessage = ""
+                            }
+                          }
+                        },
+                        [
+                          _c("span", { attrs: { "aria-hidden": "true" } }, [
+                            _vm._v("×")
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _vm.withdrawData.length <= 0
                 ? _c(
                     "div",
                     {
                       staticClass:
-                        "p-3 text-black-50 mb-3 bg-white rounded text-center shadow-sm"
+                        "p-3 mb-3 text-center bg-white rounded text-black-50 shadow-sm"
                     },
                     [_c("span", [_vm._v("Nothing to withdraw yet ...")])]
                   )
                 : _vm._e(),
               _vm._v(" "),
               _vm._l(_vm.withdrawData, function(account, index) {
-                return _c("div", { key: index }, [
+                return _c("div", { key: account.id }, [
                   _c(
                     "div",
                     { staticClass: "p-3 mb-3 bg-white rounded shadow-sm" },
@@ -20087,12 +20136,14 @@ var render = function() {
                               _vm._v("$" + _vm._s(account.amount))
                             ]),
                             _vm._v(" "),
-                            _c("div", { staticClass: "date mb-4" }, [
+                            _c("div", { staticClass: "mb-4 date" }, [
                               _c("span", { staticClass: "text-secondary" }, [
                                 _vm._v(
-                                  _vm._s(
-                                    _vm._f("formatDate")(account.created_at)
-                                  )
+                                  "\n                      " +
+                                    _vm._s(
+                                      _vm._f("formatDate")(account.created_at)
+                                    ) +
+                                    "\n                    "
                                 )
                               ])
                             ]),
@@ -20105,15 +20156,14 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     $event.preventDefault()
-                                    return _vm.initiate_withdrawal(account.id)
+                                    return _vm.initiate_withdrawal(
+                                      account.id,
+                                      index
+                                    )
                                   }
                                 }
                               },
-                              [
-                                _vm._v(
-                                  "\n                    Withdraw\n                  "
-                                )
-                              ]
+                              [_vm._v("Withdraw")]
                             ),
                             _vm._v(" "),
                             _c(
@@ -20124,15 +20174,14 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     $event.preventDefault()
-                                    return _vm.initiate_invest(account.id)
+                                    return _vm.initiate_invest(
+                                      account.id,
+                                      index
+                                    )
                                   }
                                 }
                               },
-                              [
-                                _vm._v(
-                                  "\n                    Re-invest\n                  "
-                                )
-                              ]
+                              [_vm._v("Re-invest")]
                             )
                           ])
                         ])
@@ -20169,7 +20218,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-card-text", { staticClass: "mt-3" }, [
                     _vm._v(
-                      "\n            Your withdraw request has been made and is being processed\n          "
+                      "Your withdraw request has been made and is being processed"
                     )
                   ]),
                   _vm._v(" "),
@@ -20230,7 +20279,13 @@ var render = function() {
               key: "item.created_at",
               fn: function(ref) {
                 var item = ref.item
-                return [_vm._v(_vm._s(_vm._f("formatDate")(item.created_at)))]
+                return [
+                  _vm._v(
+                    "\n        " +
+                      _vm._s(_vm._f("formatDate")(item.created_at)) +
+                      "\n      "
+                  )
+                ]
               }
             },
             {
@@ -32719,8 +32774,8 @@ var user_routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\naijacrawl soft\newJide_coin\new_jide_coin\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\naijacrawl soft\newJide_coin\new_jide_coin\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/melo/projects/braveisnt/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/melo/projects/braveisnt/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

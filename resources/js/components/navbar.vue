@@ -37,7 +37,7 @@
 
         <v-list>
           <v-list-item class="mb-10 text-lg">
-            <a href="/logout">
+            <a href="/user-logout">
               <i class="mr-3 fa fa-power-off"></i>
               Logout
             </a>
