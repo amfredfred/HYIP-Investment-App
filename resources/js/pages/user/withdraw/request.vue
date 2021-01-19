@@ -224,7 +224,8 @@ export default {
       }
 
       this.removeWithdrawData(index);
-      this.dialogShown = true;
+      this.updateWithdrawData(response_data);
+      this.$router.push({ name: "confirmWithdraw" });
     },
 
     handleInvestResponse(response_data, index) {

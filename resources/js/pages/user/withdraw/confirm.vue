@@ -4,6 +4,17 @@
 
     <section>
       <v-col cols="12" sm="8" md="4">
+        <div class="alert mb-3 alert-danger" v-if="errorMessage.length" role="alert">
+          {{errorMessage}}
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            @click="errorMessage = ''"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <v-card class="shadow-sm">
           <v-row>
             <v-col cols="7">
@@ -41,7 +52,11 @@
             <v-btn text color="grey darken-3" :to="{name: 'Withdraw'}">Back</v-btn>
           </div>
           <div class="inline-block">
-            <v-btn class="text-green-100 bg-green-800" @click="withdrawal_confirmation()">Confirm</v-btn>
+            <v-btn
+              class="text-green-100 bg-green-800"
+              :loading="confirming"
+              @click="withdrawal_confirmation()"
+            >Confirm</v-btn>
           </div>
         </div>
       </v-col>
@@ -58,6 +73,7 @@ export default {
     return {
       confirming: false,
       message: "",
+      errorMessage: "",
       alert: false,
     };
   },
@@ -84,12 +100,13 @@ export default {
           }
 
           this.confirmSuccess = true;
+          this.goBack();
         })
         .catch((error) => {
-          this.error_message =
+          this.errorMessage =
             "We cannot proccess your request at this time, please try again later";
           this.error_making_withdraw = true;
-          this.loading_data = false;
+          this.confirming = false;
         });
     },
 

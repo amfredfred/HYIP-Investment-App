@@ -6822,6 +6822,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "confirmWithdraw",
@@ -6829,6 +6844,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       confirming: false,
       message: "",
+      errorMessage: "",
       alert: false
     };
   },
@@ -6856,10 +6872,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         _this.confirmSuccess = true;
+
+        _this.goBack();
       })["catch"](function (error) {
-        _this.error_message = "We cannot proccess your request at this time, please try again later";
+        _this.errorMessage = "We cannot proccess your request at this time, please try again later";
         _this.error_making_withdraw = true;
-        _this.loading_data = false;
+        _this.confirming = false;
       });
     },
     goBack: function goBack() {
@@ -7097,7 +7115,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       this.removeWithdrawData(index);
-      this.dialogShown = true;
+      this.updateWithdrawData(response_data);
+      this.$router.push({
+        name: "confirmWithdraw"
+      });
     },
     handleInvestResponse: function handleInvestResponse(response_data, index) {
       if (response_data.status === "error") {
@@ -19853,6 +19874,38 @@ var render = function() {
           "v-col",
           { attrs: { cols: "12", sm: "8", md: "4" } },
           [
+            _vm.errorMessage.length
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert mb-3 alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _vm._v(
+                      "\n        " + _vm._s(_vm.errorMessage) + "\n        "
+                    ),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "close",
+                        attrs: { type: "button", "aria-label": "Close" },
+                        on: {
+                          click: function($event) {
+                            _vm.errorMessage = ""
+                          }
+                        }
+                      },
+                      [
+                        _c("span", { attrs: { "aria-hidden": "true" } }, [
+                          _vm._v("×")
+                        ])
+                      ]
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c(
               "v-card",
               { staticClass: "shadow-sm" },
@@ -19984,6 +20037,7 @@ var render = function() {
                     "v-btn",
                     {
                       staticClass: "text-green-100 bg-green-800",
+                      attrs: { loading: _vm.confirming },
                       on: {
                         click: function($event) {
                           return _vm.withdrawal_confirmation()
