@@ -7536,7 +7536,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".card-withdraws[data-v-677b2c96] {\n  height: 15rem;\n  max-height: 15rem;\n  overflow: auto;\n}\n.card-withdraws .date span[data-v-677b2c96] {\n  font-size: 0.8rem;\n}", ""]);
+exports.push([module.i, ".card-withdraws[data-v-677b2c96] {\n  height: 40rem;\n  max-height: 40rem;\n  overflow: auto;\n}\n.card-withdraws .date span[data-v-677b2c96] {\n  font-size: 0.8rem;\n}", ""]);
 
 // exports
 
@@ -32828,8 +32828,8 @@ var user_routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/melo/projects/braveisnt/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/melo/projects/braveisnt/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\naijacrawl soft\newJide_coin\new_jide_coin\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\naijacrawl soft\newJide_coin\new_jide_coin\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

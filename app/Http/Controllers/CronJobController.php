@@ -50,10 +50,10 @@ class CronJobController extends Controller {
                         $profit = $invest->amount * $invest->plan->percentage / 100;
                         // / $c
                         $daily_profit = $profit;
-                        $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
-                        //usercoin 
-                        $usercoin->earn = $usercoin->earn + $daily_profit;
-                        $usercoin->save();
+//                        $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
+//                        //usercoin 
+//                        $usercoin->earn = $usercoin->earn + $daily_profit;
+//                        $usercoin->save();
                         //userwithdrawal
                         $user_withdraw = new UserWithdrawal();
                         $user_withdraw->amount = $daily_profit;
@@ -84,13 +84,13 @@ class CronJobController extends Controller {
                         ]);
                         $text_p = "You’ve earned a profit of $$daily_profit and it has been credited to your account.";
 
-                        /* $this->sendMail($invest->user->email, $invest->user->first_name, 'Profit Notification', $text_p); */
+                        $this->sendMail($invest->user->email, $invest->user->first_name, 'Profit Notification', $text_p); 
                     } else {
 
-                        //usercoin 
-                        $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
-                        $usercoin->amount = $usercoin->amount + $invest->amount;
-                        $usercoin->save();
+//                        //usercoin 
+//                        $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
+//                        $usercoin->amount = $usercoin->amount + $invest->amount;
+//                        $usercoin->save();
                         $user_withdraw = new UserWithdrawal();
                         $user_withdraw->amount = $invest->amount;
                         $user_withdraw->user_id = $invest->user_id;
@@ -117,7 +117,7 @@ class CronJobController extends Controller {
                             'description' => 'You Investment Amount Returned  Under ' . $invest->plan->name
                         ]);
                         $text = "Your investment of $$invest->amount have been returned.";
-                        /* $this->sendMail($invest->user->email, $invest->user->first_name, 'Investment  Completed.', $text); */
+                        $this->sendMail($invest->user->email, $invest->user->first_name, 'Investment  Completed.', $text); 
                     }
                 }
             } else {
@@ -145,10 +145,10 @@ class CronJobController extends Controller {
                     $usercoin = UserCoin::whereCoin_id($invest->coin_id)->whereUser_id($invest->user_id)->first();
 
                     $profitamount = $invest->amount * $invest->plan->percentage / 100;
-                    //usercoin 
-                    $usercoin->amount = $usercoin->amount + $invest->amount;
-                    $usercoin->earn = $usercoin->earn + $profitamount;
-                    $usercoin->save();
+//                    //usercoin 
+//                    $usercoin->amount = $usercoin->amount + $invest->amount;
+//                    $usercoin->earn = $usercoin->earn + $profitamount;
+//                    $usercoin->save();
                     //user withdrawal
                     $user_withdraw_p = new UserWithdrawal();
                     $user_withdraw_p->amount = $profitamount;

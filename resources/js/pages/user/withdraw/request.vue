@@ -254,8 +254,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .card-withdraws {
-  height: 15rem;
-  max-height: 15rem;
+  height: 40rem;
+  max-height: 40rem;
   overflow: auto;
 
   .date {

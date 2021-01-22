@@ -761,7 +761,7 @@ class AdminController extends Controller {
             $url_path = url('manage-withdraw?type=' . $request->type);
         }
         if ($request->type == '') {
-            $items = Withdraw::with('coin', 'user')->whereStatus(true)->orderBy('created_at', 'desc')->get();
+            $items = Withdraw::with('coin', 'user')->orderBy('created_at', 'desc')->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -841,44 +841,40 @@ class AdminController extends Controller {
                 $name = 'Dash wallet address';
             }
             $amount = $withdraw->amount - $withdraw->withdraw_charge;
-            foreach ($withdraw->user->coin as $ucoin) {
-                if ($withdraw->coin_id == $ucoin->coin_id) {
-
-                    $address = $ucoin->address;
-                }
-            }
-            $sub = UserCoin::whereUser_id($withdraw->user_id)->whereCoin_id($withdraw->coin_id)->first();
-            if ($withdraw->withdraw_from == 'Balance') {
-                $sub->update([
-                    'amount' => $sub->amount - $withdraw->total_amount
-                ]);
-            }
-            if ($withdraw->withdraw_from == 'Profit Balance') {
-                $sub->update([
-                    'earn' => $sub->earn - $withdraw->total_amount
-                ]);
-            }
-            if ($withdraw->withdraw_from == 'Special Balance') {
-                $sub->update([
-                    'earn_promo' => $sub->earn_promo - $withdraw->total_amount
-                ]);
-            }
-            if ($withdraw->withdraw_from == 'Referral Bonus') {
-                $s = $sub->bonus - $withdraw->total_amount;
-                $sub = UserCoin::whereUser_id($withdraw->user_id)->whereCoin_id($withdraw->coin_id)->update([
-                    'bonus' => $s
-                ]);
-            }
-
-            if ($withdraw->withdraw_from == 'All') {
-                $s = $sub->bonus - $withdraw->total_amount;
-                $sub = UserCoin::whereUser_id($withdraw->user_id)->whereCoin_id($withdraw->coin_id)->update([
-                    'amount' => 0,
-                    'bonus' => 0,
-                    'earn' => 0,
-                    'earn_promo' => 0,
-                ]);
-            }
+             $address = $withdraw->usercoin->address;
+            
+//            $sub = UserCoin::whereUser_id($withdraw->user_id)->whereCoin_id($withdraw->coin_id)->first();
+//            if ($withdraw->withdraw_from == 'Balance') {
+//                $sub->update([
+//                    'amount' => $sub->amount - $withdraw->total_amount
+//                ]);
+//            }
+//            if ($withdraw->withdraw_from == 'Profit Balance') {
+//                $sub->update([
+//                    'earn' => $sub->earn - $withdraw->total_amount
+//                ]);
+//            }
+//            if ($withdraw->withdraw_from == 'Special Balance') {
+//                $sub->update([
+//                    'earn_promo' => $sub->earn_promo - $withdraw->total_amount
+//                ]);
+//            }
+//            if ($withdraw->withdraw_from == 'Referral Bonus') {
+//                $s = $sub->bonus - $withdraw->total_amount;
+//                $sub = UserCoin::whereUser_id($withdraw->user_id)->whereCoin_id($withdraw->coin_id)->update([
+//                    'bonus' => $s
+//                ]);
+//            }
+//
+//            if ($withdraw->withdraw_from == 'All') {
+//                $s = $sub->bonus - $withdraw->total_amount;
+//                $sub = UserCoin::whereUser_id($withdraw->user_id)->whereCoin_id($withdraw->coin_id)->update([
+//                    'amount' => 0,
+//                    'bonus' => 0,
+//                    'earn' => 0,
+//                    'earn_promo' => 0,
+//                ]);
+//            }
             $message = 'Your withdrawal of $' . $amount . ' has been successfully sent to your ' . $name . '  ' . $address . '. ';
 
 //transcation log
