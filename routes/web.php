@@ -90,7 +90,7 @@ Route::group(['middleware' => 'can:isAdmin'], function () {
     Route::get('user-login/{id}', 'AdminController@login')->name('user-login');
     Route::post('blacklist-user', 'AdminController@blackList');
     Route::post('unblacklist-user', 'AdminController@unBlackList');
-
+ Route::get('/users-mail', 'AdminController@usersMail')->name('users-mail');
 //deposit
     Route::get('/manage-deposit', 'AdminController@deposit')->name('manage-deposit');
     Route::post('/delete-deposit', 'AdminController@deleteDeposit')->name('delete-deposit');

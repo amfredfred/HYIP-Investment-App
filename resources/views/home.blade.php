@@ -1,5 +1,5 @@
 @section('title')
-<title>Brvest</title>
+<title>{{ucfirst($settings['site_name'])}}</title>
 @endsection
 @extends('layouts.home')
 @section('content')

@@ -69,6 +69,7 @@ class HomeController extends Controller {
         } else {
             $data['invest'] = false;
         }
+        $data['refs_count'] = number_format(Reference::whereUser_id(Auth::user()->id)->count());
         $data['transaction'] = Transaction::whereUser_id(Auth::user()->id)->whereStatus(true)->orderBy('created_at', 'desc')->take(5)->get();
         $data['investment'] = Investment::whereNotNull('hash')->whereUser_id(Auth::user()->id)->whereStatus_deposit(1)->whereStatus(0)->orderBy('created_at', 'desc')->take(5)->get();
 //admin
@@ -257,44 +258,23 @@ class HomeController extends Controller {
                 $due_pay = null;
                 $txt = strtoupper(Str::random(20));
             }
-            if ($request->transaction_id) {
-//know plan name
+
 //create investment
 
-                $invest = Investment::whereTransaction_id($request->transaction_id)->first();
-                $invest->update([
-                    'transaction_id' => $request->transaction_id,
-                    'user_id' => Auth::user()->id,
-                    'plan_id' => $request->plan_id,
-                    'coin_id' => $request->coin_id,
-                    'amount' => $request->amount,
-                    // 'deposit_investment_charge' => $charge,
-                    'run_count' => 0,
-                    'earn' => 0,
-                    'due_pay' => $due_pay,
-                    'status_deposit' => $status_deposit,
-                    'settled_status' => 0,
-                    'status' => 0
-                ]);
-            } else {
-//create investment
-
-                $invest = Investment::create([
-                            'transaction_id' => $txt,
-                            'user_id' => Auth::user()->id,
-                            'plan_id' => $request->plan_id,
-                            'coin_id' => $request->coin_id,
-                            'amount' => $request->amount,
-                            //'deposit_investment_charge' => $charge,
-                            'run_count' => 0,
-                            'earn' => 0,
-                            'due_pay' => $due_pay,
-                            'status_deposit' => $status_deposit,
-                            'settled_status' => 0,
-                            'status' => 0
-                ]);
-            }
-
+            $invest = Investment::create([
+                        'transaction_id' => $txt,
+                        'user_id' => Auth::user()->id,
+                        'plan_id' => $request->plan_id,
+                        'coin_id' => $request->coin_id,
+                        'amount' => $request->amount,
+                        //'deposit_investment_charge' => $charge,
+                        'run_count' => 0,
+                        'earn' => 0,
+                        'due_pay' => $due_pay,
+                        'status_deposit' => $status_deposit,
+                        'settled_status' => 0,
+                        'status' => 0
+            ]);
             $profit = $invest->amount * $plan->percentage / 100;
 //transcation log
             Transaction::create([
@@ -390,108 +370,107 @@ class HomeController extends Controller {
             $data['plan'] = $plan;
             $data['profit'] = $profit;
             $data['sendaddress'] = $data['name_full'] . ':' . $coin->address;
-
-//send user email
-            if ($data ['fund'] == 'invest') {
-//check reference for bouns
-                $actionb = $invest->coin->slug;
-                if ($actionb == 'bitcoin_address') {
-                    $name = 'Bitcoin';
-                }
-                if ($actionb == 'litecoin_address') {
-
-                    $name = 'Litecoin';
-                }
-                if ($actionb == 'ethereum_address') {
-                    $name = 'Ethereum';
-                }
-                if ($actionb == 'bitcoin_cash_address') {
-                    $name = 'Bitcoin Cash';
-                }
-                if ($actionb == 'dash_address') {
-                    $name = 'Dash';
-                }
-                foreach ($invest->user->coin as $ucoin) {
-                    if ($invest->coin_id == $ucoin->coin_id) {
-
-                        $address = $ucoin->address;
-                    }
-                }
-                $user_ref = Reference::whereReferred_id($invest->user_id)->first();
-                if (is_object($user_ref)) {
-//plan ref percentage
-                    $bonus = $invest->amount * $invest->plan->ref / 100;
-                    $pay = UserCoin::whereUser_id($user_ref->user_id)->whereCoin_id($invest->coin_id)->first();
-                    if (is_object($pay)) {
-                        $pay->bonus = $pay->bonus + $bonus;
-                        $pay->save();
-//transcation log
-                        Transaction::create([
-                            'user_id' => $user_ref->user_id,
-                            'transaction_id' => $invest->transaction_id,
-                            'type' => 'Referral Bonus',
-                            'name_type' => 'Referral Bonus',
-                            'coin_id' => $invest->coin_id,
-                            'amount' => $bonus,
-                            'status' => true,
-                            'amount_profit' => $bonus,
-                            'description' => 'Referral Bonus Under ' . $invest->plan->name
-                        ]);
-                        $user_pay = $user_ref->refs->first_name . ' ' . $user_ref->refs->last_name;
-                        $text = "You earned a referral bonus  of $$bonus for referring  $user_pay.";
-
-
-                        $message = $text;
-
-                        $this->sendMail($pay->user->email, $pay->user->first_name, 'Referral Bonus Notification', $message);
-                    }
-                }
-
-                $greeting = 'Hello ' . Auth::user()->first_name . ' ' . Auth::user()->last_name . ',';
-                $email = Auth::user()->email;
-                $subject = 'New Investment Notification';
-                $message = ' You invested' . '$' . $invest->amount . " using " . $data ['name'] . " Under " . $plan->name . "  .";
-
-                Notification:: route('mail', $email)
-                        ->notify(new PlanDepositMail($greeting, $subject, $message));
-
-                return [
-                    'status' => 'success',
-                    'message' => 'The Deposit Have Been Successfully Saved',
-                    'plan' => $plan,
-                    'invest' => $invest,
-                    'type' => 'invest'
-                ];
-            }
-
-            if ($data ['fund'] == 'fund') {
-                $realcount = number_format(floatval($data['amount_convert']), 8, '.', '');
-                Investment::whereId($invest->id)->update([
-                    'amount_check' => $realcount
-                ]);
-//generate image for QR barcode
-
-                $text = $data['sendaddress'] . '?amount=' . $realcount;
-                $qrCode = new QrCode($text);
-                $qrCode->setSize(300);
-                $qrCode->setWriterByName('png');
-                $qrCode->setEncoding('UTF-8');
-                $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH());
-                $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
-                $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
-                $qrCode->setLogoPath(public_path() . '/' . $setting['logo']);
-                $qrCode->setLogoSize(32, 32);
-                $qrCode->setValidateResult(false);
-                $qrcode_image = $qrCode->writeDataUri();
-                $data['image_qrcode'] = $qrcode_image;
-                $data['type'] = 'fund';
-                $data['status'] = 'success';
-                return $data;
-            }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             throw $e;
+        }
+//send user email
+        if ($data ['fund'] == 'invest') {
+//check reference for bouns
+            $actionb = $invest->coin->slug;
+            if ($actionb == 'bitcoin_address') {
+                $name = 'Bitcoin';
+            }
+            if ($actionb == 'litecoin_address') {
+
+                $name = 'Litecoin';
+            }
+            if ($actionb == 'ethereum_address') {
+                $name = 'Ethereum';
+            }
+            if ($actionb == 'bitcoin_cash_address') {
+                $name = 'Bitcoin Cash';
+            }
+            if ($actionb == 'dash_address') {
+                $name = 'Dash';
+            }
+            foreach ($invest->user->coin as $ucoin) {
+                if ($invest->coin_id == $ucoin->coin_id) {
+
+                    $address = $ucoin->address;
+                }
+            }
+            $user_ref = Reference::whereReferred_id($invest->user_id)->first();
+            if (is_object($user_ref)) {
+//plan ref percentage
+                $bonus = $invest->amount * $invest->plan->ref / 100;
+                $pay = UserCoin::whereUser_id($user_ref->user_id)->whereCoin_id($invest->coin_id)->first();
+                if (is_object($pay)) {
+                    $pay->bonus = $pay->bonus + $bonus;
+                    $pay->save();
+//transcation log
+                    Transaction::create([
+                        'user_id' => $user_ref->user_id,
+                        'transaction_id' => $invest->transaction_id,
+                        'type' => 'Referral Bonus',
+                        'name_type' => 'Referral Bonus',
+                        'coin_id' => $invest->coin_id,
+                        'amount' => $bonus,
+                        'status' => true,
+                        'amount_profit' => $bonus,
+                        'description' => 'Referral Bonus Under ' . $invest->plan->name
+                    ]);
+                    $user_pay = $user_ref->refs->first_name . ' ' . $user_ref->refs->last_name;
+                    $text = "You earned a referral bonus  of $$bonus for referring  $user_pay.";
+
+
+                    $message = $text;
+
+                    $this->sendMail($pay->user->email, $pay->user->first_name, 'Referral Bonus Notification', $message);
+                }
+            }
+
+            $greeting = 'Hello ' . Auth::user()->first_name . ' ' . Auth::user()->last_name . ',';
+            $email = Auth::user()->email;
+            $subject = 'New Investment Notification';
+            $message = ' You invested' . '$' . $invest->amount . " using " . $data ['name'] . " Under " . $plan->name . "  .";
+
+            Notification:: route('mail', $email)
+                    ->notify(new PlanDepositMail($greeting, $subject, $message));
+
+            return [
+                'status' => 'success',
+                'message' => 'The Deposit Have Been Successfully Saved',
+                'plan' => $plan,
+                'invest' => $invest,
+                'type' => 'invest'
+            ];
+        }
+
+        if ($data ['fund'] == 'fund') {
+            $realcount = number_format(floatval($data['amount_convert']), 8, '.', '');
+            Investment::whereId($invest->id)->update([
+                'amount_check' => $realcount
+            ]);
+//generate image for QR barcode
+
+            $text = $data['sendaddress'] . '?amount=' . $realcount;
+            $qrCode = new QrCode($text);
+            $qrCode->setSize(300);
+            $qrCode->setWriterByName('png');
+            $qrCode->setEncoding('UTF-8');
+            $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH());
+            $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+            $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+            $qrCode->setLogoPath(public_path() . '/' . $setting['logo']);
+            $qrCode->setLogoSize(32, 32);
+            $qrCode->setValidateResult(false);
+            $qrcode_image = $qrCode->writeDataUri();
+            $data['image_qrcode'] = $qrcode_image;
+            $data['type'] = 'fund';
+            $data['status'] = 'success';
+            return $data;
         }
     }
 
@@ -535,6 +514,13 @@ class HomeController extends Controller {
         $setting = Setting::whereId(1)->first();
         $charge = $setting['withdraw_charge'];
         $usercoin = UserWithdrawal::whereId($request->id)->first();
+        $check = Withdraw::whereUser_id(Auth::user()->id)->whereUser_withdrawal_id($request->id)->first();
+        if (is_object($check)) {
+            return [
+                'status' => 'error',
+                'message' => 'You have a pending withdrawal. Wait for it to be processed before requesting another one.'
+            ];
+        }
         $amount_to_convert = $usercoin->amount - $charge;
         $amount = $usercoin->amount;
         if ($amount < $setting->min_withdraw) {
@@ -854,7 +840,8 @@ class HomeController extends Controller {
 
 //maual withdraw
             if ($on == false) {
-                $address = $withdraw->usercoin->address;
+                $address = $withdraw->user->usercoinOne->address;
+
 ////transcation log
                 Transaction::create([
                     'user_id' => Auth::user()->id,
@@ -864,12 +851,12 @@ class HomeController extends Controller {
                     'withdraw_charge' => $charge,
                     'coin_id' => $withdraw_create['coin_id'],
                     'amount' => $withdraw->amount,
-                    'description' => 'You Widthraw  ' . '$' . $withdraw->amount
+                    'description' => 'You Widthrew  ' . '$' . $withdraw->amount
                 ]);
-//set user withdrawal status
-                UserWithdrawal::whereId($withdraw->user_withdrawal_id)->update([
-                    'status' => false
-                ]);
+////set user withdrawal status
+//                UserWithdrawal::whereId($withdraw->user_withdrawal_id)->update([
+//                    'status' => false
+//                ]);
 //send mail
                 $greeting = 'Hello Administrator,';
                 $user_name = $withdraw->user->first_name . ' ' . $withdraw->user->last_name;

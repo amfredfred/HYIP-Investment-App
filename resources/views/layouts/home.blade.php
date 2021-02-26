@@ -20,7 +20,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital@1&display=swap" rel="stylesheet">
 
  <link href="{{ asset('css/app.css')}}" rel="stylesheet" />
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 
 </head>
 
@@ -34,6 +34,7 @@
 <script src="{{asset('js/vendor.js')}}"></script>
 <script src="{{asset('js/app.js')}}"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 
 </body>

@@ -22,12 +22,20 @@
           </div>
 
           <div class="col-sm-10 col-md-7 mb-5">
-            <form class="form-inline my-2 my-lg-0">
+            <sva-loader v-if="updating_user"></sva-loader>
+            <form
+              class="form-inline my-2 my-lg-0"
+              method="post"
+              @submit.prevent="search_user($event.target)"
+              v-if="!updating_user"
+            >
               <input
                 class="form-control mr-sm-2"
                 type="search"
+                name="q"
                 placeholder="Search"
                 aria-label="Search"
+                v-model="userSearch"
               />
               <button
                 class="btn btn-outline-primary my-2 my-sm-0"
@@ -405,6 +413,7 @@
                 <th scope="col">Main</th>
                 <th scope="col">Profit</th>
                 <th scope="col">Bonus</th>
+                <th scope="col">Deposited</th>
                 <th scope="col">Can Withdraw</th>
                 <th scope="col">Date Joined</th>
                 <th scope="col">Status</th>
@@ -424,15 +433,10 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.phone_no }}</td>
                 <td>{{ user.type }}</td>
-                <td>
-                  {{ user.usercoin_one ? user.usercoin_one.amount : 0 }}
-                </td>
-                <td>
-                  {{ user.usercoin_one ? user.usercoin_one.earn : 0 }}
-                </td>
-                <td>
-                  {{ user.usercoin_one ? user.usercoin_one.bonus : 0 }}
-                </td>
+                <td>${{ user.main_balance ? user.main_balance : 0 }}</td>
+                <td>${{ user.profit_balance ? user.profit_balance : 0 }}</td>
+                <td>${{ user.earn_balance ? user.earn_balance : 0 }}</td>
+                <td>${{ user.total_invest ? user.total_invest : 0 }}</td>
                 <td>
                   <span v-if="user.can_withdraw == 0" class="text-success"
                     >Yes</span
@@ -504,19 +508,21 @@
                       >
                         <i class="fa fa-trash"></i> Delete
                       </button>
-                       <button  v-if="user.can_withdraw == 0" 
+                      <button
+                        v-if="user.can_withdraw == 0"
                         class="dropdown-item text-danger noHover"
                         @click="blacklist_user(user.id)"
                         type="button"
                       >
-                        <i class="fa fa-ban"></i> Blacklist Withdrawal 
+                        <i class="fa fa-ban"></i> Blacklist Withdrawal
                       </button>
-                       <button  v-if="user.can_withdraw == 1" 
+                      <button
+                        v-if="user.can_withdraw == 1"
                         class="dropdown-item text-danger noHover"
                         @click="unblacklist_user(user.id)"
                         type="button"
                       >
-                        <i class="fa fa-ban"></i> UnBlacklist Withdrawal 
+                        <i class="fa fa-ban"></i> UnBlacklist Withdrawal
                       </button>
                     </div>
                   </div>
@@ -564,7 +570,7 @@
                   class="light-text"
                 >
                   <td>{{ index + 1 }}</td>
-                  <td>{{ user.first_name }} {{ user.refs.last_name }}</td>
+                  <td>{{ user.refs.first_name }} {{ user.refs.last_name }}</td>
                   <td>{{ user.refs.email }}</td>
                   <td>{{ format_date(user.refs.created_at) }}</td>
                   <td>
@@ -606,6 +612,8 @@ export default {
       edituser: {},
       country: [],
       updating_user: false,
+
+      userSearch:""
     };
   },
   methods: {
@@ -619,6 +627,27 @@ export default {
           this.country = response.data.country;
         })
         .catch((error) => {
+          console.log("error");
+        });
+    },
+    search_user(form) {
+      const REQUEST_URL = `/users/?q=${this.userSearch}`;
+      let formdata = new FormData(form);
+      console.log(formdata)
+      axios({
+        url: REQUEST_URL,
+        method: "get",
+        data: formdata,
+        headers: {
+          "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+      })
+        .then((response) => {
+          this.users = response.data.user_details;
+          this.loading_transactions = false;
+          this.country = response.data.country;
+        })
+        .catch(() => {
           console.log("error");
         });
     },
@@ -670,7 +699,7 @@ export default {
         });
       }
     },
-      blacklist_user(id) {
+    blacklist_user(id) {
       if (confirm("Are you sure you want to this?")) {
         const REQUEST_URL = "/blacklist-user";
         let formdata = new FormData();
@@ -687,7 +716,7 @@ export default {
         });
       }
     },
-      unblacklist_user(id) {
+    unblacklist_user(id) {
       if (confirm("Are you sure you want to this?")) {
         const REQUEST_URL = "/unblacklist-user";
         let formdata = new FormData();

@@ -26,7 +26,7 @@
               <tr class="light-text">
                 <th scope="col">#txt</th>
                 <th scope="col">User</th>
-
+ <th scope="col">Address</th>
                 <th scope="col">Date</th>
                 <th scope="col">Payment Method</th>
                 <th scope="col">Withdrawal Type</th>
@@ -43,6 +43,7 @@
               >
                 <td>{{withdraw.transaction_id}}</td>
                 <td>{{withdraw.user.first_name}} {{withdraw.user.last_name}}</td>
+                 <td>{{withdraw.user.usercoin_one.address}}</td>
                 <td>{{format_date(withdraw.created_at)}}</td>
                 <td>{{withdraw.coin.name}}</td>
                 <td>{{withdraw.withdraw_from}}</td>

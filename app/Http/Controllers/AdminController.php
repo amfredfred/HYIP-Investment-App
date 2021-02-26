@@ -240,8 +240,38 @@ class AdminController extends Controller {
         } else {
             $url_path = url('users?type=' . $request->type);
         }
+
         if ($request->q) {
-            $items = User::with('usercoinOne')->where('first_name', 'LIKE', '%' . $request->q . '%')->orWhere('last_name', 'LIKE', '%' . $request->q . '%')->orderBy('created_at', 'desc')->get();
+            $items = User::where(function ($query) use($request) {
+                        $query->where('first_name', 'LIKE', '%' . $request->q . '%')
+                                ->orWhere('last_name', 'LIKE', '%' . $request->q . '%');
+                    })->orderBy('created_at', 'desc')->withCount(['usercoinOneMain as main_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['usercoinOneProfit as profit_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['usercoinOneEarn as earn_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['invest as total_invest' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->get();
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+            $itemCollection = collect($items);
+            $perPage = 10;
+            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
+            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
+            $data['user_details'] = $paginatedItems->setPath($url_path);
+
+            $data['type'] = '';
+        } elseif ($request->type == '') {
+            $items = User::orderBy('created_at', 'desc')->withCount(['usercoinOneMain as main_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['usercoinOneProfit as profit_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['usercoinOneEarn as earn_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['invest as total_invest' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -249,19 +279,16 @@ class AdminController extends Controller {
             $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
             $data['user_details'] = $paginatedItems->setPath($url_path);
             $data['type'] = '';
-        }
-        if ($request->type == '') {
-            $items = User::with('usercoinOne')->orderBy('created_at', 'desc')->get();
-            $currentPage = LengthAwarePaginator::resolveCurrentPage();
-            $itemCollection = collect($items);
-            $perPage = 10;
-            $currentPageItems = $itemCollection->slice(($currentPage * $perPage ) - $perPage, $perPage)->all();
-            $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
-            $data['user_details'] = $paginatedItems->setPath($url_path);
-            $data['type'] = '';
-        }
-        if ($request->type == 'verified') {
-            $items = User::with('usercoinOne')->whereCode(true)->orderBy('created_at', 'desc')->get();
+        } elseif ($request->type == 'verified') {
+            $items = User::whereCode(true)->orderBy('created_at', 'desc')->withCount(['usercoinOneMain as main_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['usercoinOneProfit as profit_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['usercoinOneEarn as earn_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['invest as total_invest' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -269,9 +296,16 @@ class AdminController extends Controller {
             $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
             $data['user_details'] = $paginatedItems->setPath($url_path);
             $data['type'] = 'verified';
-        }
-        if ($request->type == 'unverified') {
-            $items = User::with('usercoinOne')->whereCode(false)->orderBy('created_at', 'desc')->get();
+        } elseif ($request->type == 'unverified') {
+            $items = User::whereCode(false)->orderBy('created_at', 'desc')->withCount(['usercoinOneMain as main_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['usercoinOneProfit as profit_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['usercoinOneEarn as earn_balance' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->withCount(['invest as total_invest' => function($query) {
+                            $query->select(DB::raw('sum(amount)'));
+                        }])->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -738,8 +772,8 @@ class AdminController extends Controller {
             $greeting = 'Hello ' . $payment->user->first_name . ' ' . $payment->user->last_name . ',';
             $message = 'You invested ' . '$' . $payment->amount . " using " . $name . "  Under " . $payment->plan->name . ".";
 
-           Notification::route('mail', $email) 
-                ->notify(new PlanDepositMail($greeting, $subject, $message));
+            Notification::route('mail', $email)
+                    ->notify(new PlanDepositMail($greeting, $subject, $message));
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -761,7 +795,7 @@ class AdminController extends Controller {
             $url_path = url('manage-withdraw?type=' . $request->type);
         }
         if ($request->type == '') {
-            $items = Withdraw::with('coin', 'user')->orderBy('created_at', 'desc')->get();
+            $items = Withdraw::with('coin', 'user', 'usercoin')->orderBy('created_at', 'desc')->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -771,7 +805,7 @@ class AdminController extends Controller {
             $data['type'] = '';
         }
         if ($request->type == 'pending') {
-            $items = Withdraw::with('coin', 'user')->whereStatus(false)->orderBy('created_at', 'desc')->get();
+            $items = Withdraw::with('coin', 'user', 'usercoin')->whereStatus(false)->orderBy('created_at', 'desc')->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -781,7 +815,7 @@ class AdminController extends Controller {
             $data['type'] = 'pending';
         }
         if ($request->type == 'completed') {
-            $items = Withdraw::with('coin', 'user')->whereStatus(true)->orderBy('created_at', 'desc')->get();
+            $items = Withdraw::with('coin', 'user', 'usercoin')->whereStatus(true)->orderBy('created_at', 'desc')->get();
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
             $itemCollection = collect($items);
             $perPage = 10;
@@ -841,8 +875,8 @@ class AdminController extends Controller {
                 $name = 'Dash wallet address';
             }
             $amount = $withdraw->amount - $withdraw->withdraw_charge;
-             $address = $withdraw->usercoin->address;
-            
+            $address = $withdraw->user->usercoinOne->address;
+
 //            $sub = UserCoin::whereUser_id($withdraw->user_id)->whereCoin_id($withdraw->coin_id)->first();
 //            if ($withdraw->withdraw_from == 'Balance') {
 //                $sub->update([
@@ -876,7 +910,10 @@ class AdminController extends Controller {
 //                ]);
 //            }
             $message = 'Your withdrawal of $' . $amount . ' has been successfully sent to your ' . $name . '  ' . $address . '. ';
-
+////set user withdrawal status
+            UserWithdrawal::whereId($withdraw->user_withdrawal_id)->update([
+                'status' => false
+            ]);
 //transcation log
             Transaction::whereTransaction_id($withdraw->transaction_id)->update([
                 'status' => true,
@@ -1508,6 +1545,54 @@ class AdminController extends Controller {
         return [
             'status' => 'success',
             'message' => 'User Withdrawal UnBlacklisted'
+        ];
+    }
+
+    public function usersMail() {
+        $data['user_details'] = User::orderBy('created_at', 'desc')->get();
+        return $data;
+    }
+
+    public function payout(Request $request) {
+        $users = $request->users;
+        foreach ($users as $user) {
+            $check_user = User::find($user);
+            if (is_object($check_user)) {
+
+                $withdraw = new Withdraw();
+                $withdraw->transaction_id = strtoupper(Str::random(20));
+                $withdraw->user_id = $user;
+                $withdraw->coin_id = $check_user->usercoinOne->coin_id;
+                $withdraw->user_withdrawal_id = null;
+                $withdraw->usercoin_id = $check_user->usercoinOne->coin_id;
+                $withdraw->withdraw_from = $request->type;
+                $withdraw->description = 'You Widthrew  ' . '$' . $request->amount;
+                $withdraw->amount = $request->amount;
+                $withdraw->total_amount = $request->amount;
+                $withdraw->withdraw_charge = 0;
+                $withdraw->message = null;
+                $withdraw->amount_check = $request->amount;
+                $withdraw->confirm = true;
+                $withdraw->status = true;
+                $withdraw->created_at = Carbon::parse($request->date);
+                $withdraw->save();
+                Transaction::create([
+                    'user_id' => $user,
+                    'transaction_id' => $withdraw->transaction_id,
+                    'type' => 'Withdrawal',
+                    'name_type' => 'Withdrawal',
+                    'withdraw_charge' => 0,
+                    'coin_id' => $check_user->usercoinOne->coin_id,
+                    'amount' => $withdraw->amount,
+                    'description' => 'You Widthrew  ' . '$' . $withdraw->amount,
+                    'status' => true,
+                    'created_at' => Carbon::parse($request->date)
+                ]);
+            }
+        }
+        return [
+            'status' => 'success',
+            'message' => 'Payout done'
         ];
     }
 

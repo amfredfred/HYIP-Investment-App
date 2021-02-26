@@ -45,6 +45,21 @@ class User extends Authenticatable {
         return $this->hasMany(UserCoin::class, 'user_id');
     }
 
+    public function usercoinOneMain() {
+        return $this->hasMany(UserWithdrawal::class, 'user_id')->whereType('Main Balance')->whereStatus(true);
+    }
+
+    public function usercoinOneProfit() {
+        return $this->hasMany(UserWithdrawal::class, 'user_id')->whereType('Profit')->whereStatus(true);
+    }
+
+    public function usercoinOneEarn() {
+        return $this->hasMany(UserWithdrawal::class, 'user_id')->whereType('Referral Bonus')->whereStatus(true);
+    }
+     public function invest() {
+        return $this->hasMany(Investment::class, 'user_id')->whereStatus_deposit(true);
+    }
+
     public function usercoinOne() {
         return $this->hasOne(UserCoin::class, 'user_id');
     }
