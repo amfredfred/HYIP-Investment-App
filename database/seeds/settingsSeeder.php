@@ -12,12 +12,12 @@ class settingsSeeder extends Seeder {
      */
     public function run() {
         $settings = new Setting();
-        $settings->site_email = 'demo@gmail.com';
+        $settings->site_email = 'info@broadviewfinancials.co.uk';
         $settings->site_phone = '+4124949559';
-        $settings->send_notify_email = 'demo@gmail.com';
-        $settings->site_name = 'Demo';
+        $settings->send_notify_email = 'admin@broadviewfinancials.co.uk';
+        $settings->site_name = 'Broadviewfinancials';
         $settings->address = 'no 10 USA texas';
-        $settings->site_url = 'https://demo.com';
+        $settings->site_url = 'https://broadviewfinancials.co.uk';
         $settings->site_code = 'DM';
         $settings->logo = 'images/logo/logo.png';
         $settings->withdraw_charge = '0';
@@ -63,7 +63,7 @@ class settingsSeeder extends Seeder {
 </div>
 <div style="font-size: 14px; margin-left: 20px; margin-right: 20px;"><br></div>
 <div style="margin-left: 20px; margin-right: 20px; margin-bottom: 24px;">
-<p class="size-14" style="margin-top: 0px; margin-bottom: 0px; line-height: 21px;"><font size="3">Thanks,</font><br> <strong style="font-size: 14px;">Demo</strong></p>
+<p class="size-14" style="margin-top: 0px; margin-bottom: 0px; line-height: 21px;"><font size="3">Thanks,</font><br> <strong style="font-size: 14px;">Broadviewfinancials</strong></p>
 </div>
 </td>
 </tr>
