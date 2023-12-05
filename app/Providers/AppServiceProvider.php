@@ -3,12 +3,13 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Schema;
 use App\Models\Admin\Setting;
 use Illuminate\Support\Facades\View;
 use App\social;
 use App\HomePageText;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Schema as FacadesSchema;
+
 class AppServiceProvider extends ServiceProvider {
 
     /**
@@ -26,7 +27,7 @@ class AppServiceProvider extends ServiceProvider {
      * @return void
      */
     public function boot() {
-        Schema::defaultStringLength(191);
+        FacadesSchema::defaultStringLength(191);
         date_default_timezone_set('Africa/Lagos');
         $setting = Setting::whereId(1)->first();
         View::share('settings', $setting);

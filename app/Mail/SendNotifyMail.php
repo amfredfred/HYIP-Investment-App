@@ -12,32 +12,38 @@ class SendNotifyMail extends Notification {
 
     use Queueable;
 
+    public $message;
+    public $greeting;
+    public $subject;
+
     /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct($greeting, $subject, $message) {
+    * Create a new message instance.
+    *
+    * @return void
+    */
+
+    public function __construct( $greeting, $subject, $message ) {
         $this->message = $message;
         $this->subject = $subject;
         $this->greeting = $greeting;
     }
 
-    public function via($notifiable) {
-        return ['mail'];
+    public function via( $notifiable ) {
+        return [ 'mail' ];
     }
 
     /**
-     * Build the message.
-     *
-     * @return $this
-     */
-    public function toMail($notifiable) {
+    * Build the message.
+    *
+    * @return $this
+    */
 
-        return (new MailMessage)
-                        ->greeting($this->greeting)
-                        ->subject($this->subject)
-                        ->line($this->message)
+    public function toMail( $notifiable ) {
+
+        return ( new MailMessage )
+        ->greeting( $this->greeting )
+        ->subject( $this->subject )
+        ->line( $this->message )
         ;
     }
 
